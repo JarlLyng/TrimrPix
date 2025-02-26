@@ -1,99 +1,87 @@
 # TrimrPix
 
-## 📋 Beskrivelse
-TrimrPix er en MacOS-app bygget med SwiftUI, der fokuserer på høj komprimeringskvalitet og et simpelt brugerinterface. Målet er at tilbyde en moderne og effektiv billedoptimeringsløsning med samme kernefunktionalitet som [ImageOptim](https://github.com/ImageOptim/ImageOptim), men med nyere teknologi og optimeret performance.
+<img src="Screenshots/app_screenshot.png" width="600" alt="TrimrPix Screenshot">
 
-## ✨ Funktioner
-- **Billedkomprimering** med fokus på høj kvalitet og reduceret filstørrelse.
-- **Understøttelse af populære formater:** JPEG, PNG og GIF (WebP og AVIF planlagt til fremtidige versioner).
-- **Drag & Drop Interface** til nem tilføjelse af billeder.
-- **Batch-optimering** (optimer flere billeder ad gangen).
-- **Visuel feedback:** Før/efter filstørrelse og procentuel reduktion.
-- **Brugervalgt gemmested** for optimerede billeder.
+## 📋 Description
+TrimrPix is a macOS app built with SwiftUI, focusing on high-quality image compression with a simple user interface. The goal is to offer a modern and efficient image optimization solution with the same core functionality as [ImageOptim](https://github.com/ImageOptim/ImageOptim), but with newer technology and optimized performance.
 
-## 🛠️ Teknologier
-- **SwiftUI** – Moderne UI-udvikling til MacOS.
-- **Core Image** – Billedbehandling og komprimering.
-- **NSBitmapImageRep** – Effektiv billedkomprimering med kontrol over kvalitet.
-- **Async/Await** – Moderne Swift concurrency for responsivt UI under billedbehandling.
+## ✨ Features
+- **Image compression** with focus on high quality and reduced file size
+- **Support for popular formats:** JPEG, PNG, and GIF (WebP and AVIF planned for future versions)
+- **Drag & Drop Interface** for easy addition of images
+- **Batch optimization** (optimize multiple images at once)
+- **Visual feedback:** Before/after file size and percentage reduction
+- **User-selected save location** for optimized images
 
-## ⚙️ Arkitektur & Regler
-- **Sandboxed App:** Appen er sandboxed for at sikre filsystembeskyttelse. Filadgang håndteres via **NSOpenPanel** og **NSSavePanel**.
-- **Komprimeringslogik:** Vi benytter NSBitmapImageRep til billedoptimering med kontrolleret kvalitet.
-- **Filskrivning:** Optimerede billeder gemmes som nye filer som standard (f.eks. `billede-optimized.png`) for at undgå datatab.
-- **MVVM-arkitektur:** Appen følger Model-View-ViewModel mønstret for klar adskillelse af ansvar:
-  - **Models:** Repræsenterer billeddata og metadata
-  - **Views:** Håndterer brugergrænsefladen og interaktioner
-  - **ViewModels:** Koordinerer dataflow og forretningslogik
-- **Cursor Regler:**
-  - Cursor må **ikke** opfinde nye funktioner, som ikke er specificeret i README.
-  - Cursor skal sikre, at ændringer **ikke** påvirker eksisterende funktionalitet negativt.
-  - Cursor skal være grundig og tjekke kode for konsistens og stabilitet.
-  - Cursor skal kun implementere fremtidige features, hvis det specifikt bliver instrueret.
+## 🛠️ Technologies
+- **SwiftUI** – Modern UI development for macOS
+- **Core Image** – Image processing and compression
+- **NSBitmapImageRep** – Efficient image compression with quality control
+- **Async/Await** – Modern Swift concurrency for responsive UI during image processing
 
-## 📁 Projektstruktur
+## ⚙️ Architecture
+- **Sandboxed App:** The app is sandboxed to ensure file system protection. File access is handled via **NSOpenPanel** and **NSSavePanel**.
+- **Compression Logic:** We use NSBitmapImageRep for image optimization with controlled quality.
+- **File Writing:** Optimized images are saved as new files by default (e.g., `image-optimized.png`) to avoid data loss.
+- **MVVM Architecture:** The app follows the Model-View-ViewModel pattern for clear separation of responsibilities:
+  - **Models:** Represent image data and metadata
+  - **Views:** Handle the user interface and interactions
+  - **ViewModels:** Coordinate data flow and business logic
+
+## 📁 Project Structure
 ```
 TrimrPix/
 ├── TrimrPixApp.swift       # App entry point
-├── ContentView.swift       # Hovedvisning med UI-komponenter
+├── ContentView.swift       # Main view with UI components
 ├── Models/
-│   └── ImageItem.swift     # Datamodel for billeder
+│   └── ImageItem.swift     # Data model for images
 ├── ViewModels/
-│   └── ImageOptimizationViewModel.swift  # Håndterer billedoptimering
+│   └── ImageOptimizationViewModel.swift  # Handles image optimization
 ├── Services/
-│   └── CompressionService.swift  # Billedkomprimeringslogik
-├── TrimrPix.entitlements   # App sandboxing og tilladelser
-└── README.md               # Projektbeskrivelse
+│   └── CompressionService.swift  # Image compression logic
+├── Assets.xcassets/        # App icons and assets
+└── TrimrPix.entitlements   # App sandboxing and permissions
 ```
 
-## 🔧 Teknisk Implementering
-- **Drag & Drop:** Implementeret med SwiftUI's `.onDrop` modifier og UTType.
-- **Billedkomprimering:**
-  - JPEG: Komprimering med 80% kvalitet for optimal balance mellem størrelse og kvalitet
-  - PNG: Optimeret med standardindstillinger via NSBitmapImageRep
-  - GIF: Grundlæggende håndtering (kopiering i MVP)
-- **Concurrency:** Bruger Swift's moderne async/await mønster med @MainActor for UI-opdateringer
-- **Filhåndtering:** NSSavePanel giver brugeren kontrol over, hvor optimerede billeder gemmes
-- **Sandboxing:** Implementeret med korrekte entitlements for sikker filadgang
-
-## ✅ MVP (Minimum Viable Product)
-1. Enkel drag & drop af billeder.
-2. Optimering af billeder med høj kvalitet.
-3. Visning af filstørrelse før og efter optimering.
-4. Understøttelse af JPEG, PNG og GIF.
-
-## 🚀 Fremtidige Features *(Kun implementeres efter eksplicit instruktion)*
-- **Brugerindstillinger:**
-  - Mulighed for at vælge komprimeringsstyrke (lav/mellem/høj).
-  - Valg mellem at overskrive originalfiler eller gemme som nye.
-  - Indstillinger for outputmappe.
-- **Udvidet formatunderstøttelse:**
-  - Understøttelse af WebP og AVIF.
-  - SVG-optimering med SVGO.
-- **Automatisering:**
-  - Watch-folder funktionalitet (automatisk optimering af nye filer i en mappe).
-  - Batch-job system til større mængder filer.
-- **Yderligere UI-forbedringer:**
-  - Indstillingsmenu til konfiguration.
-  - Før/efter billedeksempel.
-- **Avanceret komprimering:**
-  - Integration af MozJPEG og Zopfli for endnu bedre komprimeringsresultater.
-  - Intelligent komprimering baseret på billedindhold.
+## 🔧 Technical Implementation
+- **Drag & Drop:** Implemented with SwiftUI's `.onDrop` modifier and UTType
+- **Image Compression:**
+  - JPEG: Compression with 80% quality for optimal balance between size and quality
+  - PNG: Optimized with default settings via NSBitmapImageRep
+  - GIF: Basic handling (copying in MVP)
+- **Concurrency:** Uses Swift's modern async/await pattern with @MainActor for UI updates
+- **File Handling:** NSSavePanel gives the user control over where optimized images are saved
+- **Sandboxing:** Implemented with proper entitlements for secure file access
 
 ## 📖 Installation
-1. Klon repoet:
+1. Clone the repository:
    ```bash
-   git clone https://github.com/dinbruger/TrimrPix.git
+   git clone https://github.com/jarllyng/TrimrPix.git
    ```
-2. Åbn projektet i Xcode.
-3. Kør projektet på macOS.
+2. Open the project in Xcode
+3. Build and run the project on macOS
 
-## 🔍 Kendte begrænsninger
-- GIF-optimering er begrænset til kopiering i den nuværende version.
-- Appen kræver macOS 15.2 eller nyere.
-- Billedoptimering sker synkront for hvert billede, hvilket kan påvirke performance ved store batches.
+## 🔍 Known Limitations
+- GIF optimization is limited to copying in the current version
+- The app requires macOS 15.2 or newer
+- Image optimization happens synchronously for each image, which may affect performance with large batches
 
-## 📢 Licens
-MIT License – Fri til at bruge og tilpasse.
+## 🚀 Future Features
+- **User Settings:**
+  - Option to choose compression strength (low/medium/high)
+  - Choice between overwriting original files or saving as new ones
+  - Output folder settings
+- **Extended Format Support:**
+  - Support for WebP and AVIF
+  - SVG optimization with SVGO
+- **Automation:**
+  - Watch-folder functionality (automatic optimization of new files in a folder)
+  - Batch job system for larger quantities of files
+- **Additional UI Improvements:**
+  - Settings menu for configuration
+  - Before/after image preview
+
+## 📢 License
+MIT License – Free to use and adapt.
 
 ---
