@@ -112,6 +112,11 @@ TrimrPix/
    - Download `TrimrPix.dmg`
    - Open the DMG and drag TrimrPix to Applications folder
 
+2. **First-time setup (Security):**
+   - Right-click TrimrPix in Applications → "Open"
+   - Click "Open" in the security dialog
+   - Or go to System Preferences → Security & Privacy → "Open Anyway"
+
 #### Option 2: Build from Source
 1. **Clone the repository:**
    ```bash
