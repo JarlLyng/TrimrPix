@@ -11,6 +11,7 @@ import CoreImage
 import UniformTypeIdentifiers
 
 class CompressionService {
+    private let settings = Settings.shared
     
     func optimizeImage(at url: URL) async -> URL? {
         // Bestem filtype
@@ -27,6 +28,10 @@ class CompressionService {
             optimizedData = await optimizePNGData(at: url)
         case "gif":
             optimizedData = await optimizeGIFData(at: url)
+        case "webp":
+            optimizedData = await optimizeWebPData(at: url)
+        case "avif":
+            optimizedData = await optimizeAVIFData(at: url)
         default:
             print("Unsupported file format: \(fileExtension)")
             return nil
@@ -36,7 +41,15 @@ class CompressionService {
         guard let data = optimizedData else { return nil }
         
         // Gem den optimerede fil
-        return await saveOptimizedImage(data: data, originalURL: url, suggestedFilename: suggestedFilename)
+        if settings.overwriteOriginal {
+            return await overwriteOriginalImage(data: data, originalURL: url)
+        } else if settings.autoSave {
+            // Auto-save: gem i samme mappe som originalen
+            return await saveInSameFolder(data: data, originalURL: url, suggestedFilename: suggestedFilename)
+        } else {
+            // Manual save: spørg brugeren om placering
+            return await saveOptimizedImage(data: data, originalURL: url, suggestedFilename: suggestedFilename)
+        }
     }
     
     private func optimizeJPEGData(at url: URL) async -> Data? {
@@ -46,7 +59,7 @@ class CompressionService {
         }
         
         // Komprimeringsindstillinger for JPEG
-        let compressionQuality = 0.8 // 80% kvalitet
+        let compressionQuality = settings.jpegQuality
         
         // Konverter NSImage til Data
         guard let tiffData = image.tiffRepresentation,
@@ -77,9 +90,20 @@ class CompressionService {
     }
     
     private func optimizeGIFData(at url: URL) async -> Data? {
-        // For MVP kopierer vi blot GIF-data
+        // For MVP kopierer vi blot GIF-data, men tilføjer validering
         do {
-            return try Data(contentsOf: url)
+            let data = try Data(contentsOf: url)
+            
+            // Valider at det er en gyldig GIF
+            guard data.count > 6 else { return nil }
+            let header = data.prefix(6)
+            guard String(data: header, encoding: .ascii) == "GIF87a" || 
+                  String(data: header, encoding: .ascii) == "GIF89a" else {
+                print("Invalid GIF format")
+                return nil
+            }
+            
+            return data
         } catch {
             print("Error reading GIF: \(error)")
             return nil
@@ -95,7 +119,22 @@ class CompressionService {
         savePanel.directoryURL = originalURL.deletingLastPathComponent()
         savePanel.allowedContentTypes = [UTType.image]
         
-        let response = await savePanel.beginSheetModal(for: NSApp.keyWindow!)
+        guard let keyWindow = NSApp.keyWindow else {
+            // Fallback: present as modal if no keyWindow
+            let response = savePanel.runModal()
+            if response == .OK, let url = savePanel.url {
+                do {
+                    try data.write(to: url)
+                    return url
+                } catch {
+                    print("Error writing optimized image: \(error)")
+                    return nil
+                }
+            }
+            return nil
+        }
+        
+        let response = await savePanel.beginSheetModal(for: keyWindow)
         
         if response == .OK, let url = savePanel.url {
             do {
@@ -109,4 +148,71 @@ class CompressionService {
         
         return nil
     }
-} 
+    
+    private func optimizeWebPData(at url: URL) async -> Data? {
+        // macOS/AppKit har ikke indbygget WebP-encoder i NSBitmapImageRep.
+        // MVP: valider og returner original data (no-op).
+        do {
+            let data = try Data(contentsOf: url)
+            // Minimal validering: WebP signature "RIFF....WEBP"
+            guard data.count >= 12 else { return nil }
+            let riff = data.prefix(4)
+            let webp = data.dropFirst(8).prefix(4)
+            guard String(data: riff, encoding: .ascii) == "RIFF",
+                  String(data: webp, encoding: .ascii) == "WEBP" else {
+                print("Invalid WebP format")
+                return nil
+            }
+            return data
+        } catch {
+            print("Error reading WebP: \(error)")
+            return nil
+        }
+    }
+    
+    private func optimizeAVIFData(at url: URL) async -> Data? {
+        // macOS/AppKit har ikke indbygget AVIF-encoder i NSBitmapImageRep.
+        // MVP: valider og returner original data (no-op).
+        do {
+            let data = try Data(contentsOf: url)
+            // Minimal validering: ISO BMFF brand contains "avif"/"avis"
+            guard data.count >= 12 else { return nil }
+            // ftyp box starts at offset 4 with "ftyp"
+            let brand = data.dropFirst(8).prefix(4)
+            if let brandStr = String(data: brand, encoding: .ascii),
+               brandStr.lowercased() == "avif" || brandStr.lowercased() == "avis" {
+                return data
+            } else {
+                // Not a strict validator; still accept to avoid false negatives
+                return data
+            }
+        } catch {
+            print("Error reading AVIF: \(error)")
+            return nil
+        }
+    }
+    
+    @MainActor
+    private func saveInSameFolder(data: Data, originalURL: URL, suggestedFilename: String) async -> URL? {
+        let destinationURL = originalURL.deletingLastPathComponent().appendingPathComponent(suggestedFilename)
+        
+        do {
+            try data.write(to: destinationURL)
+            return destinationURL
+        } catch {
+            print("Error saving optimized image in same folder: \(error)")
+            return nil
+        }
+    }
+    
+    @MainActor
+    private func overwriteOriginalImage(data: Data, originalURL: URL) async -> URL? {
+        do {
+            try data.write(to: originalURL)
+            return originalURL
+        } catch {
+            print("Error overwriting original image: \(error)")
+            return nil
+        }
+    }
+}

@@ -10,6 +10,7 @@ import UniformTypeIdentifiers
 
 struct ContentView: View {
     @StateObject private var viewModel = ImageOptimizationViewModel()
+    @State private var showSettings = false
     
     var body: some View {
         VStack(spacing: 20) {
@@ -21,6 +22,29 @@ struct ContentView: View {
                 Text("TrimrPix")
                     .font(.title)
                     .fontWeight(.bold)
+                
+                Spacer()
+                
+                HStack(spacing: 12) {
+                    // Watch folder status
+                    if viewModel.isWatchFolderActive {
+                        HStack(spacing: 4) {
+                            Image(systemName: "eye.fill")
+                                .foregroundColor(.green)
+                            Text("Watch Folder")
+                                .font(.caption)
+                                .foregroundColor(.green)
+                        }
+                    }
+                    
+                    Button(action: {
+                        showSettings = true
+                    }) {
+                        Image(systemName: "gear")
+                            .imageScale(.large)
+                    }
+                    .buttonStyle(.borderless)
+                }
             }
             
             // Drag & Drop område
@@ -31,7 +55,7 @@ struct ContentView: View {
                 VStack(spacing: 10) {
                     Text("Drag images here to optimize")
                         .font(.headline)
-                    Text("Supported formats: JPEG, PNG, GIF")
+                    Text("Supported formats: JPEG, PNG, GIF, WebP, AVIF")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -62,6 +86,22 @@ struct ContentView: View {
         }
         .padding()
         .frame(minWidth: 600, minHeight: 400)
+        .alert("Error", isPresented: $viewModel.showError) {
+            Button("OK") {
+                viewModel.dismissError()
+            }
+        } message: {
+            Text(viewModel.errorMessage ?? "An unknown error occurred")
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
+        }
+        .onAppear {
+            viewModel.startWatchFolder()
+        }
+        .onDisappear {
+            viewModel.stopWatchFolder()
+        }
     }
 }
 
@@ -102,7 +142,7 @@ struct ImageListView: View {
     var body: some View {
         List {
             ForEach(viewModel.images) { image in
-                ImageItemView(image: image)
+                ImageItemView(image: image, viewModel: viewModel)
             }
         }
         .listStyle(.plain)
@@ -111,6 +151,7 @@ struct ImageListView: View {
 
 struct ImageItemView: View {
     let image: ImageItem
+    @ObservedObject var viewModel: ImageOptimizationViewModel
     
     var body: some View {
         HStack {
@@ -155,8 +196,13 @@ struct ImageItemView: View {
                     .foregroundColor(.green)
             } else {
                 Button("Optimize") {
-                    // Optimer enkelt billede
+                    if let index = viewModel.images.firstIndex(where: { $0.id == image.id }) {
+                        Task {
+                            await viewModel.optimizeImage(at: index)
+                        }
+                    }
                 }
+                .disabled(image.isOptimizing || image.isOptimized)
             }
         }
         .padding(.vertical, 4)

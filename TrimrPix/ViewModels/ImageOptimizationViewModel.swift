@@ -12,8 +12,12 @@ import UniformTypeIdentifiers
 class ImageOptimizationViewModel: ObservableObject {
     @Published var images: [ImageItem] = []
     @Published var isOptimizing: Bool = false
+    @Published var errorMessage: String?
+    @Published var showError: Bool = false
     
     private let compressionService = CompressionService()
+    private let watchFolderService = WatchFolderService()
+    private let settings = Settings.shared
     
     @MainActor
     func handleDrop(providers: [NSItemProvider]) async {
@@ -30,6 +34,9 @@ class ImageOptimizationViewModel: ObservableObject {
                     }
                 } catch {
                     print("Error loading image: \(error)")
+                    await MainActor.run {
+                        self.showError(message: "Error loading image: \(error.localizedDescription)")
+                    }
                 }
             }
         }
@@ -63,8 +70,16 @@ class ImageOptimizationViewModel: ObservableObject {
         isOptimizing = true
         
         Task {
-            for index in 0..<images.count {
-                await optimizeImage(at: index)
+            // Concurrent processing for better performance
+            await withTaskGroup(of: Void.self) { group in
+                for index in 0..<images.count {
+                    group.addTask {
+                        await self.optimizeImage(at: index)
+                    }
+                }
+                
+                // Wait for all tasks to complete
+                await group.waitForAll()
             }
             
             await MainActor.run {
@@ -98,12 +113,38 @@ class ImageOptimizationViewModel: ObservableObject {
                 print("Error reading optimized file size: \(error)")
                 await MainActor.run {
                     self.images[index].isOptimizing = false
+                    self.showError(message: "Error reading optimized file: \(error.localizedDescription)")
                 }
             }
         } else {
             await MainActor.run {
                 self.images[index].isOptimizing = false
+                self.showError(message: "Error optimizing image: \(imageItem.filename)")
             }
         }
     }
-} 
+    
+    @MainActor
+    private func showError(message: String) {
+        self.errorMessage = message
+        self.showError = true
+    }
+    
+    func dismissError() {
+        self.showError = false
+        self.errorMessage = nil
+    }
+    
+    func startWatchFolder() {
+        guard settings.watchFolderEnabled, !settings.watchFolderPath.isEmpty else { return }
+        watchFolderService.startWatching(path: settings.watchFolderPath)
+    }
+    
+    func stopWatchFolder() {
+        watchFolderService.stopWatching()
+    }
+    
+    var isWatchFolderActive: Bool {
+        watchFolderService.isWatching
+    }
+}
