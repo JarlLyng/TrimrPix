@@ -105,6 +105,14 @@ TrimrPix/
 ## 📖 Installation & Usage
 
 ### 🚀 Quick Start
+
+#### Option 1: Download Pre-built App (Recommended)
+1. **Download the latest release:**
+   - Go to [Releases](https://github.com/JarlLyng/TrimrPix/releases)
+   - Download `TrimrPix.dmg`
+   - Open the DMG and drag TrimrPix to Applications folder
+
+#### Option 2: Build from Source
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/jarllyng/TrimrPix.git
@@ -119,6 +127,14 @@ TrimrPix/
 3. **Build and run:**
    - Select your target device/simulator
    - Press `Cmd + R` to build and run
+
+#### Option 3: Command Line Build
+```bash
+# Clone and build
+git clone https://github.com/jarllyng/TrimrPix.git
+cd TrimrPix
+./build.sh
+```
 
 ### 📋 Requirements
 - **macOS:** 15.2 or newer
