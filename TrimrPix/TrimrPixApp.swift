@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+/// Main application entry point
+/// Configures the main window and initializes the application lifecycle
 @main
 struct TrimrPixApp: App {
     var body: some Scene {

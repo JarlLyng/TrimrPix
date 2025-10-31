@@ -8,6 +8,9 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+/// Main content view for the TrimrPix application
+/// Provides the primary user interface for image optimization
+/// Includes drag & drop support, image list, and optimization controls
 struct ContentView: View {
     @StateObject private var viewModel = ImageOptimizationViewModel()
     @State private var showSettings = false
@@ -105,6 +108,8 @@ struct ContentView: View {
     }
 }
 
+/// Drag and drop zone view for accepting image files
+/// Provides visual feedback when files are dragged over the drop zone
 struct DropZoneView: View {
     @ObservedObject var viewModel: ImageOptimizationViewModel
     @State private var isHighlighted = false
@@ -136,6 +141,8 @@ struct DropZoneView: View {
     }
 }
 
+/// List view displaying all images loaded for optimization
+/// Shows thumbnails, file sizes, and optimization status for each image
 struct ImageListView: View {
     @ObservedObject var viewModel: ImageOptimizationViewModel
     
@@ -149,6 +156,9 @@ struct ImageListView: View {
     }
 }
 
+/// Individual image item view within the list
+/// Displays thumbnail, filename, file sizes, and optimization controls
+/// Shows progress indicator during optimization and checkmark when complete
 struct ImageItemView: View {
     let image: ImageItem
     @ObservedObject var viewModel: ImageOptimizationViewModel

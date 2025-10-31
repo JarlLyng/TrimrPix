@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+/// Settings view panel for configuring application preferences
+/// Allows users to configure compression quality, save options, and watch folder settings
 struct SettingsView: View {
     @StateObject private var settings = Settings.shared
     @Environment(\.dismiss) private var dismiss
@@ -100,7 +102,11 @@ struct SettingsView: View {
                 }
                 
                 Button("Save") {
-                    settings.saveSettings()
+                    do {
+                        try settings.saveSettings()
+                    } catch {
+                        Logger.shared.error("Failed to save settings: \(error.localizedDescription)")
+                    }
                     dismiss()
                 }
                 .buttonStyle(.borderedProminent)
@@ -127,3 +133,4 @@ struct SettingsView: View {
 #Preview {
     SettingsView()
 }
+

@@ -38,24 +38,39 @@ TrimrPix is a macOS app built with SwiftUI, focusing on high-quality image compr
 - **Core Image** – Image processing and compression
 - **NSBitmapImageRep** – Efficient image compression with quality control
 - **Async/Await** – Modern Swift concurrency for responsive UI during image processing
+- **OSLog** – Unified logging system for debugging and monitoring
+- **Protocol-Oriented Design** – Dependency injection and testability
 
 ## ⚙️ Architecture
 
 ### 🏗️ Design Patterns
 - **MVVM Architecture:** Clean separation of concerns with Model-View-ViewModel pattern
+- **Protocol-Oriented Design:** Dependency injection for testability and flexibility
 - **Sandboxed App:** Secure file system access with proper entitlements
 - **Async/Await:** Modern Swift concurrency for responsive UI and background processing
+- **Error Handling:** Centralized error management with user-friendly messages
+- **Logging:** Structured logging system with OSLog integration
 
 ### 🔧 Core Components
 - **Models:** Data structures for images, settings, and application state
 - **Views:** SwiftUI-based user interface with reactive updates
 - **ViewModels:** Business logic coordination and data flow management
 - **Services:** Specialized classes for compression and file system monitoring
+- **Protocols:** Service interfaces for dependency injection and testing
+- **Error Handling:** Centralized `TrimrPixError` enum with recovery suggestions
+- **Logging:** Centralized `Logger` service with structured log levels
 
 ### 🛡️ Security & Performance
 - **File System Protection:** Sandboxed environment with controlled file access
 - **Memory Management:** Efficient image processing with proper resource cleanup
 - **Concurrent Processing:** Background optimization with UI responsiveness
+- **Error Recovery:** User-friendly error messages with recovery suggestions
+- **Structured Logging:** Comprehensive logging for debugging and monitoring
+
+### 📚 Documentation
+- **Code Documentation:** Comprehensive inline documentation for all public APIs
+- **Architecture Guide:** Detailed architecture documentation (`ARCHITECTURE.md`)
+- **Code Style Guide:** Coding standards and best practices (`CODE_STYLE.md`)
 
 ## 📁 Project Structure
 ```
