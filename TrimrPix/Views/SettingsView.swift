@@ -87,6 +87,21 @@ struct SettingsView: View {
                                 selectWatchFolder()
                             }
                         }
+                        
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("Processing Delay")
+                                .font(.subheadline)
+                            
+                            HStack {
+                                Slider(value: $settings.watchFolderDelay, in: 0.5...10.0, step: 0.5)
+                                Text("\(settings.watchFolderDelay, specifier: "%.1f")s")
+                                    .frame(width: 50)
+                            }
+                            
+                            Text("Delay before processing new files (prevents processing incomplete files)")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
                     }
                 }
             }
@@ -103,9 +118,21 @@ struct SettingsView: View {
                 
                 Button("Save") {
                     do {
+                        // Validate watch folder path if enabled
+                        if settings.watchFolderEnabled {
+                            try settings.validateWatchFolderPath()
+                        }
                         try settings.saveSettings()
                     } catch {
                         Logger.shared.error("Failed to save settings: \(error.localizedDescription)")
+                        // Show error alert to user
+                        let alert = NSAlert()
+                        alert.messageText = "Fejl ved gemning"
+                        alert.informativeText = error.localizedDescription
+                        alert.alertStyle = .warning
+                        alert.addButton(withTitle: "OK")
+                        alert.runModal()
+                        return
                     }
                     dismiss()
                 }
@@ -114,7 +141,7 @@ struct SettingsView: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 30)
-        .frame(width: 500, height: 450)
+        .frame(width: 500, height: 520)
     }
     
     private func selectWatchFolder() {

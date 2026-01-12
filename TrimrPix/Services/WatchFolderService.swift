@@ -23,6 +23,7 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
     private var fileSystemWatcher: DispatchSourceFileSystemObject?
     private let fileManager: any FileManagerProtocol
     private let compressionService: any CompressionServiceProtocol
+    private let settings: any SettingsProtocol
     private let logger: any LoggerProtocol
     private let supportedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "avif"]
     private var debounceWorkItem: DispatchWorkItem?
@@ -33,14 +34,17 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
     /// - Parameters:
     ///   - fileManager: File manager protocol instance (defaults to FileManager.default)
     ///   - compressionService: Compression service protocol instance
+    ///   - settings: Settings protocol instance (defaults to Settings.shared)
     ///   - logger: Logger protocol instance (defaults to Logger.shared)
     init(
         fileManager: any FileManagerProtocol = FileManager.default,
         compressionService: (any CompressionServiceProtocol)? = nil,
+        settings: any SettingsProtocol = Settings.shared,
         logger: any LoggerProtocol = Logger.shared
     ) {
         self.fileManager = fileManager
         self.compressionService = compressionService ?? CompressionService()
+        self.settings = settings
         self.logger = logger
         super.init()
     }
@@ -194,9 +198,11 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
             return
         }
         
-        // Wait for file to stabilize (2 seconds)
+        // Wait for file to stabilize (delay from settings)
+        let delaySeconds = settings.watchFolderDelay
+        let delayNanoseconds = UInt64(delaySeconds * 1_000_000_000)
         do {
-            try await Task.sleep(nanoseconds: 2_000_000_000)
+            try await Task.sleep(nanoseconds: delayNanoseconds)
         } catch {
             logger.warning("Task sleep interrupted")
             return

@@ -46,8 +46,18 @@ final class CompressionService: CompressionServiceProtocol {
     func optimizeImage(at url: URL) async throws -> URL {
         logger.info("Starting image optimization for: \(url.lastPathComponent)")
         
-        // Determine file type
-        let fileExtension = url.pathExtension.lowercased()
+        // Determine file type using UTType for better detection
+        let fileExtension: String
+        if let resourceValues = try? url.resourceValues(forKeys: [.contentTypeKey]),
+           let contentType = resourceValues.contentType {
+            // Use UTType to determine extension
+            fileExtension = contentType.preferredFilenameExtension ?? url.pathExtension.lowercased()
+            logger.debug("Detected file type: \(contentType.identifier), extension: \(fileExtension)")
+        } else {
+            // Fallback to path extension
+            fileExtension = url.pathExtension.lowercased()
+            logger.debug("Using path extension: \(fileExtension)")
+        }
         
         // Validate file exists
         guard fileManager.fileExists(atPath: url.path) else {
@@ -169,16 +179,35 @@ final class CompressionService: CompressionServiceProtocol {
             throw error
         }
         
-        // Convert NSImage to PNG data
+        // Convert NSImage to PNG data with compression
+        // Compression level: 0.0 (no compression) to 1.0 (max compression)
+        // Using 0.75 as a good balance between size and speed
+        let compressionLevel: Float = 0.75
+        let pngProperties: [NSBitmapImageRep.PropertyKey: Any] = [
+            .compressionMethod: NSBitmapImageRep.TIFFCompression.lzw.rawValue
+        ]
+        
         guard let tiffData = image.tiffRepresentation,
-              let bitmapImage = NSBitmapImageRep(data: tiffData),
-              let pngData = bitmapImage.representation(using: .png, properties: [:]) else {
+              let bitmapImage = NSBitmapImageRep(data: tiffData) else {
+            let error = TrimrPixError.pngCompressionFailed(url)
+            logger.error("Failed to create bitmap representation: \(error.technicalDescription)")
+            throw error
+        }
+        
+        // Try with compression properties first
+        if let pngData = bitmapImage.representation(using: .png, properties: pngProperties) {
+            logger.debug("PNG optimization completed with compression level: \(compressionLevel)")
+            return pngData
+        }
+        
+        // Fallback to default PNG representation if compression fails
+        guard let pngData = bitmapImage.representation(using: .png, properties: [:]) else {
             let error = TrimrPixError.pngCompressionFailed(url)
             logger.error("PNG compression failed: \(error.technicalDescription)")
             throw error
         }
         
-        logger.debug("PNG optimization completed")
+        logger.debug("PNG optimization completed (fallback to default compression)")
         return pngData
     }
     

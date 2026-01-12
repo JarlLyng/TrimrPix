@@ -50,7 +50,10 @@ final class ImageOptimizationViewModel: ObservableObject {
         logger: any LoggerProtocol = Logger.shared
     ) {
         self.compressionService = compressionService ?? CompressionService()
-        self.watchFolderService = watchFolderService ?? WatchFolderService(compressionService: CompressionService())
+        self.watchFolderService = watchFolderService ?? WatchFolderService(
+            compressionService: CompressionService(),
+            settings: settings
+        )
         self.settings = settings
         self.logger = logger
     }
@@ -71,8 +74,10 @@ final class ImageOptimizationViewModel: ObservableObject {
                 continue
             }
             
+            var attemptedURL: URL?
             do {
                 let url = try await loadItemFromProvider(provider: provider)
+                attemptedURL = url
                 
                 guard let url = url else {
                     logger.warning("Provider did not return a URL")
@@ -87,15 +92,23 @@ final class ImageOptimizationViewModel: ObservableObject {
                 }
                 
                 // Create image item
-                let imageItem = ImageItem(url: url)
-                self.images.append(imageItem)
-                loadedCount += 1
-                
-                logger.debug("Added image: \(url.lastPathComponent)")
+                do {
+                    let imageItem = try ImageItem(url: url)
+                    self.images.append(imageItem)
+                    loadedCount += 1
+                    
+                    logger.debug("Added image: \(url.lastPathComponent)")
+                } catch {
+                    failedCount += 1
+                    let error = TrimrPixError.imageLoadFailed(url: url, underlyingError: error)
+                    logger.error("Error creating image item: \(error.technicalDescription)")
+                    showError(message: error.errorDescription ?? "Kunne ikke indlæse billede")
+                }
                 
             } catch {
                 failedCount += 1
-                let error = TrimrPixError.imageLoadFailed(url: URL(fileURLWithPath: ""), underlyingError: error)
+                let errorURL = attemptedURL ?? URL(fileURLWithPath: "unknown")
+                let error = TrimrPixError.imageLoadFailed(url: errorURL, underlyingError: error)
                 logger.error("Error loading image from provider: \(error.technicalDescription)")
                 showError(message: error.errorDescription ?? "Kunne ikke indlæse billede")
             }
@@ -198,6 +211,20 @@ final class ImageOptimizationViewModel: ObservableObject {
     func startWatchFolder() {
         guard settings.watchFolderEnabled, !settings.watchFolderPath.isEmpty else {
             logger.debug("Watch folder not enabled or path is empty")
+            return
+        }
+        
+        // Validate watch folder path before starting
+        do {
+            try settings.validateWatchFolderPath()
+        } catch let error as TrimrPixError {
+            logger.error("Watch folder path validation failed: \(error.technicalDescription)")
+            showError(message: error.errorDescription ?? "Ugyldig watch folder sti")
+            return
+        } catch {
+            let trimmedError = TrimrPixError.watchFolderSetupFailed(settings.watchFolderPath, underlyingError: error)
+            logger.error("Watch folder path validation failed: \(trimmedError.technicalDescription)")
+            showError(message: trimmedError.errorDescription ?? "Ugyldig watch folder sti")
             return
         }
         

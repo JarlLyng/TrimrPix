@@ -160,12 +160,17 @@ struct ImageListView: View {
 /// Displays thumbnail, filename, file sizes, and optimization controls
 /// Shows progress indicator during optimization and checkmark when complete
 struct ImageItemView: View {
-    let image: ImageItem
+    @State private var image: ImageItem
     @ObservedObject var viewModel: ImageOptimizationViewModel
+    
+    init(image: ImageItem, viewModel: ImageOptimizationViewModel) {
+        self._image = State(initialValue: image)
+        self.viewModel = viewModel
+    }
     
     var body: some View {
         HStack {
-            // Thumbnail
+            // Thumbnail (lazy loaded)
             if let nsImage = image.thumbnail {
                 Image(nsImage: nsImage)
                     .resizable()

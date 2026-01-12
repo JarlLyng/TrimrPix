@@ -37,6 +37,7 @@ final class Settings: SettingsProtocol {
     @Published var autoSave: Bool = true
     @Published var watchFolderEnabled: Bool = false
     @Published var watchFolderPath: String = ""
+    @Published var watchFolderDelay: Double = 2.0 // Delay in seconds before processing new files
     
     // MARK: - Singleton
     
@@ -56,6 +57,7 @@ final class Settings: SettingsProtocol {
         static let autoSave = "autoSave"
         static let watchFolderEnabled = "watchFolderEnabled"
         static let watchFolderPath = "watchFolderPath"
+        static let watchFolderDelay = "watchFolderDelay"
     }
     
     // MARK: - Initialization
@@ -119,6 +121,20 @@ final class Settings: SettingsProtocol {
         // Load watch folder path
         watchFolderPath = userDefaults.string(forKey: UserDefaultsKeys.watchFolderPath) ?? ""
         
+        // Load watch folder delay
+        let savedDelay = userDefaults.double(forKey: UserDefaultsKeys.watchFolderDelay)
+        if savedDelay > 0 {
+            watchFolderDelay = savedDelay
+        } else {
+            watchFolderDelay = 2.0 // Default 2 seconds
+        }
+        
+        // Validate watch folder delay
+        guard watchFolderDelay >= 0.5 && watchFolderDelay <= 10.0 else {
+            watchFolderDelay = 2.0
+            logger.warning("Invalid watch folder delay, resetting to default: 2.0 seconds")
+        }
+        
         // Ensure autoSave is disabled if overwriteOriginal is enabled
         if overwriteOriginal && autoSave {
             autoSave = false
@@ -147,6 +163,7 @@ final class Settings: SettingsProtocol {
             userDefaults.set(autoSave, forKey: UserDefaultsKeys.autoSave)
             userDefaults.set(watchFolderEnabled, forKey: UserDefaultsKeys.watchFolderEnabled)
             userDefaults.set(watchFolderPath, forKey: UserDefaultsKeys.watchFolderPath)
+            userDefaults.set(watchFolderDelay, forKey: UserDefaultsKeys.watchFolderDelay)
             
             // Synchronize UserDefaults
             if !userDefaults.synchronize() {
@@ -170,5 +187,34 @@ final class Settings: SettingsProtocol {
             jpegQuality = compressionPreset.quality
             logger.debug("Updated JPEG quality from preset: \(oldQuality) -> \(jpegQuality)")
         }
+    }
+    
+    /// Validates the watch folder path
+    /// - Throws: TrimrPixError if path is invalid or inaccessible
+    func validateWatchFolderPath() throws {
+        guard !watchFolderPath.isEmpty else {
+            throw TrimrPixError.invalidFilePath("Watch folder path is empty")
+        }
+        
+        let url = URL(fileURLWithPath: watchFolderPath)
+        
+        // Check if path exists
+        guard FileManager.default.fileExists(atPath: watchFolderPath) else {
+            throw TrimrPixError.watchFolderNotFound(watchFolderPath)
+        }
+        
+        // Check if it's a directory
+        var isDirectory: ObjCBool = false
+        guard FileManager.default.fileExists(atPath: watchFolderPath, isDirectory: &isDirectory),
+              isDirectory.boolValue else {
+            throw TrimrPixError.invalidFilePath("Path is not a directory: \(watchFolderPath)")
+        }
+        
+        // Check read access
+        guard FileManager.default.isReadableFile(atPath: watchFolderPath) else {
+            throw TrimrPixError.watchFolderPermissionDenied(watchFolderPath)
+        }
+        
+        logger.debug("Watch folder path validated successfully: \(watchFolderPath)")
     }
 }

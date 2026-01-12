@@ -86,9 +86,11 @@ protocol SettingsProtocol: ObservableObject {
     var autoSave: Bool { get set }
     var watchFolderEnabled: Bool { get set }
     var watchFolderPath: String { get set }
+    var watchFolderDelay: Double { get set }
     
     func saveSettings() throws
     func loadSettings() throws
     func updateQualityFromPreset()
+    func validateWatchFolderPath() throws
 }
 
