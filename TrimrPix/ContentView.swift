@@ -160,67 +160,101 @@ struct ImageListView: View {
 /// Displays thumbnail, filename, file sizes, and optimization controls
 /// Shows progress indicator during optimization and checkmark when complete
 struct ImageItemView: View {
-    @State private var image: ImageItem
+    let imageId: UUID
     @ObservedObject var viewModel: ImageOptimizationViewModel
+    @State private var thumbnail: NSImage?
+    
+    // Computed property to get current image from viewModel
+    private var image: ImageItem? {
+        viewModel.images.first(where: { $0.id == imageId })
+    }
     
     init(image: ImageItem, viewModel: ImageOptimizationViewModel) {
-        self._image = State(initialValue: image)
+        self.imageId = image.id
         self.viewModel = viewModel
+        self._thumbnail = State(initialValue: nil)
     }
     
     var body: some View {
-        HStack {
-            // Thumbnail (lazy loaded)
-            if let nsImage = image.thumbnail {
-                Image(nsImage: nsImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 60, height: 60)
-                    .cornerRadius(6)
-            } else {
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(Color.gray.opacity(0.2))
-                    .frame(width: 60, height: 60)
-            }
-            
-            // Filinfo
-            VStack(alignment: .leading) {
-                Text(image.filename)
-                    .font(.headline)
-                
-                HStack {
-                    Text("Original: \(image.originalSize.formattedSize)")
-                    
-                    if let optimizedSize = image.optimizedSize {
-                        Text("→")
-                        Text("Optimized: \(optimizedSize.formattedSize)")
-                        Text("(\(image.savingsPercentage)% reduction)")
-                            .foregroundColor(.green)
-                    }
+        if let image = image {
+            HStack {
+                // Thumbnail (lazy loaded)
+                if let nsImage = thumbnail {
+                    Image(nsImage: nsImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 60, height: 60)
+                        .cornerRadius(6)
+                } else {
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(Color.gray.opacity(0.2))
+                        .frame(width: 60, height: 60)
+                        .onAppear {
+                            // Load thumbnail when view appears
+                            var mutableImage = image
+                            thumbnail = mutableImage.thumbnail
+                        }
                 }
-                .font(.subheadline)
-            }
-            
-            Spacer()
-            
-            // Status
-            if image.isOptimizing {
-                ProgressView()
-            } else if image.isOptimized {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(.green)
-            } else {
-                Button("Optimize") {
-                    if let index = viewModel.images.firstIndex(where: { $0.id == image.id }) {
-                        Task {
-                            await viewModel.optimizeImage(at: index)
+                
+                // Filinfo
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(image.filename)
+                        .font(.headline)
+                    
+                    HStack(spacing: 4) {
+                        Text("Original: \(image.originalSize.formattedSize)")
+                            .foregroundColor(.secondary)
+                        
+                        if let optimizedSize = image.optimizedSize {
+                            Text("→")
+                                .foregroundColor(.secondary)
+                            Text("Optimized: \(optimizedSize.formattedSize)")
+                                .foregroundColor(.primary)
+                            Text("(\(image.savingsPercentage)% reduction)")
+                                .foregroundColor(.green)
+                                .fontWeight(.medium)
                         }
                     }
+                    .font(.subheadline)
                 }
-                .disabled(image.isOptimizing || image.isOptimized)
+                
+                Spacer()
+                
+                // Status and actions
+                HStack(spacing: 8) {
+                    // Remove button
+                    Button(action: {
+                        viewModel.removeImage(id: image.id)
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.secondary)
+                    }
+                    .buttonStyle(.borderless)
+                    .help("Remove image from list")
+                    .disabled(image.isOptimizing)
+                    
+                    // Status or optimize button
+                    if image.isOptimizing {
+                        ProgressView()
+                            .scaleEffect(0.8)
+                    } else if image.isOptimized {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                            .font(.title2)
+                    } else {
+                        Button("Optimize") {
+                            if let index = viewModel.images.firstIndex(where: { $0.id == image.id }) {
+                                Task {
+                                    await viewModel.optimizeImage(at: index)
+                                }
+                            }
+                        }
+                        .disabled(image.isOptimizing || image.isOptimized)
+                    }
+                }
             }
+            .padding(.vertical, 4)
         }
-        .padding(.vertical, 4)
     }
 }
 

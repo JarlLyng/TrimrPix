@@ -114,9 +114,19 @@ final class Settings: SettingsProtocol {
         }
         
         // Load boolean settings
-        overwriteOriginal = userDefaults.bool(forKey: UserDefaultsKeys.overwriteOriginal)
-        autoSave = userDefaults.bool(forKey: UserDefaultsKeys.autoSave)
-        watchFolderEnabled = userDefaults.bool(forKey: UserDefaultsKeys.watchFolderEnabled)
+        // Only use UserDefaults value if key exists, otherwise use default
+        if userDefaults.object(forKey: UserDefaultsKeys.overwriteOriginal) != nil {
+            overwriteOriginal = userDefaults.bool(forKey: UserDefaultsKeys.overwriteOriginal)
+        }
+        if userDefaults.object(forKey: UserDefaultsKeys.autoSave) != nil {
+            autoSave = userDefaults.bool(forKey: UserDefaultsKeys.autoSave)
+        } else {
+            // Default to true if not set
+            autoSave = true
+        }
+        if userDefaults.object(forKey: UserDefaultsKeys.watchFolderEnabled) != nil {
+            watchFolderEnabled = userDefaults.bool(forKey: UserDefaultsKeys.watchFolderEnabled)
+        }
         
         // Load watch folder path
         watchFolderPath = userDefaults.string(forKey: UserDefaultsKeys.watchFolderPath) ?? ""
@@ -130,7 +140,7 @@ final class Settings: SettingsProtocol {
         }
         
         // Validate watch folder delay
-        guard watchFolderDelay >= 0.5 && watchFolderDelay <= 10.0 else {
+        if !(watchFolderDelay >= 0.5 && watchFolderDelay <= 10.0) {
             watchFolderDelay = 2.0
             logger.warning("Invalid watch folder delay, resetting to default: 2.0 seconds")
         }
@@ -196,8 +206,6 @@ final class Settings: SettingsProtocol {
             throw TrimrPixError.invalidFilePath("Watch folder path is empty")
         }
         
-        let url = URL(fileURLWithPath: watchFolderPath)
-        
         // Check if path exists
         guard FileManager.default.fileExists(atPath: watchFolderPath) else {
             throw TrimrPixError.watchFolderNotFound(watchFolderPath)
@@ -218,3 +226,4 @@ final class Settings: SettingsProtocol {
         logger.debug("Watch folder path validated successfully: \(watchFolderPath)")
     }
 }
+

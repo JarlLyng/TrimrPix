@@ -73,8 +73,26 @@ enum TrimrPixError: LocalizedError {
             return "Fil ikke fundet: \(url.lastPathComponent)"
         case .fileReadError(let url, _):
             return "Kunne ikke læse fil: \(url.lastPathComponent)"
-        case .fileWriteError(let url, _):
-            return "Kunne ikke skrive fil: \(url.lastPathComponent)"
+        case .fileWriteError(let url, let error):
+            var message = "Kunne ikke skrive fil: \(url.lastPathComponent)"
+            if let error = error {
+                let nsError = error as NSError
+                if nsError.domain == NSCocoaErrorDomain {
+                    switch nsError.code {
+                    case NSFileWriteNoPermissionError:
+                        message += " (Ingen skriveadgang)"
+                    case NSFileWriteFileExistsError:
+                        message += " (Fil eksisterer allerede)"
+                    case NSFileWriteVolumeReadOnlyError:
+                        message += " (Drev er skrivebeskyttet)"
+                    default:
+                        message += " (\(error.localizedDescription))"
+                    }
+                } else {
+                    message += " (\(error.localizedDescription))"
+                }
+            }
+            return message
         case .fileSizeReadError(let url, _):
             return "Kunne ikke læse filstørrelse: \(url.lastPathComponent)"
         case .invalidFilePath(let path):

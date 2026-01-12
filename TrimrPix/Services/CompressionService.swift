@@ -377,19 +377,210 @@ final class CompressionService: CompressionServiceProtocol {
     /// - Returns: The URL where the file was saved
     /// - Throws: TrimrPixError if save fails
     private func saveInSameFolder(data: Data, originalURL: URL, suggestedFilename: String) async throws -> URL {
-        let destinationURL = originalURL.deletingLastPathComponent().appendingPathComponent(suggestedFilename)
+        let folderURL = originalURL.deletingLastPathComponent()
         
-        logger.debug("Auto-saving to: \(destinationURL.lastPathComponent)")
+        // For sandboxed apps, we need to access security-scoped resources
+        // Start accessing the original file's security-scoped resource to get access to its parent directory
+        // This MUST be called before any file operations on the parent directory
+        let fileHasAccess = originalURL.startAccessingSecurityScopedResource()
+        let folderHasAccess = folderURL.startAccessingSecurityScopedResource()
         
-        do {
-            try data.write(to: destinationURL)
-            logger.info("Image auto-saved to: \(destinationURL.path)")
-            return destinationURL
-        } catch {
-            let trimmedError = TrimrPixError.fileWriteError(url: destinationURL, underlyingError: error)
-            logger.error("Auto-save failed: \(trimmedError.technicalDescription)")
-            throw trimmedError
+        // We'll stop access after we're done writing
+        defer {
+            if folderHasAccess {
+                folderURL.stopAccessingSecurityScopedResource()
+            }
+            if fileHasAccess {
+                originalURL.stopAccessingSecurityScopedResource()
+            }
         }
+        
+        logger.debug("Security-scoped access: file=\(fileHasAccess), folder=\(folderHasAccess)")
+        
+        // Validate folder exists
+        guard fileManager.fileExists(atPath: folderURL.path) else {
+            let error = TrimrPixError.directoryNotFound(folderURL)
+            logger.error("Destination folder does not exist: \(error.technicalDescription)")
+            throw error
+        }
+        
+        // Try to check if folder is writable
+        // If we don't have access, we'll try to write anyway and catch the error
+        let isWritable = isFolderWritable(folderURL)
+        logger.debug("Folder writable check: \(isWritable)")
+        
+        if !isWritable && !fileHasAccess && !folderHasAccess {
+            // No security-scoped access and folder not writable
+            // Fall back to save panel
+            logger.warning("No write access to folder, falling back to save panel")
+            return try await saveOptimizedImage(data: data, originalURL: originalURL, suggestedFilename: suggestedFilename)
+        }
+        
+        // Validate and sanitize filename
+        let sanitizedFilename = sanitizeFilename(suggestedFilename)
+        
+        // Find a unique filename if the suggested one already exists
+        var finalFilename = generateUniqueFilename(baseFilename: sanitizedFilename, in: folderURL)
+        var destinationURL = folderURL.appendingPathComponent(finalFilename)
+        
+        logger.debug("Auto-saving to: \(destinationURL.path)")
+        logger.debug("File size: \(data.count) bytes")
+        logger.debug("Folder URL: \(folderURL.path)")
+        logger.debug("Has security-scoped access: file=\(fileHasAccess), folder=\(folderHasAccess)")
+        
+        // Try to save, and if file exists error occurs, find new unique name and retry
+        var attempts = 0
+        let maxAttempts = 10
+        
+        while attempts < maxAttempts {
+            do {
+                // Use atomic write to prevent race conditions
+                try data.write(to: destinationURL, options: .atomic)
+                logger.info("Image auto-saved to: \(destinationURL.path)")
+                return destinationURL
+            } catch let error as NSError {
+                logger.error("File write error - Domain: \(error.domain), Code: \(error.code), Description: \(error.localizedDescription)")
+                logger.error("Attempted path: \(destinationURL.path)")
+                
+                // Check if error is because file already exists (race condition)
+                if error.domain == NSCocoaErrorDomain && error.code == NSFileWriteFileExistsError {
+                    logger.debug("File exists during write (race condition), finding new name: \(destinationURL.lastPathComponent)")
+                    attempts += 1
+                    
+                    // Generate new unique filename
+                    finalFilename = generateUniqueFilename(baseFilename: suggestedFilename, in: folderURL, excludeFilename: finalFilename)
+                    destinationURL = folderURL.appendingPathComponent(finalFilename)
+                    
+                    if attempts >= maxAttempts {
+                        let trimmedError = TrimrPixError.fileWriteError(url: destinationURL, underlyingError: error)
+                        logger.error("Auto-save failed after \(maxAttempts) attempts: \(trimmedError.technicalDescription)")
+                        throw trimmedError
+                    }
+                } else {
+                    // Check if it's a permission error
+                    if error.domain == NSCocoaErrorDomain && error.code == NSFileWriteNoPermissionError {
+                        logger.warning("Permission denied, falling back to save panel")
+                        // Stop accessing resources before showing save panel
+                        if folderHasAccess {
+                            folderURL.stopAccessingSecurityScopedResource()
+                        }
+                        if fileHasAccess {
+                            originalURL.stopAccessingSecurityScopedResource()
+                        }
+                        // Fall back to save panel
+                        return try await saveOptimizedImage(data: data, originalURL: originalURL, suggestedFilename: suggestedFilename)
+                    }
+                    
+                    // Different error, log details and throw it
+                    let trimmedError = TrimrPixError.fileWriteError(url: destinationURL, underlyingError: error)
+                    logger.error("Auto-save failed with error: \(trimmedError.technicalDescription)")
+                    logger.error("Error details - Domain: \(error.domain), Code: \(error.code), UserInfo: \(error.userInfo)")
+                    throw trimmedError
+                }
+            } catch {
+                // Other error types
+                let trimmedError = TrimrPixError.fileWriteError(url: destinationURL, underlyingError: error)
+                logger.error("Auto-save failed with unknown error: \(trimmedError.technicalDescription)")
+                logger.error("Error type: \(type(of: error)), Description: \(error.localizedDescription)")
+                throw trimmedError
+            }
+        }
+        
+        // Should never reach here, but just in case
+        let trimmedError = TrimrPixError.fileWriteError(url: destinationURL, underlyingError: nil)
+        logger.error("Auto-save failed: \(trimmedError.technicalDescription)")
+        throw trimmedError
+    }
+    
+    /// Checks if a folder is writable by using URL resource values and a safe write probe fallback
+    /// - Parameter folderURL: The folder URL to check
+    /// - Returns: True if the folder appears writable
+    private func isFolderWritable(_ folderURL: URL) -> Bool {
+        // First, attempt to read the isWritable resource value
+        if let values = try? folderURL.resourceValues(forKeys: [.isWritableKey]),
+           let writable = values.isWritable {
+            return writable
+        }
+        
+        // Fallback: attempt to create and remove a tiny temp file in the folder
+        // Use FileManager.default directly since removeItem is not in the protocol
+        let tempFilename = ".trimrpix_write_test_\(UUID().uuidString)"
+        let tempURL = folderURL.appendingPathComponent(tempFilename)
+        do {
+            try Data().write(to: tempURL, options: .atomic)
+            try? FileManager.default.removeItem(at: tempURL)
+            return true
+        } catch {
+            return false
+        }
+    }
+    
+    /// Sanitizes a filename by removing invalid characters
+    /// - Parameter filename: The filename to sanitize
+    /// - Returns: A sanitized filename safe for filesystem use
+    private func sanitizeFilename(_ filename: String) -> String {
+        // Remove invalid characters for macOS filesystem
+        let invalidChars = CharacterSet(charactersIn: "/\\:<>\"|?*")
+        let components = filename.components(separatedBy: invalidChars)
+        return components.joined(separator: "_")
+    }
+    
+    /// Generates a unique filename by appending a number if the file already exists
+    /// - Parameters:
+    ///   - baseFilename: The base filename to use
+    ///   - folderURL: The folder where the file will be saved
+    ///   - excludeFilename: Optional filename to exclude from check (already tried)
+    /// - Returns: A unique filename that doesn't exist in the folder
+    private func generateUniqueFilename(baseFilename: String, in folderURL: URL, excludeFilename: String? = nil) -> String {
+        // Check if base filename already exists
+        let baseURL = folderURL.appendingPathComponent(baseFilename)
+        
+        guard fileManager.fileExists(atPath: baseURL.path) || baseFilename == excludeFilename else {
+            // File doesn't exist and it's not the excluded one, use base filename
+            return baseFilename
+        }
+        
+        // File exists, find a unique name by appending a number
+        let nameWithoutExtension = (baseFilename as NSString).deletingPathExtension
+        let fileExtension = (baseFilename as NSString).pathExtension
+        
+        var counter = 2
+        var uniqueFilename: String
+        
+        repeat {
+            if fileExtension.isEmpty {
+                uniqueFilename = "\(nameWithoutExtension)-\(counter)"
+            } else {
+                uniqueFilename = "\(nameWithoutExtension)-\(counter).\(fileExtension)"
+            }
+            
+            // Skip if this is the excluded filename
+            if uniqueFilename == excludeFilename {
+                counter += 1
+                continue
+            }
+            
+            let testURL = folderURL.appendingPathComponent(uniqueFilename)
+            
+            if !fileManager.fileExists(atPath: testURL.path) {
+                logger.debug("Found unique filename: \(uniqueFilename)")
+                return uniqueFilename
+            }
+            
+            counter += 1
+            
+            // Safety limit to prevent infinite loop
+            if counter > 1000 {
+                logger.warning("Could not find unique filename after 1000 attempts, using timestamp")
+                let timestamp = Int(Date().timeIntervalSince1970)
+                if fileExtension.isEmpty {
+                    uniqueFilename = "\(nameWithoutExtension)-\(timestamp)"
+                } else {
+                    uniqueFilename = "\(nameWithoutExtension)-\(timestamp).\(fileExtension)"
+                }
+                return uniqueFilename
+            }
+        } while true
     }
     
     /// Overwrites the original image with optimized version
@@ -412,3 +603,4 @@ final class CompressionService: CompressionServiceProtocol {
         }
     }
 }
+

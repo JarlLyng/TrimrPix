@@ -20,18 +20,20 @@ TrimrPix is a macOS app built with SwiftUI, focusing on high-quality image compr
 
 ### 🎯 User Experience
 - **Drag & Drop Interface** for intuitive image addition
-- **Batch processing** with concurrent optimization for speed
-- **Individual optimization** for single images
-- **Real-time feedback:** Before/after file size and percentage reduction
-- **Auto-save functionality** - saves optimized images in the same folder as originals
-- **Manual save option** for custom file locations
+- **Batch processing** with concurrent optimization
+- **Individual optimization** with per-image controls
+- **Real-time feedback:** File size comparison and percentage reduction
+- **Auto-save:** Saves optimized images in the same folder as originals (default)
+- **Manual save:** Fallback to save dialog when folder access is restricted
+- **Individual removal:** Remove single images from the list
 
 ### ⚙️ Advanced Features
 - **Compression presets:** Low (60%), Medium (80%), High (95%), Custom
-- **Watch Folder:** Automatically processes new images added to a monitored folder
-- **Settings panel** with comprehensive customization options
+- **Watch Folder:** Automatically processes new images with configurable delay (0.5-10s)
+- **Settings panel:** Compression quality, save options, and watch folder configuration
 - **Overwrite protection:** Option to overwrite originals or create new files
-- **Error handling** with user-friendly error messages and recovery
+- **Smart file naming:** Automatically handles filename conflicts with unique naming
+- **Error handling:** User-friendly messages with recovery suggestions
 
 ## 🛠️ Technologies
 - **SwiftUI** – Modern UI development for macOS
@@ -43,79 +45,44 @@ TrimrPix is a macOS app built with SwiftUI, focusing on high-quality image compr
 
 ## ⚙️ Architecture
 
-### 🏗️ Design Patterns
-- **MVVM Architecture:** Clean separation of concerns with Model-View-ViewModel pattern
-- **Protocol-Oriented Design:** Dependency injection for testability and flexibility
-- **Sandboxed App:** Secure file system access with proper entitlements
-- **Async/Await:** Modern Swift concurrency for responsive UI and background processing
-- **Error Handling:** Centralized error management with user-friendly messages
-- **Logging:** Structured logging system with OSLog integration
+TrimrPix følger MVVM-arkitektur med protocol-orienteret design. Se [ARCHITECTURE.md](ARCHITECTURE.md) for detaljeret dokumentation.
 
-### 🔧 Core Components
-- **Models:** Data structures for images, settings, and application state
-- **Views:** SwiftUI-based user interface with reactive updates
-- **ViewModels:** Business logic coordination and data flow management
-- **Services:** Specialized classes for compression and file system monitoring
-- **Protocols:** Service interfaces for dependency injection and testing
-- **Error Handling:** Centralized `TrimrPixError` enum with recovery suggestions
-- **Logging:** Centralized `Logger` service with structured log levels
-
-### 🛡️ Security & Performance
-- **File System Protection:** Sandboxed environment with controlled file access
-- **Memory Management:** Efficient image processing with proper resource cleanup
-- **Concurrent Processing:** Background optimization with UI responsiveness
-- **Error Recovery:** User-friendly error messages with recovery suggestions
-- **Structured Logging:** Comprehensive logging for debugging and monitoring
-
-### 📚 Documentation
-- **Code Documentation:** Comprehensive inline documentation for all public APIs
-- **Architecture Guide:** Detailed architecture documentation (`ARCHITECTURE.md`)
-- **Code Style Guide:** Coding standards and best practices (`CODE_STYLE.md`)
+**Nøgleprincipper:**
+- MVVM med klar separation of concerns
+- Protocol-based dependency injection
+- Security-scoped resource access for sandboxing
+- Async/await for concurrent processing
+- Centraliseret error handling og logging
 
 ## 📁 Project Structure
 ```
 TrimrPix/
-├── TrimrPixApp.swift       # App entry point
-├── ContentView.swift       # Main view with UI components
+├── TrimrPixApp.swift              # App entry point
+├── ContentView.swift              # Main view with UI components
 ├── Models/
-│   ├── ImageItem.swift     # Data model for images
-│   └── Settings.swift      # User settings and preferences
+│   ├── ImageItem.swift            # Image data model with lazy thumbnails
+│   ├── Settings.swift             # User settings and preferences
+│   └── TrimrPixError.swift       # Centralized error types
 ├── ViewModels/
-│   └── ImageOptimizationViewModel.swift  # Handles image optimization
+│   └── ImageOptimizationViewModel.swift  # Business logic coordination
 ├── Views/
-│   └── SettingsView.swift  # Settings panel UI
+│   └── SettingsView.swift         # Settings panel UI
 ├── Services/
-│   ├── CompressionService.swift  # Image compression logic
-│   └── WatchFolderService.swift  # Watch folder monitoring
-├── Assets.xcassets/        # App icons and assets
-└── TrimrPix.entitlements   # App sandboxing and permissions
+│   ├── CompressionService.swift   # Image compression with security-scoped access
+│   ├── WatchFolderService.swift   # File system monitoring
+│   ├── Logger.swift               # Structured logging service
+│   └── Protocols.swift            # Service protocol definitions
+└── Assets.xcassets/               # App icons and assets
 ```
 
-## 🔧 Technical Implementation
+## 🔧 Technical Details
 
-### 🖱️ User Interface
-- **Drag & Drop:** SwiftUI's `.onDrop` modifier with UTType support
-- **Reactive UI:** Real-time updates with `@Published` properties and `@StateObject`
-- **Settings Panel:** Comprehensive configuration with persistent storage
-
-### 🖼️ Image Processing
-- **JPEG:** Configurable quality compression (60%-95%) via NSBitmapImageRep
-- **PNG:** Optimized compression with default settings
-- **GIF:** Format validation and safe copying (no compression in MVP)
-- **WebP:** Format validation and copying (macOS limitation)
-- **AVIF:** Format validation and copying (macOS limitation)
-
-### ⚡ Performance & Concurrency
-- **Async/Await:** Modern Swift concurrency for non-blocking operations
-- **TaskGroup:** Concurrent batch processing for improved performance
-- **@MainActor:** Thread-safe UI updates
-- **Memory Management:** Efficient resource handling with proper cleanup
-
-### 📁 File Management
-- **Auto-save:** Automatic saving in same folder as originals
-- **Manual Save:** Optional user-controlled file placement
-- **Watch Folder:** Real-time file system monitoring with debouncing
-- **Sandboxing:** Secure file access with proper entitlements
+- **File Type Detection:** UTType-based format identification
+- **Security-Scoped Resources:** Automatic handling of sandboxed file access
+- **Filename Conflicts:** Automatic unique naming (e.g., `image-optimized-2.png`)
+- **Memory Optimization:** Lazy-loaded thumbnails resized to max 120px
+- **Concurrent Processing:** TaskGroup-based batch optimization
+- **Error Handling:** Detailed error messages with recovery suggestions
 
 ## 📖 Installation & Usage
 
@@ -168,10 +135,10 @@ cd TrimrPix
 4. **Watch Folder:** Enable automatic processing of new images in a folder
 
 ## 🔍 Known Limitations
-- **GIF Processing:** Limited to validation and copying (no compression in MVP)
-- **WebP/AVIF:** Format validation only due to macOS NSBitmapImageRep limitations
+- **GIF Processing:** Validation and copying only (no compression in MVP)
+- **WebP/AVIF:** Format validation only (macOS NSBitmapImageRep limitations)
 - **macOS Version:** Requires macOS 15.2 or newer
-- **Watch Folder:** Requires manual folder selection in settings
+- **Sandboxing:** May require save dialog for folders without explicit access
 
 ## 🚀 Future Roadmap
 

@@ -109,7 +109,7 @@ Debounce (1 second delay)
     ↓
 Process new files
     ↓
-Check file stability (size check with 2s delay)
+Check file stability (size check with configurable delay from Settings)
     ↓
 CompressionService.optimizeImage()
     ↓
@@ -124,13 +124,15 @@ Optimized file saved
 - Repræsenterer et billede der skal optimeres
 - Indeholder original og optimeret filstørrelse
 - Beregner besparelsesprocent
-- Indeholder thumbnail til visning
+- Lazy-loaded thumbnails (max 120px) for memory optimization
+- Throwing initializer for bedre error handling
 
 #### Settings
 - Singleton for applikationsindstillinger
 - Persisterer til UserDefaults
-- Validerer indstillingsværdier
+- Validerer indstillingsværdier (JPEG quality, watch folder path)
 - Håndterer compression presets
+- Watch folder delay konfiguration (0.5-10s)
 
 #### TrimrPixError
 - Centraliseret fejltyper for hele applikationen
@@ -153,18 +155,22 @@ Optimized file saved
 - Implementerer `CompressionServiceProtocol`
 - Håndterer format-specifik komprimering:
   - JPEG: Kvalitets-komprimeret (60%-95%)
-  - PNG: Standard PNG-komprimering
+  - PNG: Optimized compression med compression level support
   - GIF: Validering og kopiering (ingen komprimering i MVP)
   - WebP: Validering (ingen komprimering i MVP - macOS begrænsning)
   - AVIF: Validering (ingen komprimering i MVP - macOS begrænsning)
-- Håndterer fil-opslag baseret på indstillinger
+- Filtype detection via UTType for robust identifikation
+- Security-scoped resource access for sandboxed apps
+- Automatisk filnavn konflikthåndtering med unique naming
+- Fallback til save panel ved manglende folder access
 
 #### WatchFolderService
 - Implementerer `WatchFolderServiceProtocol`
 - Monitører en mappe for nye billeder
 - Bruger `DispatchSourceFileSystemObject` til file system events
-- Debouncing for at undgå overflødige events
-- Filstabilitets-check for at vente på at filer er færdige med at blive skrevet
+- Debouncing (1 sekund) for at undgå overflødige events
+- Filstabilitets-check med konfigurerbart delay (fra Settings)
+- Validerer folder path og permissions før start
 
 #### Logger
 - Implementerer `LoggerProtocol`
@@ -181,12 +187,14 @@ Optimized file saved
 - Indeholder DropZoneView, ImageListView og controls
 - Håndterer error alerts
 - Starter/stopper watch folder
+- Real-time opdatering af optimization status via reactive bindings
 
 #### SettingsView
 - Indstillingspanel
-- Compression quality configuration
+- Compression quality configuration med presets
 - Save options (overwrite/auto-save)
-- Watch folder configuration
+- Watch folder configuration med path validation
+- Watch folder delay konfiguration (0.5-10s)
 
 ## Concurrency
 
@@ -233,9 +241,9 @@ let compressionService = CompressionService(logger: mockLogger)
 ## Performance Considerations
 
 1. **Concurrent Processing**: Batch optimization bruger TaskGroup for concurrent processing
-2. **Memory Management**: Images læses og behandles en ad gangen hvor muligt
-3. **File System Monitoring**: Debouncing reducerer antal file system events
-4. **Thumbnails**: Thumbnails caches i ImageItem for hurtigere UI rendering
+2. **Memory Management**: Lazy-loaded thumbnails (max 120px) reducerer memory footprint
+3. **File System Monitoring**: Debouncing og konfigurerbart delay reducerer overflødige events
+4. **Security-Scoped Resources**: Automatisk håndtering af sandboxed file access
 
 ## Future Improvements
 
@@ -269,7 +277,8 @@ let compressionService = CompressionService(logger: mockLogger)
 ## Security Considerations
 
 - **Sandboxing**: Appen er sandboxed (TrimrPix.entitlements)
-- **File Access**: Restricted til bruger-valgte lokationer
+- **Security-Scoped Resources**: Automatisk håndtering af file access via `startAccessingSecurityScopedResource()`
+- **File Access**: Restricted til bruger-valgte lokationer med fallback til save panel
 - **Error Messages**: Ingen sensitive data i fejlbeskeder
 
 ## Code Quality Standards
@@ -283,5 +292,5 @@ let compressionService = CompressionService(logger: mockLogger)
 ---
 
 **Opdateret**: 26. februar 2025  
-**Version**: 1.0
+**Version**: 1.1
 

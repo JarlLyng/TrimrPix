@@ -91,6 +91,13 @@ final class ImageOptimizationViewModel: ObservableObject {
                     continue
                 }
                 
+                // Start security-scoped resource access for sandboxed apps
+                // This gives us access to the file and its parent directory
+                let hasAccess = url.startAccessingSecurityScopedResource()
+                if hasAccess {
+                    logger.debug("Started security-scoped access for: \(url.lastPathComponent)")
+                }
+                
                 // Create image item
                 do {
                     let imageItem = try ImageItem(url: url)
@@ -122,6 +129,18 @@ final class ImageOptimizationViewModel: ObservableObject {
         let count = images.count
         images.removeAll()
         logger.info("Cleared \(count) images from list")
+    }
+    
+    /// Removes a single image from the list
+    /// - Parameter id: The ID of the image to remove
+    func removeImage(id: UUID) {
+        if let index = images.firstIndex(where: { $0.id == id }) {
+            let filename = images[index].filename
+            images.remove(at: index)
+            logger.info("Removed image from list: \(filename)")
+        } else {
+            logger.warning("Attempted to remove image with ID that doesn't exist")
+        }
     }
     
     /// Optimizes all images in the list concurrently
