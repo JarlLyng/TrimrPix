@@ -133,6 +133,8 @@ Optimized file saved
 - Validerer indstillingsværdier (JPEG quality, watch folder path)
 - Håndterer compression presets
 - Watch folder delay konfiguration (0.5-10s)
+- **Security-Scoped Bookmarks**: Gemmer og genoptager bookmarks for watch folder ved app restart
+- **Bookmark Management**: `setWatchFolder()` og `getWatchFolderURL()` metoder for persistent folder access
 
 #### TrimrPixError
 - Centraliseret fejltyper for hele applikationen
@@ -148,6 +150,9 @@ Optimized file saved
 - Managerer image list state
 - Koordinerer watch folder integration
 - `@MainActor` for thread-safe UI updates
+- **Background Processing**: Optimering kører i `Task.detached` for at undgå UI-freezing
+- **Security-Scoped Access Management**: Tracks og stopper security-scoped resource access når billeder fjernes
+- **Dependency Injection**: Bruger injicerede services korrekt (fx compressionService til WatchFolderService)
 
 ### Services
 
@@ -168,9 +173,11 @@ Optimized file saved
 - Implementerer `WatchFolderServiceProtocol`
 - Monitører en mappe for nye billeder
 - Bruger `DispatchSourceFileSystemObject` til file system events
-- Debouncing (1 sekund) for at undgå overflødige events
+- Debouncing med konfigurerbart delay (fra Settings, 0.5-10s) for at undgå overflødige events
 - Filstabilitets-check med konfigurerbart delay (fra Settings)
 - Validerer folder path og permissions før start
+- **Loop Prevention**: Filtrerer output-filer (`*-optimized*`) og tracker processed files for at undgå re-optimering
+- **Processed Files Tracking**: Set-baseret tracking af allerede-behandlede filer for at forhindre re-processing
 
 #### Logger
 - Implementerer `LoggerProtocol`
@@ -202,8 +209,10 @@ Applikationen bruger moderne Swift concurrency:
 
 - **async/await**: For asynkron operations (image loading, compression)
 - **TaskGroup**: For concurrent batch processing
+- **Task.detached**: Optimering kører i baggrunden for at undgå UI-freezing
 - **@MainActor**: For thread-safe UI updates
 - **Actor isolation**: ViewModel er markeret med @MainActor
+- **Data Race Prevention**: Settings værdier kopieres på main actor før baggrundsarbejde
 
 ## Error Handling Strategy
 
@@ -240,10 +249,12 @@ let compressionService = CompressionService(logger: mockLogger)
 
 ## Performance Considerations
 
-1. **Concurrent Processing**: Batch optimization bruger TaskGroup for concurrent processing
+1. **Concurrent Processing**: Batch optimization bruger TaskGroup for concurrent processing i baggrunden (`Task.detached`)
 2. **Memory Management**: Lazy-loaded thumbnails (max 120px) reducerer memory footprint
 3. **File System Monitoring**: Debouncing og konfigurerbart delay reducerer overflødige events
-4. **Security-Scoped Resources**: Automatisk håndtering af sandboxed file access
+4. **Security-Scoped Resources**: Automatisk håndtering af sandboxed file access med korrekt start/stop
+5. **UI Responsiveness**: Optimering kører i baggrunden, UI opdateres kun via `MainActor.run`
+6. **Processed Files Tracking**: Set-baseret tracking begrænset til 1000 entries for memory management
 
 ## Future Improvements
 
@@ -291,6 +302,6 @@ let compressionService = CompressionService(logger: mockLogger)
 
 ---
 
-**Opdateret**: 26. februar 2025  
+**Opdateret**: 15. januar 2026  
 **Version**: 1.1
 
