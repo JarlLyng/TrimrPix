@@ -267,7 +267,8 @@ final class Settings: SettingsProtocol {
     /// - Throws: TrimrPixError if bookmark creation fails
     func setWatchFolder(url: URL) throws {
         // Create security-scoped bookmark for persistent access
-        let bookmarkData = try url.bookmarkData(options: [.withSecurityScope, .securityScopeAllowOnlyReadKey],
+        // Use .withSecurityScope for read-write access to the folder
+        let bookmarkData = try url.bookmarkData(options: [.withSecurityScope],
                                                 includingResourceValuesForKeys: nil,
                                                 relativeTo: nil)
         

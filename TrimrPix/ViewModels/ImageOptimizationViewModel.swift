@@ -9,6 +9,16 @@ import Foundation
 import SwiftUI
 import UniformTypeIdentifiers
 
+private extension ImageItem {
+    static var placeholder: ImageItem {
+        // Create a minimal placeholder that won't be used; values won't be accessed
+        // Use a temporary file URL as a dummy
+        let tempURL = URL(fileURLWithPath: "/dev/null")
+        // Force-try is acceptable here because it's only used when index is missing and won't be accessed
+        return try! ImageItem(url: tempURL)
+    }
+}
+
 /// ViewModel responsible for managing image optimization operations
 /// Coordinates between UI, compression service, and watch folder service
 @MainActor
@@ -196,19 +206,20 @@ final class ImageOptimizationViewModel: ObservableObject {
         logger.info("Starting optimization for \(images.count) images")
         isOptimizing = true
         
-        // Run optimization in background to avoid blocking UI
-        Task.detached { [weak self] in
-            guard let self = self else { return }
+        // Launch a task that inherits MainActor, then capture a snapshot of IDs on MainActor
+        Task { [weak self] in
+            guard let self else { return }
             
-            // Concurrent processing for better performance
+            // Capture a stable snapshot of the image IDs to process
+            let idsToProcess: [UUID] = await MainActor.run { self.images.map { $0.id } }
+            
+            // Perform concurrent processing without touching MainActor-isolated state directly
             await withTaskGroup(of: Void.self) { group in
-                for index in 0..<self.images.count {
-                    group.addTask {
-                        await self.optimizeImage(at: index)
+                for id in idsToProcess {
+                    group.addTask { [weak self] in
+                        await self?.optimizeImage(withID: id)
                     }
                 }
-                
-                // Wait for all tasks to complete
                 await group.waitForAll()
             }
             
@@ -229,7 +240,7 @@ final class ImageOptimizationViewModel: ObservableObject {
             return
         }
         
-        let imageItem = images[index]
+        let imageItem: ImageItem = await MainActor.run { self.images[index] }
         logger.info("Starting optimization for: \(imageItem.filename)")
         
         // Set optimizing state on main actor
@@ -251,10 +262,10 @@ final class ImageOptimizationViewModel: ObservableObject {
                     self.images[index].optimizedSize = optimizedSize
                     self.images[index].isOptimized = true
                     self.images[index].isOptimizing = false
-                    
-                    let savings = self.images[index].savingsPercentage
-                    self.logger.info("Successfully optimized: \(imageItem.filename) - \(savings)% reduction")
                 }
+                
+                let savings: Int = await MainActor.run { self.images[index].savingsPercentage }
+                self.logger.info("Successfully optimized: \(imageItem.filename) - \(savings)% reduction")
                 
             } catch {
                 let error = TrimrPixError.fileSizeReadError(optimizedURL, underlyingError: error)
@@ -279,6 +290,26 @@ final class ImageOptimizationViewModel: ObservableObject {
                 self.showError(message: trimmedError.errorDescription ?? "Kunne ikke optimere billede")
             }
         }
+    }
+    
+    /// Optimizes a single image identified by its ID
+    /// - Parameter id: The ID of the image to optimize
+    private func optimizeImage(withID id: UUID) async {
+        // Resolve the current index for this ID on the main actor
+        let result = await MainActor.run {
+            if let idx = self.images.firstIndex(where: { $0.id == id }) {
+                return (idx, self.images[idx])
+            } else {
+                return (-1, ImageItem.placeholder)
+            }
+        }
+        
+        guard result.0 >= 0 else {
+            logger.warning("Optimize image called with missing ID: \(id)")
+            return
+        }
+        
+        await optimizeImage(at: result.0)
     }
     
     /// Starts watch folder monitoring if enabled in settings
@@ -383,3 +414,4 @@ final class ImageOptimizationViewModel: ObservableObject {
         logger.debug("Error dismissed by user")
     }
 }
+
