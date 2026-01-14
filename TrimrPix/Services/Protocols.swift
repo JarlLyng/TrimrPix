@@ -92,5 +92,7 @@ protocol SettingsProtocol: ObservableObject {
     func loadSettings() throws
     func updateQualityFromPreset()
     func validateWatchFolderPath() throws
+    func setWatchFolder(url: URL) throws
+    func getWatchFolderURL() -> URL?
 }
 

@@ -39,6 +39,10 @@ final class Settings: SettingsProtocol {
     @Published var watchFolderPath: String = ""
     @Published var watchFolderDelay: Double = 2.0 // Delay in seconds before processing new files
     
+    /// Security-scoped bookmark data for watch folder (persists across app restarts)
+    /// This is required for sandboxed apps to maintain access to the folder
+    private var watchFolderBookmarkData: Data?
+    
     // MARK: - Singleton
     
     static let shared = Settings()
@@ -58,6 +62,7 @@ final class Settings: SettingsProtocol {
         static let watchFolderEnabled = "watchFolderEnabled"
         static let watchFolderPath = "watchFolderPath"
         static let watchFolderDelay = "watchFolderDelay"
+        static let watchFolderBookmarkData = "watchFolderBookmarkData"
     }
     
     // MARK: - Initialization
@@ -131,6 +136,32 @@ final class Settings: SettingsProtocol {
         // Load watch folder path
         watchFolderPath = userDefaults.string(forKey: UserDefaultsKeys.watchFolderPath) ?? ""
         
+        // Load watch folder bookmark data
+        if let bookmarkData = userDefaults.data(forKey: UserDefaultsKeys.watchFolderBookmarkData) {
+            watchFolderBookmarkData = bookmarkData
+            // Try to resolve bookmark to get current path
+            do {
+                var isStale = false
+                let bookmarkURL = try URL(resolvingBookmarkData: bookmarkData,
+                                          options: [.withoutUI, .withSecurityScope],
+                                          relativeTo: nil,
+                                          bookmarkDataIsStale: &isStale)
+                
+                if !isStale {
+                    // Start accessing security-scoped resource to maintain access
+                    _ = bookmarkURL.startAccessingSecurityScopedResource()
+                    watchFolderPath = bookmarkURL.path
+                    logger.debug("Resolved watch folder bookmark: \(watchFolderPath)")
+                } else {
+                    logger.warning("Watch folder bookmark is stale, clearing it")
+                    watchFolderBookmarkData = nil
+                }
+            } catch {
+                logger.warning("Failed to resolve watch folder bookmark: \(error.localizedDescription)")
+                watchFolderBookmarkData = nil
+            }
+        }
+        
         // Load watch folder delay
         let savedDelay = userDefaults.double(forKey: UserDefaultsKeys.watchFolderDelay)
         if savedDelay > 0 {
@@ -174,6 +205,11 @@ final class Settings: SettingsProtocol {
             userDefaults.set(watchFolderEnabled, forKey: UserDefaultsKeys.watchFolderEnabled)
             userDefaults.set(watchFolderPath, forKey: UserDefaultsKeys.watchFolderPath)
             userDefaults.set(watchFolderDelay, forKey: UserDefaultsKeys.watchFolderDelay)
+            
+            // Save watch folder bookmark data if available
+            if let bookmarkData = watchFolderBookmarkData {
+                userDefaults.set(bookmarkData, forKey: UserDefaultsKeys.watchFolderBookmarkData)
+            }
             
             // Synchronize UserDefaults
             if !userDefaults.synchronize() {
@@ -224,6 +260,49 @@ final class Settings: SettingsProtocol {
         }
         
         logger.debug("Watch folder path validated successfully: \(watchFolderPath)")
+    }
+    
+    /// Sets the watch folder path and creates a security-scoped bookmark
+    /// - Parameter url: The URL of the watch folder
+    /// - Throws: TrimrPixError if bookmark creation fails
+    func setWatchFolder(url: URL) throws {
+        // Create security-scoped bookmark for persistent access
+        let bookmarkData = try url.bookmarkData(options: [.withSecurityScope, .securityScopeAllowOnlyReadKey],
+                                                includingResourceValuesForKeys: nil,
+                                                relativeTo: nil)
+        
+        watchFolderBookmarkData = bookmarkData
+        watchFolderPath = url.path
+        
+        logger.info("Created security-scoped bookmark for watch folder: \(watchFolderPath)")
+    }
+    
+    /// Gets the watch folder URL from bookmark if available
+    /// - Returns: The watch folder URL, or nil if bookmark is not available or stale
+    func getWatchFolderURL() -> URL? {
+        guard let bookmarkData = watchFolderBookmarkData else {
+            return nil
+        }
+        
+        do {
+            var isStale = false
+            let bookmarkURL = try URL(resolvingBookmarkData: bookmarkData,
+                                     options: [.withoutUI, .withSecurityScope],
+                                     relativeTo: nil,
+                                     bookmarkDataIsStale: &isStale)
+            
+            if isStale {
+                logger.warning("Watch folder bookmark is stale")
+                watchFolderBookmarkData = nil
+                return nil
+            }
+            
+            return bookmarkURL
+        } catch {
+            logger.warning("Failed to resolve watch folder bookmark: \(error.localizedDescription)")
+            watchFolderBookmarkData = nil
+            return nil
+        }
     }
 }
 

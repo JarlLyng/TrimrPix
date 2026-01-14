@@ -27,6 +27,7 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
     private let logger: any LoggerProtocol
     private let supportedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "avif"]
     private var debounceWorkItem: DispatchWorkItem?
+    private var processedFiles: Set<String> = [] // Track processed files to avoid re-processing
     
     // MARK: - Initialization
     
@@ -130,9 +131,36 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
         }
         
         logger.info("Stopped watching folder")
+        
+        // Clear processed files tracking
+        Task { @MainActor in
+            self.processedFiles.removeAll()
+        }
     }
     
     // MARK: - Private Methods
+    
+    /// Checks if a file has already been processed
+    /// - Parameter fileKey: The file path to check
+    /// - Returns: True if the file has been processed
+    @MainActor
+    private func isFileProcessed(_ fileKey: String) -> Bool {
+        return processedFiles.contains(fileKey)
+    }
+    
+    /// Marks a file as processed
+    /// - Parameter fileKey: The file path to mark
+    @MainActor
+    private func markFileAsProcessed(_ fileKey: String) {
+        processedFiles.insert(fileKey)
+        
+        // Limit the size of processed files set to prevent memory growth
+        // Keep only the most recent 1000 entries
+        if processedFiles.count > 1000 {
+            let toRemove = processedFiles.prefix(processedFiles.count - 1000)
+            processedFiles.subtract(toRemove)
+        }
+    }
     
     /// Handles file system events with debouncing
     private func handleFileSystemEvent() {
@@ -162,18 +190,36 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
         Task.detached { [weak self] in
             guard let self = self else { return }
             
+            // Copy settings values on main actor before background work to avoid data races
+            let delaySeconds = await MainActor.run {
+                self.settings.watchFolderDelay
+            }
+            
             do {
                 let contents = try self.fileManager.contentsOfDirectory(atPath: self.watchedPath)
                 let imageFiles = contents.filter { file in
                     let fileExtension = (file as NSString).pathExtension.lowercased()
-                    return self.supportedExtensions.contains(fileExtension)
+                    // Filter out output files (e.g., *-optimized.*) to prevent re-optimization loop
+                    let filename = (file as NSString).deletingPathExtension
+                    let isOutputFile = filename.contains("-optimized")
+                    
+                    return self.supportedExtensions.contains(fileExtension) && !isOutputFile
                 }
                 
-                logger.debug("Found \(imageFiles.count) image file(s) in watched folder")
+                logger.debug("Found \(imageFiles.count) image file(s) in watched folder (excluding output files)")
                 
                 for imageFile in imageFiles {
                     let fullPath = URL(fileURLWithPath: self.watchedPath).appendingPathComponent(imageFile)
-                    await self.processImageFile(at: fullPath)
+                    let fileKey = fullPath.path
+                    
+                    // Skip if already processed
+                    if await self.isFileProcessed(fileKey) {
+                        logger.debug("Skipping already processed file: \(imageFile)")
+                        continue
+                    }
+                    
+                    await self.processImageFile(at: fullPath, delaySeconds: delaySeconds)
+                    await self.markFileAsProcessed(fileKey)
                 }
             } catch {
                 let trimmedError = TrimrPixError.watchFolderSetupFailed(self.watchedPath, underlyingError: error)
@@ -183,8 +229,10 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
     }
     
     /// Processes a single image file from the watched folder
-    /// - Parameter url: The URL of the image file to process
-    private func processImageFile(at url: URL) async {
+    /// - Parameters:
+    ///   - url: The URL of the image file to process
+    ///   - delaySeconds: The delay in seconds to wait for file stability (copied from settings to avoid data race)
+    private func processImageFile(at url: URL, delaySeconds: Double) async {
         logger.debug("Processing image file: \(url.lastPathComponent)")
         
         // Check if file is still being written to (size changes)
@@ -198,8 +246,7 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
             return
         }
         
-        // Wait for file to stabilize (delay from settings)
-        let delaySeconds = settings.watchFolderDelay
+        // Wait for file to stabilize (using copied delay value to avoid data race)
         let delayNanoseconds = UInt64(delaySeconds * 1_000_000_000)
         do {
             try await Task.sleep(nanoseconds: delayNanoseconds)

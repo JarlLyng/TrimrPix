@@ -152,7 +152,14 @@ struct SettingsView: View {
         panel.prompt = "Choose Watch Folder"
         
         if panel.runModal() == .OK, let url = panel.url {
-            settings.watchFolderPath = url.path
+            do {
+                // Create security-scoped bookmark for persistent access
+                try settings.setWatchFolder(url: url)
+            } catch {
+                Logger.shared.error("Failed to create bookmark for watch folder: \(error.localizedDescription)")
+                // Fallback to just setting the path
+                settings.watchFolderPath = url.path
+            }
         }
     }
 }

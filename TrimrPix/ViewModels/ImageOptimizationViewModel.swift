@@ -35,6 +35,12 @@ final class ImageOptimizationViewModel: ObservableObject {
     private let settings: any SettingsProtocol
     private let logger: any LoggerProtocol
     
+    // MARK: - Security-Scoped Resources
+    
+    /// Tracks security-scoped resource access for dropped files
+    /// Maps image ID to whether access was granted
+    private var securityScopedAccess: [UUID: Bool] = [:]
+    
     // MARK: - Initialization
     
     /// Initializes the view model with dependencies
@@ -50,8 +56,10 @@ final class ImageOptimizationViewModel: ObservableObject {
         logger: any LoggerProtocol = Logger.shared
     ) {
         self.compressionService = compressionService ?? CompressionService()
+        // Use the injected compressionService for WatchFolderService to maintain dependency injection
+        let serviceToUse = compressionService ?? CompressionService()
         self.watchFolderService = watchFolderService ?? WatchFolderService(
-            compressionService: CompressionService(),
+            compressionService: serviceToUse,
             settings: settings
         )
         self.settings = settings
@@ -102,10 +110,21 @@ final class ImageOptimizationViewModel: ObservableObject {
                 do {
                     let imageItem = try ImageItem(url: url)
                     self.images.append(imageItem)
+                    
+                    // Track security-scoped access
+                    if hasAccess {
+                        self.securityScopedAccess[imageItem.id] = true
+                    }
+                    
                     loadedCount += 1
                     
                     logger.debug("Added image: \(url.lastPathComponent)")
                 } catch {
+                    // Stop access if image creation failed
+                    if hasAccess {
+                        url.stopAccessingSecurityScopedResource()
+                    }
+                    
                     failedCount += 1
                     let error = TrimrPixError.imageLoadFailed(url: url, underlyingError: error)
                     logger.error("Error creating image item: \(error.technicalDescription)")
@@ -127,6 +146,16 @@ final class ImageOptimizationViewModel: ObservableObject {
     /// Clears all images from the list
     func clearImages() {
         let count = images.count
+        
+        // Stop all security-scoped resource access
+        for imageItem in images {
+            if securityScopedAccess[imageItem.id] == true {
+                imageItem.url.stopAccessingSecurityScopedResource()
+                logger.debug("Stopped security-scoped access for: \(imageItem.filename)")
+            }
+        }
+        
+        securityScopedAccess.removeAll()
         images.removeAll()
         logger.info("Cleared \(count) images from list")
     }
@@ -135,7 +164,16 @@ final class ImageOptimizationViewModel: ObservableObject {
     /// - Parameter id: The ID of the image to remove
     func removeImage(id: UUID) {
         if let index = images.firstIndex(where: { $0.id == id }) {
-            let filename = images[index].filename
+            let imageItem = images[index]
+            let filename = imageItem.filename
+            
+            // Stop security-scoped resource access if it was started
+            if securityScopedAccess[id] == true {
+                imageItem.url.stopAccessingSecurityScopedResource()
+                securityScopedAccess.removeValue(forKey: id)
+                logger.debug("Stopped security-scoped access for: \(filename)")
+            }
+            
             images.remove(at: index)
             logger.info("Removed image from list: \(filename)")
         } else {
@@ -158,7 +196,10 @@ final class ImageOptimizationViewModel: ObservableObject {
         logger.info("Starting optimization for \(images.count) images")
         isOptimizing = true
         
-        Task {
+        // Run optimization in background to avoid blocking UI
+        Task.detached { [weak self] in
+            guard let self = self else { return }
+            
             // Concurrent processing for better performance
             await withTaskGroup(of: Void.self) { group in
                 for index in 0..<self.images.count {
@@ -171,8 +212,12 @@ final class ImageOptimizationViewModel: ObservableObject {
                 await group.waitForAll()
             }
             
-            isOptimizing = false
-            logger.info("Completed optimization for all images")
+            // Update UI state on main actor
+            await MainActor.run {
+                self.isOptimizing = false
+            }
+            
+            self.logger.info("Completed optimization for all images")
         }
     }
     
@@ -187,10 +232,12 @@ final class ImageOptimizationViewModel: ObservableObject {
         let imageItem = images[index]
         logger.info("Starting optimization for: \(imageItem.filename)")
         
-        // Set optimizing state
-        self.images[index].isOptimizing = true
+        // Set optimizing state on main actor
+        await MainActor.run {
+            self.images[index].isOptimizing = true
+        }
         
-        // Optimize the image
+        // Optimize the image in background
         do {
             let optimizedURL = try await compressionService.optimizeImage(at: imageItem.url)
             
@@ -199,37 +246,59 @@ final class ImageOptimizationViewModel: ObservableObject {
                 let attributes = try FileManager.default.attributesOfItem(atPath: optimizedURL.path)
                 let optimizedSize = attributes[.size] as? Int64 ?? 0
                 
-                // Update image item
-                self.images[index].optimizedSize = optimizedSize
-                self.images[index].isOptimized = true
-                self.images[index].isOptimizing = false
-                
-                let savings = self.images[index].savingsPercentage
-                logger.info("Successfully optimized: \(imageItem.filename) - \(savings)% reduction")
+                // Update image item on main actor
+                await MainActor.run {
+                    self.images[index].optimizedSize = optimizedSize
+                    self.images[index].isOptimized = true
+                    self.images[index].isOptimizing = false
+                    
+                    let savings = self.images[index].savingsPercentage
+                    self.logger.info("Successfully optimized: \(imageItem.filename) - \(savings)% reduction")
+                }
                 
             } catch {
                 let error = TrimrPixError.fileSizeReadError(optimizedURL, underlyingError: error)
                 logger.error("Error reading optimized file size: \(error.technicalDescription)")
-                self.images[index].isOptimizing = false
-                showError(message: error.errorDescription ?? "Kunne ikke læse filstørrelse")
+                await MainActor.run {
+                    self.images[index].isOptimizing = false
+                    self.showError(message: error.errorDescription ?? "Kunne ikke læse filstørrelse")
+                }
             }
             
         } catch let error as TrimrPixError {
             logger.error("Optimization failed: \(error.technicalDescription)")
-            self.images[index].isOptimizing = false
-            showError(message: error.errorDescription ?? "Kunne ikke optimere billede")
+            await MainActor.run {
+                self.images[index].isOptimizing = false
+                self.showError(message: error.errorDescription ?? "Kunne ikke optimere billede")
+            }
         } catch {
             let trimmedError = TrimrPixError.compressionFailed(url: imageItem.url, underlyingError: error)
             logger.error("Optimization failed: \(trimmedError.technicalDescription)")
-            self.images[index].isOptimizing = false
-            showError(message: trimmedError.errorDescription ?? "Kunne ikke optimere billede")
+            await MainActor.run {
+                self.images[index].isOptimizing = false
+                self.showError(message: trimmedError.errorDescription ?? "Kunne ikke optimere billede")
+            }
         }
     }
     
     /// Starts watch folder monitoring if enabled in settings
     func startWatchFolder() {
-        guard settings.watchFolderEnabled, !settings.watchFolderPath.isEmpty else {
-            logger.debug("Watch folder not enabled or path is empty")
+        guard settings.watchFolderEnabled else {
+            logger.debug("Watch folder not enabled")
+            return
+        }
+        
+        // Try to get watch folder URL from bookmark first
+        var watchFolderPath: String
+        if let bookmarkURL = settings.getWatchFolderURL() {
+            // Start accessing security-scoped resource from bookmark
+            _ = bookmarkURL.startAccessingSecurityScopedResource()
+            watchFolderPath = bookmarkURL.path
+            logger.debug("Using watch folder from bookmark: \(watchFolderPath)")
+        } else if !settings.watchFolderPath.isEmpty {
+            watchFolderPath = settings.watchFolderPath
+        } else {
+            logger.debug("Watch folder path is empty")
             return
         }
         
@@ -241,20 +310,20 @@ final class ImageOptimizationViewModel: ObservableObject {
             showError(message: error.errorDescription ?? "Ugyldig watch folder sti")
             return
         } catch {
-            let trimmedError = TrimrPixError.watchFolderSetupFailed(settings.watchFolderPath, underlyingError: error)
+            let trimmedError = TrimrPixError.watchFolderSetupFailed(watchFolderPath, underlyingError: error)
             logger.error("Watch folder path validation failed: \(trimmedError.technicalDescription)")
             showError(message: trimmedError.errorDescription ?? "Ugyldig watch folder sti")
             return
         }
         
         do {
-            try watchFolderService.startWatching(path: settings.watchFolderPath)
-            logger.info("Watch folder started: \(settings.watchFolderPath)")
+            try watchFolderService.startWatching(path: watchFolderPath)
+            logger.info("Watch folder started: \(watchFolderPath)")
         } catch let error as TrimrPixError {
             logger.error("Failed to start watch folder: \(error.technicalDescription)")
             showError(message: error.errorDescription ?? "Kunne ikke starte watch folder")
         } catch {
-            let trimmedError = TrimrPixError.watchFolderSetupFailed(settings.watchFolderPath, underlyingError: error)
+            let trimmedError = TrimrPixError.watchFolderSetupFailed(watchFolderPath, underlyingError: error)
             logger.error("Failed to start watch folder: \(trimmedError.technicalDescription)")
             showError(message: trimmedError.errorDescription ?? "Kunne ikke starte watch folder")
         }
