@@ -19,7 +19,7 @@ To enable GitHub Pages:
 5. Select folder: `/docs`
 6. Save
 
-The site will be available at: `https://jarllyng.github.io/TrimrPix/`
+The site will be available at: `https://trimrpix.iamjarl.com/`
 
 ## Local Development
 

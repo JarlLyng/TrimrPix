@@ -11,14 +11,20 @@
     <meta name="keywords" content="image optimization, image compression, macOS app, free image optimizer, JPEG compressor, PNG optimizer, image compression tool, SwiftUI app, batch image compression, image size reducer, WebP optimizer, AVIF compressor, image optimization software, reduce image file size, compress images macOS">
     <meta name="author" content="Jarl Lyng">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <link rel="canonical" href="https://jarllyng.github.io/TrimrPix/">
+    <meta name="theme-color" content="#007AFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="canonical" href="https://trimrpix.iamjarl.com/">
+    
+    <!-- Sitemap -->
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://jarllyng.github.io/TrimrPix/">
+    <meta property="og:url" content="https://trimrpix.iamjarl.com/">
     <meta property="og:title" content="TrimrPix - Free Image Optimizer for macOS | Compress JPEG, PNG, GIF, WebP, AVIF">
     <meta property="og:description" content="Free macOS app for high-quality image compression. Optimize JPEG, PNG, GIF, WebP, and AVIF images with simple drag & drop. Reduce file sizes by up to 80%.">
-    <meta property="og:image" content="https://jarllyng.github.io/TrimrPix/app_screenshot.png">
+    <meta property="og:image" content="https://trimrpix.iamjarl.com/app_screenshot.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="800">
     <meta property="og:image:alt" content="TrimrPix macOS app screenshot showing image optimization interface">
@@ -27,10 +33,10 @@
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://jarllyng.github.io/TrimrPix/">
+    <meta name="twitter:url" content="https://trimrpix.iamjarl.com/">
     <meta name="twitter:title" content="TrimrPix - Free Image Optimizer for macOS">
     <meta name="twitter:description" content="Free macOS app for high-quality image compression. Optimize JPEG, PNG, GIF, WebP, and AVIF images with simple drag & drop.">
-    <meta name="twitter:image" content="https://jarllyng.github.io/TrimrPix/app_screenshot.png">
+    <meta name="twitter:image" content="https://trimrpix.iamjarl.com/app_screenshot.png">
     <meta name="twitter:image:alt" content="TrimrPix macOS app screenshot">
     
     <!-- Favicon -->
@@ -61,10 +67,10 @@
                 <h1 class="hero-title">TrimrPix</h1>
                 <p class="hero-subtitle">
                     Optimize your images with high quality and simple drag & drop. 
-                    Modern SwiftUI app with intelligent compression.
+                    Modern SwiftUI app with intelligent compression. <strong>Free image optimizer for macOS</strong> that reduces file sizes by up to 80% while maintaining visual quality.
                 </p>
                 <div class="hero-cta">
-                    <a href="https://github.com/JarlLyng/TrimrPix/releases" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                    <a href="https://github.com/JarlLyng/TrimrPix/releases" class="btn btn-primary" target="_blank" rel="noopener noreferrer" onclick="if (typeof umami !== 'undefined') umami.track('Download Click', { location: 'hero' });">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                             <polyline points="7 10 12 15 17 10"></polyline>
@@ -72,7 +78,7 @@
                         </svg>
                         Download Now
                     </a>
-                    <a href="https://github.com/JarlLyng/TrimrPix" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+                    <a href="https://github.com/JarlLyng/TrimrPix" class="btn btn-secondary" target="_blank" rel="noopener noreferrer" onclick="if (typeof umami !== 'undefined') umami.track('GitHub Click', { location: 'hero' });">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
                         </svg>
@@ -86,7 +92,7 @@
                 </div>
             </div>
             <div class="hero-image">
-                <img src="app_screenshot.png" alt="TrimrPix macOS app interface showing image optimization with drag and drop, file size reduction percentages, and batch processing capabilities" class="screenshot" width="1200" height="800" loading="eager">
+                <img src="app_screenshot.png" alt="TrimrPix macOS app interface showing image optimization with drag and drop, file size reduction percentages, and batch processing capabilities" class="screenshot" width="1200" height="800" loading="eager" fetchpriority="high">
             </div>
         </div>
     </section>
@@ -205,7 +211,7 @@
             <h2 class="cta-title">Ready to optimize your images?</h2>
             <p class="cta-subtitle">Download TrimrPix for free and get started today</p>
             <div class="cta-buttons">
-                <a href="https://github.com/JarlLyng/TrimrPix/releases" class="btn btn-primary btn-large" target="_blank" rel="noopener noreferrer">
+                <a href="https://github.com/JarlLyng/TrimrPix/releases" class="btn btn-primary btn-large" target="_blank" rel="noopener noreferrer" onclick="if (typeof umami !== 'undefined') umami.track('Download Click', { location: 'cta' });">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                         <polyline points="7 10 12 15 17 10"></polyline>
@@ -213,7 +219,7 @@
                     </svg>
                     Download Now
                 </a>
-                <a href="https://github.com/JarlLyng/TrimrPix" class="btn btn-secondary btn-large" target="_blank" rel="noopener noreferrer">
+                <a href="https://github.com/JarlLyng/TrimrPix" class="btn btn-secondary btn-large" target="_blank" rel="noopener noreferrer" onclick="if (typeof umami !== 'undefined') umami.track('GitHub Click', { location: 'cta' });">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
                     </svg>
@@ -234,18 +240,18 @@
                 <div class="footer-section">
                     <h4>Links</h4>
                     <ul>
-                        <li><a href="https://github.com/JarlLyng/TrimrPix">GitHub</a></li>
-                        <li><a href="https://github.com/JarlLyng/TrimrPix/releases">Releases</a></li>
-                        <li><a href="https://github.com/JarlLyng/TrimrPix/issues">Issues</a></li>
-                        <li><a href="https://github.com/JarlLyng/TrimrPix/blob/main/LICENSE">License</a></li>
+                        <li><a href="https://github.com/JarlLyng/TrimrPix" onclick="if (typeof umami !== 'undefined') umami.track('Footer Link Click', { link: 'github' });">GitHub</a></li>
+                        <li><a href="https://github.com/JarlLyng/TrimrPix/releases" onclick="if (typeof umami !== 'undefined') umami.track('Footer Link Click', { link: 'releases' });">Releases</a></li>
+                        <li><a href="https://github.com/JarlLyng/TrimrPix/issues" onclick="if (typeof umami !== 'undefined') umami.track('Footer Link Click', { link: 'issues' });">Issues</a></li>
+                        <li><a href="https://github.com/JarlLyng/TrimrPix/blob/main/LICENSE" onclick="if (typeof umami !== 'undefined') umami.track('Footer Link Click', { link: 'license' });">License</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Dokumentation</h4>
                     <ul>
-                        <li><a href="https://github.com/JarlLyng/TrimrPix/blob/main/README.md">README</a></li>
-                        <li><a href="https://github.com/JarlLyng/TrimrPix/blob/main/ARCHITECTURE.md">Architecture</a></li>
-                        <li><a href="https://github.com/JarlLyng/TrimrPix/blob/main/CODE_STYLE.md">Code Style</a></li>
+                        <li><a href="https://github.com/JarlLyng/TrimrPix/blob/main/README.md" onclick="if (typeof umami !== 'undefined') umami.track('Footer Link Click', { link: 'readme' });">README</a></li>
+                        <li><a href="https://github.com/JarlLyng/TrimrPix/blob/main/ARCHITECTURE.md" onclick="if (typeof umami !== 'undefined') umami.track('Footer Link Click', { link: 'architecture' });">Architecture</a></li>
+                        <li><a href="https://github.com/JarlLyng/TrimrPix/blob/main/CODE_STYLE.md" onclick="if (typeof umami !== 'undefined') umami.track('Footer Link Click', { link: 'code-style' });">Code Style</a></li>
                     </ul>
                 </div>
             </div>
@@ -276,8 +282,13 @@
             "name": "Jarl Lyng",
             "url": "https://iamjarl.com/"
         },
+        "publisher": {
+            "@type": "Organization",
+            "name": "IAMJARL",
+            "url": "https://iamjarl.com/"
+        },
         "downloadUrl": "https://github.com/JarlLyng/TrimrPix/releases",
-        "screenshot": "https://jarllyng.github.io/TrimrPix/app_screenshot.png",
+        "screenshot": "https://trimrpix.iamjarl.com/app_screenshot.png",
         "featureList": [
             "Multi-format support (JPEG, PNG, GIF, WebP, AVIF)",
             "Batch image processing",
@@ -300,8 +311,40 @@
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "https://jarllyng.github.io/TrimrPix/"
+            "item": "https://trimrpix.iamjarl.com/"
         }]
+    }
+    </script>
+    
+    <!-- Organization Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "IAMJARL",
+        "url": "https://iamjarl.com/",
+        "logo": "https://trimrpix.iamjarl.com/favicon.png",
+        "sameAs": [
+            "https://github.com/JarlLyng"
+        ]
+    }
+    </script>
+    
+    <!-- Person Structured Data (Author) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Jarl Lyng",
+        "url": "https://iamjarl.com/",
+        "sameAs": [
+            "https://github.com/JarlLyng"
+        ],
+        "jobTitle": "Software Developer",
+        "worksFor": {
+            "@type": "Organization",
+            "name": "IAMJARL"
+        }
     }
     </script>
     
@@ -354,6 +397,43 @@
             }
         }]
     }
+    </script>
+    
+    <!-- Umami Analytics -->
+    <script defer src="https://umami-iamjarl.vercel.app/script.js" data-website-id="29beb01b-51b6-4992-a500-841c0b87a62b"></script>
+    
+    <!-- Custom Event Tracking -->
+    <script>
+        // Track page view with custom data when Umami is loaded
+        window.addEventListener('load', function() {
+            if (typeof umami !== 'undefined') {
+                // Track page view with additional context
+                umami.track('Page View', {
+                    page: 'landing',
+                    referrer: document.referrer || 'direct'
+                });
+            }
+        });
+        
+        // Track scroll depth (optional - tracks when user scrolls 50% and 100%)
+        let scroll50Tracked = false;
+        let scroll100Tracked = false;
+        
+        window.addEventListener('scroll', function() {
+            if (typeof umami === 'undefined') return;
+            
+            const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            
+            if (scrollPercent >= 50 && !scroll50Tracked) {
+                umami.track('Scroll Depth', { depth: '50%' });
+                scroll50Tracked = true;
+            }
+            
+            if (scrollPercent >= 100 && !scroll100Tracked) {
+                umami.track('Scroll Depth', { depth: '100%' });
+                scroll100Tracked = true;
+            }
+        });
     </script>
 </body>
 </html>

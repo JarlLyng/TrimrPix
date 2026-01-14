@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+    <url>
+        <loc>https://trimrpix.iamjarl.com/</loc>
+        <lastmod>2025-01-14</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        <image:image>
+            <image:loc>https://trimrpix.iamjarl.com/app_screenshot.png</image:loc>
+            <image:title>TrimrPix macOS App Screenshot</image:title>
+            <image:caption>TrimrPix image optimization interface showing drag and drop functionality</image:caption>
+        </image:image>
+    </url>
+</urlset>

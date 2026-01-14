@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://trimrpix.iamjarl.com/sitemap.xml
+
+# Disallow crawling of unnecessary files
+Disallow: /PRIVACY.md
+Disallow: /README.md
