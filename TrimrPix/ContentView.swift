@@ -14,29 +14,30 @@ import UniformTypeIdentifiers
 struct ContentView: View {
     @StateObject private var viewModel = ImageOptimizationViewModel()
     @State private var showSettings = false
+    @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: DesignTokens.Spacing.xl) {
             // Header
             HStack {
                 Image(systemName: "photo.stack")
                     .imageScale(.large)
-                    .foregroundStyle(.tint)
+                    .foregroundStyle(DesignTokens.Colors.primary(for: colorScheme))
                 Text("TrimrPix")
-                    .font(.title)
-                    .fontWeight(.bold)
+                    .font(DesignTokens.Typography.title)
+                    .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                 
                 Spacer()
                 
-                HStack(spacing: 12) {
+                HStack(spacing: DesignTokens.Spacing.md) {
                     // Watch folder status
                     if viewModel.isWatchFolderActive {
-                        HStack(spacing: 4) {
+                        HStack(spacing: DesignTokens.Spacing.xs) {
                             Image(systemName: "eye.fill")
-                                .foregroundColor(.green)
+                                .foregroundStyle(DesignTokens.Colors.States.success)
                             Text("Watch Folder")
-                                .font(.caption)
-                                .foregroundColor(.green)
+                                .font(DesignTokens.Typography.caption)
+                                .foregroundStyle(DesignTokens.Colors.States.success)
                         }
                     }
                     
@@ -55,12 +56,13 @@ struct ContentView: View {
             
             // Billedeliste
             if viewModel.images.isEmpty {
-                VStack(spacing: 10) {
+                VStack(spacing: DesignTokens.Spacing.sm) {
                     Text("Drag images here to optimize")
-                        .font(.headline)
+                        .font(DesignTokens.Typography.headline)
+                        .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                     Text("Supported formats: JPEG, PNG, GIF, WebP, AVIF")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .font(DesignTokens.Typography.subheadline)
+                        .foregroundStyle(DesignTokens.Colors.textSecondary(for: colorScheme))
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
@@ -85,10 +87,11 @@ struct ContentView: View {
                 }
                 .disabled(viewModel.images.isEmpty || viewModel.isOptimizing)
             }
-            .padding(.horizontal)
+            .padding(.horizontal, DesignTokens.Spacing.lg)
         }
-        .padding()
+        .padding(DesignTokens.Spacing.lg)
         .frame(minWidth: 600, minHeight: 400)
+        .background(DesignTokens.Colors.backgroundApp(for: colorScheme))
         .alert("Error", isPresented: $viewModel.showError) {
             Button("OK") {
                 viewModel.dismissError()
@@ -113,22 +116,27 @@ struct ContentView: View {
 struct DropZoneView: View {
     @ObservedObject var viewModel: ImageOptimizationViewModel
     @State private var isHighlighted = false
+    @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: DesignTokens.Radius.md)
                 .strokeBorder(
-                    isHighlighted ? Color.accentColor : Color.gray,
+                    isHighlighted 
+                        ? DesignTokens.Colors.primary(for: colorScheme)
+                        : DesignTokens.Colors.borderSubtle(for: colorScheme),
                     style: StrokeStyle(lineWidth: 2, dash: [5])
                 )
-                .background(Color.gray.opacity(0.05))
-                .cornerRadius(12)
+                .background(DesignTokens.Colors.backgroundMuted(for: colorScheme))
+                .cornerRadius(DesignTokens.Radius.md)
             
             VStack {
                 Image(systemName: "arrow.down.doc")
-                    .font(.system(size: 24))
+                    .font(.system(size: DesignTokens.Typography.Size.xl))
+                    .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                 Text("Drop images here")
-                    .font(.headline)
+                    .font(DesignTokens.Typography.headline)
+                    .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
             }
         }
         .frame(height: 120)
@@ -163,6 +171,7 @@ struct ImageItemView: View {
     let imageId: UUID
     @ObservedObject var viewModel: ImageOptimizationViewModel
     @State private var thumbnail: NSImage?
+    @Environment(\.colorScheme) private var colorScheme
     
     // Computed property to get current image from viewModel
     private var image: ImageItem? {
@@ -184,10 +193,10 @@ struct ImageItemView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 60, height: 60)
-                        .cornerRadius(6)
+                        .cornerRadius(DesignTokens.Radius.sm)
                 } else {
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(Color.gray.opacity(0.2))
+                    RoundedRectangle(cornerRadius: DesignTokens.Radius.sm)
+                        .fill(DesignTokens.Colors.backgroundMuted(for: colorScheme))
                         .frame(width: 60, height: 60)
                         .onAppear {
                             // Load thumbnail when view appears
@@ -197,37 +206,38 @@ struct ImageItemView: View {
                 }
                 
                 // Filinfo
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
                     Text(image.filename)
-                        .font(.headline)
+                        .font(DesignTokens.Typography.headline)
+                        .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                     
-                    HStack(spacing: 4) {
+                    HStack(spacing: DesignTokens.Spacing.xs) {
                         Text("Original: \(image.originalSize.formattedSize)")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(DesignTokens.Colors.textSecondary(for: colorScheme))
                         
                         if let optimizedSize = image.optimizedSize {
                             Text("→")
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(DesignTokens.Colors.textSecondary(for: colorScheme))
                             Text("Optimized: \(optimizedSize.formattedSize)")
-                                .foregroundColor(.primary)
+                                .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                             Text("(\(image.savingsPercentage)% reduction)")
-                                .foregroundColor(.green)
-                                .fontWeight(.medium)
+                                .foregroundStyle(DesignTokens.Colors.States.success)
+                                .fontWeight(DesignTokens.Typography.Weight.semibold)
                         }
                     }
-                    .font(.subheadline)
+                    .font(DesignTokens.Typography.subheadline)
                 }
                 
                 Spacer()
                 
                 // Status and actions
-                HStack(spacing: 8) {
+                HStack(spacing: DesignTokens.Spacing.sm) {
                     // Remove button
                     Button(action: {
                         viewModel.removeImage(id: image.id)
                     }) {
                         Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(DesignTokens.Colors.textSecondary(for: colorScheme))
                     }
                     .buttonStyle(.borderless)
                     .help("Remove image from list")
@@ -239,8 +249,8 @@ struct ImageItemView: View {
                             .scaleEffect(0.8)
                     } else if image.isOptimized {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green)
-                            .font(.title2)
+                            .foregroundStyle(DesignTokens.Colors.States.success)
+                            .font(.system(size: DesignTokens.Typography.Size.xl))
                     } else {
                         Button("Optimize") {
                             if let index = viewModel.images.firstIndex(where: { $0.id == image.id }) {
@@ -253,7 +263,7 @@ struct ImageItemView: View {
                     }
                 }
             }
-            .padding(.vertical, 4)
+            .padding(.vertical, DesignTokens.Spacing.xs)
         }
     }
 }

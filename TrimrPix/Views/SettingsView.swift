@@ -12,18 +12,20 @@ import SwiftUI
 struct SettingsView: View {
     @StateObject private var settings = Settings.shared
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: DesignTokens.Spacing.xl) {
             Text("Settings")
-                .font(.title2)
-                .fontWeight(.bold)
+                .font(DesignTokens.Typography.title2)
+                .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
             
-            VStack(alignment: .leading, spacing: 15) {
+            VStack(alignment: .leading, spacing: DesignTokens.Spacing.lg) {
                 // Compression preset
-                VStack(alignment: .leading, spacing: 5) {
+                VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
                     Text("Compression Preset")
-                        .font(.headline)
+                        .font(DesignTokens.Typography.headline)
+                        .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                     
                     Picker("Preset", selection: $settings.compressionPreset) {
                         ForEach(CompressionPreset.allCases, id: \.self) { preset in
@@ -37,28 +39,31 @@ struct SettingsView: View {
                 }
                 
                 // Quality
-                VStack(alignment: .leading, spacing: 5) {
+                VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
                     Text("Quality")
-                        .font(.headline)
+                        .font(DesignTokens.Typography.headline)
+                        .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                     
                     HStack {
                         Slider(value: $settings.jpegQuality, in: 0.1...1.0, step: 0.1)
                         Text("\(Int(settings.jpegQuality * 100))%")
                             .frame(width: 40)
+                            .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                     }
                     .disabled(settings.compressionPreset != .custom)
                     
                     Text("Higher value = better quality, larger file")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .font(DesignTokens.Typography.caption)
+                        .foregroundStyle(DesignTokens.Colors.textSecondary(for: colorScheme))
                 }
                 
                 Divider()
                 
                 // Save settings
-                VStack(alignment: .leading, spacing: 10) {
+                VStack(alignment: .leading, spacing: DesignTokens.Spacing.sm) {
                     Text("Save Settings")
-                        .font(.headline)
+                        .font(DesignTokens.Typography.headline)
+                        .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                     
                     Toggle("Overwrite original files", isOn: $settings.overwriteOriginal)
                         .help("Overwrites the original images instead of creating new ones")
@@ -71,9 +76,10 @@ struct SettingsView: View {
                 Divider()
                 
                 // Watch Folder settings
-                VStack(alignment: .leading, spacing: 10) {
+                VStack(alignment: .leading, spacing: DesignTokens.Spacing.sm) {
                     Text("Watch Folder")
-                        .font(.headline)
+                        .font(DesignTokens.Typography.headline)
+                        .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                     
                     Toggle("Enable Watch Folder", isOn: $settings.watchFolderEnabled)
                         .help("Automatically monitors a folder for new images")
@@ -88,19 +94,21 @@ struct SettingsView: View {
                             }
                         }
                         
-                        VStack(alignment: .leading, spacing: 5) {
+                        VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
                             Text("Processing Delay")
-                                .font(.subheadline)
+                                .font(DesignTokens.Typography.subheadline)
+                                .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                             
                             HStack {
                                 Slider(value: $settings.watchFolderDelay, in: 0.5...10.0, step: 0.5)
                                 Text("\(settings.watchFolderDelay, specifier: "%.1f")s")
                                     .frame(width: 50)
+                                    .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                             }
                             
                             Text("Delay before processing new files (prevents processing incomplete files)")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                                .font(DesignTokens.Typography.caption)
+                                .foregroundStyle(DesignTokens.Colors.textSecondary(for: colorScheme))
                         }
                     }
                 }
@@ -139,8 +147,8 @@ struct SettingsView: View {
                 .buttonStyle(.borderedProminent)
             }
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 30)
+        .padding(.horizontal, DesignTokens.Spacing.xl)
+        .padding(.vertical, DesignTokens.Spacing.xxxl)
         .frame(width: 500, height: 520)
     }
     
