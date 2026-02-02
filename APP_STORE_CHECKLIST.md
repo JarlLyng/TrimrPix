@@ -31,63 +31,23 @@
 
 ## ❌ Hvad der mangler eller skal rettes
 
-### 1. Code Signing Konfiguration (KRITISK)
+### 1. Code Signing Konfiguration ✅ KLAR
 
-**Problem:**
-- `DEVELOPMENT_TEAM` er tom (`""`)
-- `CODE_SIGN_STYLE` er sat til `Manual`
-- `PROVISIONING_PROFILE_SPECIFIER` er tom
+- **DEVELOPMENT_TEAM**: `KDWZ3WNLDK` (sat på projekt og TrimrPix-target)
+- **CODE_SIGN_STYLE**: Automatic
+- **TrimrPix-target**: Signing & Capabilities konfigureret
+- **Test-targets**: Arver samme team (vigtigt for Xcode Cloud)
 
-**Løsning:**
-1. **I Xcode:**
-   - Åbn projektet i Xcode
-   - Vælg projektet i navigatoren
-   - Vælg "TrimrPix" target
-   - Gå til "Signing & Capabilities" tab
-   - Vælg dit Apple Developer Team
-   - Xcode vil automatisk sætte `CODE_SIGN_STYLE` til `Automatic`
-   - Eller vælg "Manual" og tilføj provisioning profile
+### 2. Entitlements Fil ✅ KLAR
 
-2. **Eller manuelt i project.pbxproj:**
-   ```bash
-   # Sæt DEVELOPMENT_TEAM til dit Team ID (findes i Apple Developer portal)
-   DEVELOPMENT_TEAM = "YOUR_TEAM_ID";
-   CODE_SIGN_STYLE = Automatic;  # eller Manual hvis du bruger provisioning profiles
-   ```
+`TrimrPix.entitlements` indeholder:
+- `com.apple.security.app-sandbox`
+- `com.apple.security.files.user-selected.read-write`
+- `com.apple.security.files.downloads.read-write`
 
-### 2. Entitlements Fil (KRITISK)
+### 3. Copyright Information ✅ KLAR
 
-**Problem:**
-- `TrimrPix.entitlements` er tom
-
-**Løsning:**
-Entitlements filen skal indeholde sandboxing permissions:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>com.apple.security.app-sandbox</key>
-    <true/>
-    <key>com.apple.security.files.user-selected.read-write</key>
-    <true/>
-    <key>com.apple.security.files.downloads.read-write</key>
-    <true/>
-</dict>
-</plist>
-```
-
-### 3. Copyright Information (VIKTIGT)
-
-**Problem:**
-- `INFOPLIST_KEY_NSHumanReadableCopyright` er tom
-
-**Løsning:**
-Tilføj copyright i project.pbxproj:
-```
-INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 IAMJARL. All rights reserved.";
-```
+- `INFOPLIST_KEY_NSHumanReadableCopyright` = "Copyright © 2025 IAMJARL. All rights reserved."
 
 ### 4. App Store Connect Konfiguration (KRITISK)
 
@@ -106,9 +66,9 @@ INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 IAMJARL. All rights 
    - **Name**: TrimrPix
    - **Subtitle**: Modern image optimization tool
    - **Category**: Graphics & Design
-   - **Privacy Policy URL**: (se nedenfor)
+   - **Privacy Policy URL**: `https://trimrpix.iamjarl.com/PRIVACY.md`
    - **Support URL**: `https://github.com/JarlLyng/TrimrPix`
-   - **Marketing URL**: `https://jarllyng.github.io/TrimrPix/`
+   - **Marketing URL**: `https://trimrpix.iamjarl.com/`
 
 3. **Pricing and Availability:**
    - Vælg pris (gratis eller betalt)
@@ -121,14 +81,14 @@ INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 IAMJARL. All rights 
 
 ### 5. Privacy Policy (PÅKRÆVET)
 
-**Problem:**
-App Store kræver en privacy policy URL, selvom appen ikke samler data.
+**Status:** ✅ På plads på marketingsitet.
 
-**Løsning:**
-Opret en privacy policy side. Du kan:
-- Tilføje en `PRIVACY.md` fil til GitHub repo
-- Hoste den på GitHub Pages: `https://jarllyng.github.io/TrimrPix/PRIVACY`
-- Eller oprette en dedikeret side på din hjemmeside
+Privacy policy ligger i `docs/PRIVACY.md` og hostes på marketingsitet (GitHub Pages med CNAME `trimrpix.iamjarl.com`).
+
+**Brug denne URL i App Store Connect:**
+- **Privacy Policy URL**: `https://trimrpix.iamjarl.com/PRIVACY.md`
+
+Der er nu også et link til Privacy Policy i footeren på forsiden.
 
 **Eksempel Privacy Policy:**
 ```
@@ -250,19 +210,21 @@ Last updated: [Date]
 
 Før du submitter til App Review, tjek:
 
-- [ ] Code signing er konfigureret korrekt
-- [ ] Entitlements fil er korrekt konfigureret
-- [ ] Copyright information er tilføjet
+- [x] Code signing er konfigureret korrekt
+- [x] Entitlements fil er korrekt konfigureret
+- [x] Copyright information er tilføjet
 - [ ] App fungerer korrekt (testet grundigt)
 - [ ] Alle features virker som forventet
 - [ ] Ingen crashes eller memory leaks
-- [ ] Privacy policy URL er tilgængelig
+- [x] Privacy policy URL er tilgængelig (`https://trimrpix.iamjarl.com/PRIVACY.md`)
 - [ ] App Store metadata er udfyldt
 - [ ] Screenshots er uploadet
 - [ ] Support URL virker
 - [ ] Marketing URL virker (hvis tilføjet)
-- [ ] Build er uploadet og processing er færdig
+- [ ] Build er uploadet og processing er færdig (Xcode Cloud eller manuel Archive)
 - [ ] TestFlight testing er gennemført (anbefalet)
+
+**Xcode Cloud:** Sørg for at workflow er knyttet til samme Apple Developer Team (KDWZ3WNLDK). Ved "Start Build" bygges og signes appen i skyen; vælg "Distribute App" → App Store Connect for upload.
 
 ---
 
