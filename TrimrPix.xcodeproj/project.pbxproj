@@ -416,6 +416,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "TrimrPix - Modern image optimization tool";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 IAMJARL. All rights reserved.";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -452,6 +453,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "TrimrPix - Modern image optimization tool";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 IAMJARL. All rights reserved.";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
