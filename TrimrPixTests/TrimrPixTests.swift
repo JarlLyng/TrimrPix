@@ -81,7 +81,8 @@ struct TrimrPixTests {
     @Test func testCompressionServiceInitialization() async throws {
         // Test at CompressionService initialiseres korrekt
         let service = CompressionService()
-        #expect(service != nil)
+        // Ensure the instance is of the expected type and accessible
+        #expect(type(of: service) == CompressionService.self)
     }
     
     // MARK: - Settings Tests
