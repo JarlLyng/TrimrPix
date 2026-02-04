@@ -444,6 +444,62 @@ body {
     border-color: rgba(0, 0, 0, 0.35);
 }
 
+/* Support page */
+.support-page {
+    padding: var(--spacing-xxxl) 0;
+    min-height: 60vh;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: var(--spacing-xxl);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: var(--text-sm);
+}
+
+.back-link:hover {
+    color: var(--color-primary);
+}
+
+.support-intro {
+    margin-bottom: var(--spacing-xxxl);
+    color: var(--color-text-secondary);
+    font-size: var(--text-lg);
+}
+
+.support-blocks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xxl);
+    margin-bottom: var(--spacing-xxxl);
+}
+
+.support-blocks .feature-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.support-blocks .btn {
+    margin-top: auto;
+    align-self: flex-start;
+}
+
+.support-footer-note {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+}
+
+.support-footer-note a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.support-footer-note a:hover {
+    text-decoration: underline;
+}
+
 /* Footer – dark surface, inverse text */
 .footer {
     padding: 60px 0 var(--spacing-xxl);

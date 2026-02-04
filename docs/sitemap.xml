@@ -12,4 +12,10 @@
             <image:caption>TrimrPix image optimization interface showing drag and drop functionality</image:caption>
         </image:image>
     </url>
+    <url>
+        <loc>https://trimrpix.iamjarl.com/support.html</loc>
+        <lastmod>2026-02-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
 </urlset>
