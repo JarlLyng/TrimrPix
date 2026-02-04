@@ -20,7 +20,7 @@ struct ContentView: View {
         VStack(spacing: DesignTokens.Spacing.xl) {
             // Header
             HStack {
-                Image(systemName: "photo.stack")
+                Image(systemName: "cow")
                     .imageScale(.large)
                     .foregroundStyle(DesignTokens.Colors.primary(for: colorScheme))
                 Text("TrimrPix")
