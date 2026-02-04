@@ -8,7 +8,8 @@
 - ✅ **Bundle Identifier**: `com.iamjarl.trimrpix.TrimrPix`
 - ✅ **App Display Name**: "TrimrPix - Modern image optimization tool"
 - ✅ **App Category**: Graphics & Design (`public.app-category.graphics-design`)
-- ✅ **App Icon**: Komplet icon set i Assets.xcassets
+- ✅ **App Icon**: Komplet icon set i Assets.xcassets  
+  - **TestFlight/App Store:** 1024×1024-ikonet (`AppIcon~ios-marketing.png`) må **ikke** have alphakanal (transparens). Hvis ikonet vises som placeholder i TestFlight, flad ikonet i Preview (Baggrund → hvid) og eksporter som PNG uden transparens, erstat filen og byg igen.
 - ✅ **Sandboxing**: Aktiveret (ENABLE_APP_SANDBOX = YES)
 - ✅ **Hardened Runtime**: Aktiveret (ENABLE_HARDENED_RUNTIME = YES)
 - ✅ **User Selected Files**: Konfigureret (readwrite)
