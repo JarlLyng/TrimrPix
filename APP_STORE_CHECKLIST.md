@@ -43,8 +43,8 @@
 
 `TrimrPix.entitlements` indeholder:
 - `com.apple.security.app-sandbox`
-- `com.apple.security.files.user-selected.read-write`
-- `com.apple.security.files.downloads.read-write`
+- `com.apple.security.files.user-selected.read-write`  
+  (Downloads-read-write er fjernet – App Review 2.4.5(i) kræver kun nødvendige entitlements.)
 
 ### 3. Copyright Information ✅ KLAR
 
@@ -214,16 +214,16 @@ Før du submitter til App Review, tjek:
 - [x] Code signing er konfigureret korrekt
 - [x] Entitlements fil er korrekt konfigureret
 - [x] Copyright information er tilføjet
-- [ ] App fungerer korrekt (testet grundigt)
-- [ ] Alle features virker som forventet
-- [ ] Ingen crashes eller memory leaks
+- [x] App fungerer korrekt (testet grundigt)
+- [x] Alle features virker som forventet
+- [x] Ingen crashes eller memory leaks
 - [x] Privacy policy URL er tilgængelig (`https://trimrpix.iamjarl.com/PRIVACY.md`)
-- [ ] App Store metadata er udfyldt
-- [ ] Screenshots er uploadet
-- [ ] Support URL virker
-- [ ] Marketing URL virker (hvis tilføjet)
+- [x] App Store metadata er udfyldt
+- [x] Screenshots er uploadet
+- [x] Support URL virker
+- [x] Marketing URL virker (hvis tilføjet)
 - [ ] Build er uploadet og processing er færdig (Xcode Cloud eller manuel Archive)
-- [ ] TestFlight testing er gennemført (anbefalet)
+- [x] TestFlight testing er gennemført (anbefalet)
 
 **Xcode Cloud:** Sørg for at workflow er knyttet til samme Apple Developer Team (KDWZ3WNLDK). Ved "Start Build" bygges og signes appen i skyen; vælg "Distribute App" → App Store Connect for upload.
 
