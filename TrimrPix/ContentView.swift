@@ -20,8 +20,11 @@ struct ContentView: View {
         VStack(spacing: DesignTokens.Spacing.xl) {
             // Header
             HStack {
-                Image(systemName: "cow")
-                    .imageScale(.large)
+                Image("CowIcon")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 28, height: 28)
                     .foregroundStyle(DesignTokens.Colors.primary(for: colorScheme))
                 Text("TrimrPix")
                     .font(DesignTokens.Typography.title)
