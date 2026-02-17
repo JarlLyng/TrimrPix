@@ -229,6 +229,16 @@ Før du submitter til App Review, tjek:
 
 ---
 
+## ✅ Guideline 2.4.5(i) – Unødvendigt indhold
+
+For at undgå afvisning under **Performance - Unnecessary or extraneous content**:
+
+- **Preview Content** er fjernet fra app-mappen. Mappen "Preview Content" (kun brugt af Xcode til SwiftUI-previews) blev inkluderet i bundlen via filsystem-synkronisering og har været årsag til afvisning. Den er nu slettet, så bundlen kun indeholder nødvendige ressourcer (Assets.car, AppIcon.icns).
+- Sørg for at **ingen** dokumenter (README, PRIVACY, LICENSE), konfigfiler, eller kildekode fra projektroden kopieres med i app-targetet. Kun indholdet i mappen `TrimrPix/` (undtagen Preview Content) må inkluderes.
+- Ved nye assets: tilføj kun billeder/lyde, der bruges i appen; fjern ubrugte fra Assets.xcassets.
+
+---
+
 ## 🚨 Almindelige Fejl at Undgå
 
 1. **Code Signing Fejl:**
