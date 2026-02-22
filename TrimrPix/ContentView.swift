@@ -271,6 +271,8 @@ struct ImageItemView: View {
     }
 }
 
+#if DEBUG
 #Preview {
     ContentView()
 }
+#endif

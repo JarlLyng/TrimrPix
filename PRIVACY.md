@@ -35,8 +35,7 @@ TrimrPix stores the following data locally on your device:
 ## Permissions
 
 TrimrPix requires the following permissions:
-- **File Access**: To read and write image files that you select
-- **Downloads Folder Access**: To save optimized images (optional)
+- **File Access**: To read and write image files that you select (via drag & drop, file picker, or chosen save location)
 
 All permissions are requested explicitly and only used for the stated purpose.
 

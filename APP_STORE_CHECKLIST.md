@@ -41,10 +41,11 @@
 
 ### 2. Entitlements Fil ✅ KLAR
 
-`TrimrPix.entitlements` indeholder:
+`TrimrPix.entitlements` indeholder **kun**:
 - `com.apple.security.app-sandbox`
-- `com.apple.security.files.user-selected.read-write`  
-  (Downloads-read-write er fjernet – App Review 2.4.5(i) kræver kun nødvendige entitlements.)
+- `com.apple.security.files.user-selected.read-write`
+
+**Vigtigt:** Inkluder **ikke** `com.apple.security.files.downloads.read-write` (hverken true eller false). Apple afviser ved 2.4.5(i) hvis den er med – fjern nøglen helt. User-selected er nok til filadgang via dialog og drag & drop.
 
 ### 3. Copyright Information ✅ KLAR
 
