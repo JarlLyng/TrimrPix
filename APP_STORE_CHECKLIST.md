@@ -68,8 +68,8 @@
    - **Name**: TrimrPix
    - **Subtitle**: Modern image optimization tool
    - **Category**: Graphics & Design
-   - **Privacy Policy URL**: `https://trimrpix.iamjarl.com/PRIVACY.md`
-   - **Support URL**: `https://github.com/JarlLyng/TrimrPix`
+   - **Privacy Policy URL**: `https://trimrpix.iamjarl.com/privacy.html`
+   - **Support URL**: `https://trimrpix.iamjarl.com/support.html`
    - **Marketing URL**: `https://trimrpix.iamjarl.com/`
 
 3. **Pricing and Availability:**
@@ -85,10 +85,11 @@
 
 **Status:** ✅ På plads på marketingsitet.
 
-Privacy policy ligger i `docs/PRIVACY.md` og hostes på marketingsitet (GitHub Pages med CNAME `trimrpix.iamjarl.com`).
+Privacy policy er på marketingsitet (GitHub Pages, CNAME `trimrpix.iamjarl.com`) som `privacy.html`.
 
-**Brug denne URL i App Store Connect:**
-- **Privacy Policy URL**: `https://trimrpix.iamjarl.com/PRIVACY.md`
+**Brug disse URLs i App Store Connect:**
+- **Privacy Policy URL**: `https://trimrpix.iamjarl.com/privacy.html`
+- **Support URL**: `https://trimrpix.iamjarl.com/support.html`
 
 Der er nu også et link til Privacy Policy i footeren på forsiden.
 
@@ -218,7 +219,7 @@ Før du submitter til App Review, tjek:
 - [x] App fungerer korrekt (testet grundigt)
 - [x] Alle features virker som forventet
 - [x] Ingen crashes eller memory leaks
-- [x] Privacy policy URL er tilgængelig (`https://trimrpix.iamjarl.com/PRIVACY.md`)
+- [x] Privacy policy URL er tilgængelig (`https://trimrpix.iamjarl.com/privacy.html`)
 - [x] App Store metadata er udfyldt
 - [x] Screenshots er uploadet
 - [x] Support URL virker

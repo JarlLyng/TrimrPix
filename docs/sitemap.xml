@@ -3,19 +3,33 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>https://trimrpix.iamjarl.com/</loc>
-        <lastmod>2026-01-15</lastmod>
+        <lastmod>2026-03-04</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <image:image>
-            <image:loc>https://trimrpix.iamjarl.com/app_screenshot.png</image:loc>
-            <image:title>TrimrPix macOS App Screenshot</image:title>
-            <image:caption>TrimrPix image optimization interface showing drag and drop functionality</image:caption>
+            <image:loc>https://trimrpix.iamjarl.com/screenshot-1.png</image:loc>
+            <image:title>TrimrPix – Trim file size. Keep quality. Mac image optimizer</image:title>
+            <image:caption>TrimrPix app window showing image optimization with drag and drop and file size savings</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://trimrpix.iamjarl.com/screenshot-2.png</image:loc>
+            <image:title>TrimrPix compression and batch processing</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://trimrpix.iamjarl.com/screenshot-3.png</image:loc>
+            <image:title>TrimrPix before and after file sizes</image:title>
         </image:image>
     </url>
     <url>
         <loc>https://trimrpix.iamjarl.com/support.html</loc>
-        <lastmod>2026-02-03</lastmod>
+        <lastmod>2026-03-04</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://trimrpix.iamjarl.com/privacy.html</loc>
+        <lastmod>2026-03-04</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
     </url>
 </urlset>

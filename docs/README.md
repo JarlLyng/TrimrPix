@@ -1,44 +1,31 @@
-# TrimrPix Landing Page
+# TrimrPix marketing site
 
-This directory contains the landing page for TrimrPix, hosted on GitHub Pages.
+This directory is the marketing website for TrimrPix, hosted at **https://trimrpix.iamjarl.com/** (via GitHub Pages and CNAME).
 
 ## Structure
 
-- `index.html` - Main landing page
-- `styles.css` - All CSS styles
-- Screenshots are referenced from the root `/Screenshots/` directory
+- `index.html` – Main landing page (App Store CTA, no GitHub links)
+- `support.html` – Support and contact
+- `privacy.html` – Privacy policy
+- `styles.css` – Styles (design tokens, responsive)
+- `screenshot-1.png`, `screenshot-2.png`, `screenshot-3.png` – App Store screenshots
+- `sitemap.xml` – Sitemap for SEO
+- `robots.txt` – Crawler rules
+- `CNAME` – Custom domain (trimrpix.iamjarl.com)
 
-## GitHub Pages Configuration
+## Deployment
 
-To enable GitHub Pages:
+GitHub Pages is configured to serve from the `/docs` folder. Push to `main` and the site updates automatically (if Pages is set to “Deploy from a branch” → branch `main` → folder `/docs`).
 
-1. Go to repository Settings
-2. Navigate to Pages
-3. Select source: `Deploy from a branch`
-4. Select branch: `main` or `gh-pages`
-5. Select folder: `/docs`
-6. Save
+## Local preview
 
-The site will be available at: `https://trimrpix.iamjarl.com/`
+```bash
+cd docs && python3 -m http.server 8000
+# Open http://localhost:8000
+```
 
-## Local Development
+## SEO
 
-To preview the site locally:
-
-1. Install a local web server (Python, Node.js, etc.)
-2. Serve the docs directory:
-   ```bash
-   # Python 3
-   python3 -m http.server 8000
-   
-   # Node.js (with http-server)
-   npx http-server docs -p 8000
-   ```
-3. Open `http://localhost:8000` in your browser
-
-## Updating Content
-
-- Edit `index.html` for content changes
-- Edit `styles.css` for styling changes
-- Images should be placed in `/Screenshots/` directory (root level)
-
+- Canonical URLs, meta description, Open Graph, Twitter cards
+- Structured data: SoftwareApplication, FAQPage, BreadcrumbList
+- Sitemap includes image URLs for indexing

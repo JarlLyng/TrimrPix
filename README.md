@@ -88,16 +88,9 @@ TrimrPix/
 
 ### 🚀 Quick Start
 
-#### Option 1: Download Pre-built App (Recommended)
-1. **Download the latest release:**
-   - Go to [Releases](https://github.com/JarlLyng/TrimrPix/releases)
-   - Download `TrimrPix.dmg`
-   - Open the DMG and drag TrimrPix to Applications folder
-
-2. **First-time setup (Security):**
-   - Right-click TrimrPix in Applications → "Open"
-   - Click "Open" in the security dialog
-   - Or go to System Preferences → Security & Privacy → "Open Anyway"
+#### Option 1: App Store (Recommended)
+- **Get TrimrPix on the Mac App Store:** [apps.apple.com/app/trimrpix/id6758639590](https://apps.apple.com/app/trimrpix/id6758639590)  
+- One-time purchase. Requires macOS 15.2 or later.
 
 #### Option 2: Build from Source
 1. **Clone the repository:**
@@ -185,8 +178,9 @@ Have an idea for a new feature? Open an issue and let's discuss it!
 
 ## 📞 Support
 
-- **Issues:** [GitHub Issues](https://github.com/jarllyng/TrimrPix/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/jarllyng/TrimrPix/discussions)
+- **Website & support:** [trimrpix.iamjarl.com](https://trimrpix.iamjarl.com/)
+- **App Store:** [TrimrPix on the App Store](https://apps.apple.com/app/trimrpix/id6758639590)
+- **Source & issues:** [GitHub](https://github.com/JarlLyng/TrimrPix) (for developers)
 
 ## 📢 License
 
