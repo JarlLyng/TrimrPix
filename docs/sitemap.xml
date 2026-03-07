@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>https://trimrpix.iamjarl.com/</loc>
-        <lastmod>2026-03-04</lastmod>
+        <lastmod>2026-03-07</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <image:image>
@@ -14,21 +14,23 @@
         <image:image>
             <image:loc>https://trimrpix.iamjarl.com/screenshot-2.png</image:loc>
             <image:title>TrimrPix compression and batch processing</image:title>
+            <image:caption>TrimrPix compression settings with batch processing for multiple images</image:caption>
         </image:image>
         <image:image>
             <image:loc>https://trimrpix.iamjarl.com/screenshot-3.png</image:loc>
             <image:title>TrimrPix before and after file sizes</image:title>
+            <image:caption>TrimrPix showing before and after file size comparison with savings</image:caption>
         </image:image>
     </url>
     <url>
         <loc>https://trimrpix.iamjarl.com/support.html</loc>
-        <lastmod>2026-03-04</lastmod>
+        <lastmod>2026-03-07</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://trimrpix.iamjarl.com/privacy.html</loc>
-        <lastmod>2026-03-04</lastmod>
+        <lastmod>2026-03-07</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>

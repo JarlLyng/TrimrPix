@@ -5,6 +5,4 @@ Allow: /
 Sitemap: https://trimrpix.iamjarl.com/sitemap.xml
 
 # Disallow crawling of raw docs (use .html for SEO)
-Disallow: /PRIVACY.md
-Disallow: /README.md
-Disallow: /*.md$
+Disallow: /*.md
