@@ -80,7 +80,7 @@ protocol ImageRepositoryProtocol {
 
 /// Protocol for application settings management
 protocol SettingsProtocol: ObservableObject {
-    var jpegQuality: Double { get set }
+    var compressionQuality: Double { get set }
     var compressionPreset: CompressionPreset { get set }
     var overwriteOriginal: Bool { get set }
     var autoSave: Bool { get set }

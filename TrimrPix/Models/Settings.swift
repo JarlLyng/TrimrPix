@@ -31,7 +31,7 @@ final class Settings: SettingsProtocol {
     
     // MARK: - Published Properties
     
-    @Published var jpegQuality: Double = 0.8
+    @Published var compressionQuality: Double = 0.8
     @Published var compressionPreset: CompressionPreset = .medium
     @Published var overwriteOriginal: Bool = false
     @Published var autoSave: Bool = true
@@ -55,7 +55,8 @@ final class Settings: SettingsProtocol {
     // MARK: - UserDefaults Keys
     
     private enum UserDefaultsKeys {
-        static let jpegQuality = "jpegQuality"
+        static let compressionQuality = "compressionQuality"
+        static let legacyJpegQuality = "jpegQuality" // migration from v1.0
         static let compressionPreset = "compressionPreset"
         static let overwriteOriginal = "overwriteOriginal"
         static let autoSave = "autoSave"
@@ -92,19 +93,21 @@ final class Settings: SettingsProtocol {
     func loadSettings() throws {
         logger.debug("Loading settings from UserDefaults")
         
-        // Load JPEG quality
-        let savedQuality = userDefaults.double(forKey: UserDefaultsKeys.jpegQuality)
-        if savedQuality > 0 {
-            jpegQuality = savedQuality
-        } else {
-            // Use default value if not set
-            jpegQuality = CompressionPreset.medium.quality
-            logger.debug("Using default JPEG quality: \(jpegQuality)")
+        // Load compression quality (with migration from legacy "jpegQuality" key)
+        var savedQuality = userDefaults.double(forKey: UserDefaultsKeys.compressionQuality)
+        if savedQuality == 0 {
+            savedQuality = userDefaults.double(forKey: UserDefaultsKeys.legacyJpegQuality)
         }
-        
+        if savedQuality > 0 {
+            compressionQuality = savedQuality
+        } else {
+            compressionQuality = CompressionPreset.medium.quality
+            logger.debug("Using default compression quality: \(compressionQuality)")
+        }
+
         // Validate quality range
-        guard jpegQuality >= 0.1 && jpegQuality <= 1.0 else {
-            let error = TrimrPixError.invalidSettingsValue("jpegQuality: \(jpegQuality)")
+        guard compressionQuality >= 0.1 && compressionQuality <= 1.0 else {
+            let error = TrimrPixError.invalidSettingsValue("compressionQuality: \(compressionQuality)")
             logger.error("Invalid JPEG quality value: \(error.technicalDescription)")
             throw error
         }
@@ -191,14 +194,14 @@ final class Settings: SettingsProtocol {
         logger.debug("Saving settings to UserDefaults")
         
         // Validate quality range before saving
-        guard jpegQuality >= 0.1 && jpegQuality <= 1.0 else {
-            let error = TrimrPixError.invalidSettingsValue("jpegQuality: \(jpegQuality)")
+        guard compressionQuality >= 0.1 && compressionQuality <= 1.0 else {
+            let error = TrimrPixError.invalidSettingsValue("compressionQuality: \(compressionQuality)")
             logger.error("Invalid JPEG quality value: \(error.technicalDescription)")
             throw error
         }
         
         do {
-            userDefaults.set(jpegQuality, forKey: UserDefaultsKeys.jpegQuality)
+            userDefaults.set(compressionQuality, forKey: UserDefaultsKeys.compressionQuality)
             userDefaults.set(compressionPreset.rawValue, forKey: UserDefaultsKeys.compressionPreset)
             userDefaults.set(overwriteOriginal, forKey: UserDefaultsKeys.overwriteOriginal)
             userDefaults.set(autoSave, forKey: UserDefaultsKeys.autoSave)
@@ -229,9 +232,9 @@ final class Settings: SettingsProtocol {
     /// Updates JPEG quality from the current preset
     func updateQualityFromPreset() {
         if compressionPreset != .custom {
-            let oldQuality = jpegQuality
-            jpegQuality = compressionPreset.quality
-            logger.debug("Updated JPEG quality from preset: \(oldQuality) -> \(jpegQuality)")
+            let oldQuality = compressionQuality
+            compressionQuality = compressionPreset.quality
+            logger.debug("Updated compression quality from preset: \(oldQuality) -> \(compressionQuality)")
         }
     }
     

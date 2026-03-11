@@ -20,6 +20,9 @@ enum TrimrPixError: LocalizedError {
     case compressionFailed(url: URL, underlyingError: Error?)
     case jpegCompressionFailed(URL)
     case pngCompressionFailed(URL)
+    case webpCompressionFailed(URL)
+    case avifCompressionFailed(URL)
+    case heicCompressionFailed(URL)
     case formatNotSupported(String)
     
     // MARK: - File System Errors
@@ -54,7 +57,7 @@ enum TrimrPixError: LocalizedError {
         case .imageLoadFailed(let url, _):
             return "Kunne ikke indlæse billede: \(url.lastPathComponent)"
         case .unsupportedImageFormat(let format):
-            return "Ikke-understøttet billedformat: \(format). Støttede formater: JPEG, PNG, GIF, WebP, AVIF"
+            return "Ikke-understøttet billedformat: \(format). Støttede formater: JPEG, PNG, GIF, WebP, AVIF, HEIC"
         case .invalidImageData(let url):
             return "Ugyldig billeddata: \(url.lastPathComponent)"
         case .imageTooLarge(let url, let maxSize):
@@ -66,6 +69,12 @@ enum TrimrPixError: LocalizedError {
             return "JPEG komprimering fejlede: \(url.lastPathComponent)"
         case .pngCompressionFailed(let url):
             return "PNG komprimering fejlede: \(url.lastPathComponent)"
+        case .webpCompressionFailed(let url):
+            return "WebP komprimering fejlede: \(url.lastPathComponent)"
+        case .avifCompressionFailed(let url):
+            return "AVIF komprimering fejlede: \(url.lastPathComponent)"
+        case .heicCompressionFailed(let url):
+            return "HEIC komprimering fejlede: \(url.lastPathComponent)"
         case .formatNotSupported(let format):
             return "Format ikke understøttet: \(format)"
             
@@ -144,6 +153,12 @@ enum TrimrPixError: LocalizedError {
             return "JPEGCompressionFailed(url: \(url.path))"
         case .pngCompressionFailed(let url):
             return "PNGCompressionFailed(url: \(url.path))"
+        case .webpCompressionFailed(let url):
+            return "WebPCompressionFailed(url: \(url.path))"
+        case .avifCompressionFailed(let url):
+            return "AVIFCompressionFailed(url: \(url.path))"
+        case .heicCompressionFailed(let url):
+            return "HEICCompressionFailed(url: \(url.path))"
         case .formatNotSupported(let format):
             return "FormatNotSupported(format: \(format))"
         case .fileNotFound(let url):
@@ -188,7 +203,8 @@ enum TrimrPixError: LocalizedError {
             return "Konverter billedet til et understøttet format først"
         case .imageTooLarge:
             return "Reducer billedets opløsning eller størrelse først"
-        case .compressionFailed, .jpegCompressionFailed, .pngCompressionFailed:
+        case .compressionFailed, .jpegCompressionFailed, .pngCompressionFailed,
+             .webpCompressionFailed, .avifCompressionFailed, .heicCompressionFailed:
             return "Prøv at genåbne filen eller konverter til et andet format"
         case .fileNotFound:
             return "Sørg for at filen eksisterer og prøv igen"

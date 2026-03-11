@@ -90,15 +90,15 @@ struct TrimrPixTests {
     @Test func testSettingsValidation() async throws {
         let settings = Settings.shared
         
-        // Test JPEG quality validation
-        settings.jpegQuality = 0.8
-        #expect(settings.jpegQuality == 0.8)
-        
+        // Test compression quality validation
+        settings.compressionQuality = 0.8
+        #expect(settings.compressionQuality == 0.8)
+
         // Test compression preset
         settings.compressionPreset = .high
         #expect(settings.compressionPreset == .high)
         settings.updateQualityFromPreset()
-        #expect(settings.jpegQuality == 0.95)
+        #expect(settings.compressionQuality == 0.95)
     }
     
     @Test func testWatchFolderPathValidation() async throws {

@@ -23,7 +23,7 @@ Denne guide definerer kodestandarder og bedste praksis for TrimrPix-projektet. A
 - **camelCase** for variabler og properties
 - Beskrivende navne
 - Boolean properties skal starte med `is`, `has`, `can`, osv.
-- **Eksempel**: `isOptimizing`, `hasCompleted`, `canSave`, `jpegQuality`
+- **Eksempel**: `isOptimizing`, `hasCompleted`, `canSave`, `compressionQuality`
 
 #### Constants
 - **camelCase** for lokale konstanter
@@ -369,7 +369,7 @@ Deling konstanter skal være i dedikerede structs eller enums:
 
 ```swift
 enum UserDefaultsKeys {
-    static let jpegQuality = "jpegQuality"
+    static let compressionQuality = "compressionQuality"
     static let compressionPreset = "compressionPreset"
 }
 ```

@@ -45,8 +45,8 @@ struct SettingsView: View {
                         .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                     
                     HStack {
-                        Slider(value: $settings.jpegQuality, in: 0.1...1.0, step: 0.1)
-                        Text("\(Int(settings.jpegQuality * 100))%")
+                        Slider(value: $settings.compressionQuality, in: 0.1...1.0, step: 0.1)
+                        Text("\(Int(settings.compressionQuality * 100))%")
                             .frame(width: 40)
                             .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
                     }
