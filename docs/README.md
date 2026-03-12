@@ -8,7 +8,7 @@ Hosted at **https://trimrpix.iamjarl.com/** via GitHub Pages.
 - `support.html` – Support and contact
 - `privacy.html` – Privacy policy
 - `imageoptim-alternative.html` – ImageOptim comparison
-- `image-formats-guide.html` – JPEG vs PNG vs WebP vs AVIF
+- `image-formats-guide.html` – JPEG vs PNG vs WebP vs AVIF vs HEIC
 - `compress-images-for-web.html` – Web compression guide
 - `batch-image-compression.html` – Batch + Watch Folder guide
 - `optimize-images-app-store.html` – App Store image optimization
