@@ -5,7 +5,7 @@
 [![Xcode](https://img.shields.io/badge/Xcode-15.0+-blue.svg)](https://developer.apple.com/xcode/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-<img src="Screenshots/app_screenshot.png" width="600" alt="TrimrPix Screenshot">
+<img src="App store images/Screenshots/screenshot-1.png" width="600" alt="TrimrPix Screenshot">
 
 ## 📋 Description
 TrimrPix is a macOS app built with SwiftUI, focusing on high-quality image compression with a simple user interface. The goal is to offer a modern and efficient image optimization solution with the same core functionality as [ImageOptim](https://github.com/ImageOptim/ImageOptim), but with newer technology and optimized performance.
@@ -14,8 +14,9 @@ TrimrPix is a macOS app built with SwiftUI, focusing on high-quality image compr
 
 ### 🖼️ Image Processing
 - **High-quality compression** with focus on optimal file size reduction
-- **Multi-format support:** JPEG, PNG, GIF, WebP, and AVIF
-- **Smart compression:** JPEG with configurable quality (60%-95%)
+- **Multi-format support:** JPEG, PNG, GIF, WebP, AVIF, and HEIC
+- **Smart compression:** Configurable quality (60%-95%) for JPEG, WebP, AVIF, and HEIC
+- **Advanced PNG optimization:** Alpha channel stripping for opaque images
 - **Format validation:** Ensures file integrity before processing
 
 ### 🎯 User Experience
@@ -38,7 +39,8 @@ TrimrPix is a macOS app built with SwiftUI, focusing on high-quality image compr
 ## 🛠️ Technologies
 - **SwiftUI** – Modern UI development for macOS
 - **Core Image** – Image processing and compression
-- **NSBitmapImageRep** – Efficient image compression with quality control
+- **ImageIO / CGImageDestination** – Native WebP, AVIF, and HEIC compression
+- **NSBitmapImageRep** – Efficient JPEG/PNG compression with quality control
 - **Async/Await** – Modern Swift concurrency for responsive UI during image processing
 - **OSLog** – Unified logging system for debugging and monitoring
 - **Protocol-Oriented Design** – Dependency injection and testability
@@ -128,8 +130,8 @@ cd TrimrPix
 4. **Watch Folder:** Enable automatic processing of new images in a folder
 
 ## 🔍 Known Limitations
-- **GIF Processing:** Validation and copying only (no compression in MVP)
-- **WebP/AVIF:** Format validation only (macOS NSBitmapImageRep limitations)
+- **GIF Processing:** Validation and copying only (no compression)
+- **AVIF:** Depends on macOS system support — falls back to original data if unavailable
 - **macOS Version:** Requires macOS 15.2 or newer
 - **Sandboxing:** May require save dialog for folders without explicit access
 
@@ -137,30 +139,14 @@ cd TrimrPix
 
 ### 🎯 Planned Features
 - **Enhanced Compression:**
-  - True WebP/AVIF compression with external libraries
-  - SVG optimization with SVGO integration
-  - HEIC format support
-  - Advanced PNG optimization
-
-### 🔧 UI/UX Improvements
-- **Visual Enhancements:**
+  - SVG optimization
+  - GIF compression
+- **UI/UX:**
   - Before/after image preview
   - Progress tracking for large batches
-  - Dark mode optimization
-- **Workflow Features:**
-  - Batch job system for large quantities
-  - Scheduled optimization tasks
-  - Export/import settings profiles
-
-### 🏗️ Technical Improvements
-- **Performance:**
-  - GPU-accelerated compression
-  - Memory usage optimization
-  - Background processing improvements
 - **Integration:**
   - Finder context menu integration
   - Command-line interface
-  - API for third-party apps
 
 ## 🤝 Contributing
 

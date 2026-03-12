@@ -81,7 +81,7 @@ Concurrent TaskGroup → optimizeImage(at:) for each
     ↓
 CompressionService.optimizeImage()
     ↓
-Format-specific optimization (JPEG/PNG/GIF/WebP/AVIF)
+Format-specific optimization (JPEG/PNG/GIF/WebP/AVIF/HEIC)
     ↓
 Save optimized file based on settings
     ↓
@@ -130,8 +130,9 @@ Optimized file saved
 #### Settings
 - Singleton for applikationsindstillinger
 - Persisterer til UserDefaults
-- Validerer indstillingsværdier (JPEG quality, watch folder path)
+- Validerer indstillingsværdier (compression quality, watch folder path)
 - Håndterer compression presets
+- Transparent migration fra legacy `jpegQuality` til `compressionQuality` key
 - Watch folder delay konfiguration (0.5-10s)
 - **Security-Scoped Bookmarks**: Gemmer og genoptager bookmarks for watch folder ved app restart
 - **Bookmark Management**: `setWatchFolder()` og `getWatchFolderURL()` metoder for persistent folder access
@@ -159,11 +160,13 @@ Optimized file saved
 #### CompressionService
 - Implementerer `CompressionServiceProtocol`
 - Håndterer format-specifik komprimering:
-  - JPEG: Kvalitets-komprimeret (60%-95%)
-  - PNG: Optimized compression med compression level support
-  - GIF: Validering og kopiering (ingen komprimering i MVP)
-  - WebP: Validering (ingen komprimering i MVP - macOS begrænsning)
-  - AVIF: Validering (ingen komprimering i MVP - macOS begrænsning)
+  - JPEG: Kvalitets-komprimeret via NSBitmapImageRep (60%-95%)
+  - PNG: Optimized compression med alpha channel stripping for opaque images
+  - GIF: Validering og kopiering (ingen komprimering)
+  - WebP: Ægte komprimering via CGImageDestination (macOS 14+)
+  - AVIF: Komprimering via CGImageDestination med graceful fallback
+  - HEIC: Komprimering via CGImageDestination
+- Delt helper-metode `compressWithCGImageDestination()` for WebP/AVIF/HEIC
 - Filtype detection via UTType for robust identifikation
 - Security-scoped resource access for sandboxed apps
 - Automatisk filnavn konflikthåndtering med unique naming
@@ -282,6 +285,7 @@ let compressionService = CompressionService(logger: mockLogger)
 - **SwiftUI**: UI framework
 - **Foundation**: Core functionality
 - **AppKit**: macOS-specifik functionality (NSSavePanel, NSImage)
+- **ImageIO**: CGImageDestination for WebP/AVIF/HEIC compression
 - **OSLog**: Unified logging system
 - **UniformTypeIdentifiers**: File type identification
 
@@ -302,6 +306,6 @@ let compressionService = CompressionService(logger: mockLogger)
 
 ---
 
-**Opdateret**: 15. januar 2026  
-**Version**: 1.1
+**Opdateret**: 12. marts 2026
+**Version**: 1.3
 
