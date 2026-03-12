@@ -212,6 +212,9 @@ body {
 }
 
 .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
     font-size: var(--text-xl);
     font-weight: var(--weight-bold);
     color: var(--color-primary);
@@ -221,6 +224,10 @@ body {
 
 .logo:hover {
     opacity: 0.85;
+}
+
+.logo-icon {
+    border-radius: 6px;
 }
 
 .nav {
