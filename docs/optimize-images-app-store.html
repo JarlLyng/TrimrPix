@@ -48,13 +48,13 @@
                 <p class="article-meta">Updated March 2026 &middot; by IAMJARL</p>
             </div>
 
-            <div class="answer-box">
+            <div class="answer-box reveal">
                 <p>To optimize App Store screenshots, export them as PNG at the required resolution, then compress with TrimrPix to reduce file size without visible quality loss. This speeds up uploads and keeps your App Store Connect workflow fast.</p>
             </div>
 
             <div class="prose">
                 <h2>App Store screenshot requirements</h2>
-                <table class="comparison-table">
+                <table class="comparison-table reveal">
                     <thead>
                         <tr>
                             <th>Device</th>
@@ -92,11 +92,11 @@
 
                 <h2>Step-by-step with TrimrPix</h2>
                 <ol class="step-list">
-                    <li>Export screenshots from your design tool at the required resolution</li>
-                    <li>Drag all screenshots into TrimrPix</li>
-                    <li>Set quality to 90&ndash;95% for App Store (high quality needed)</li>
-                    <li>Click Optimize</li>
-                    <li>Upload the compressed screenshots to App Store Connect</li>
+                    <li class="reveal">Export screenshots from your design tool at the required resolution</li>
+                    <li class="reveal">Drag all screenshots into TrimrPix</li>
+                    <li class="reveal">Set quality to 90&ndash;95% for App Store (high quality needed)</li>
+                    <li class="reveal">Click Optimize</li>
+                    <li class="reveal">Upload the compressed screenshots to App Store Connect</li>
                 </ol>
 
                 <h2>Compression tips for developers</h2>
@@ -112,7 +112,7 @@
                 <p>Need to process all your assets at once? Use <a href="batch-image-compression.html">batch compression</a> to handle everything in one step.</p>
             </div>
 
-            <div class="article-cta">
+            <div class="article-cta reveal">
                 <h2>Try TrimrPix</h2>
                 <p>Optimize App Store screenshots in seconds. $1.99 on the Mac App Store.</p>
                 <a href="https://apps.apple.com/app/trimrpix/id6758639590" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Download on the App Store</a>
@@ -161,6 +161,16 @@
         "mainEntityOfPage": "https://trimrpix.iamjarl.com/optimize-images-app-store.html",
         "image": "https://trimrpix.iamjarl.com/screenshot-1.png"
     }
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+    });
     </script>
 </body>
 </html>

@@ -48,7 +48,7 @@
                 <p class="article-meta">Updated March 2026 &middot; by IAMJARL</p>
             </div>
 
-            <div class="answer-box">
+            <div class="answer-box reveal">
                 <p>To compress images for a website: resize to the display size, use WebP or AVIF for the best compression, aim for under 200 KB per image, and use a tool like TrimrPix to batch-optimize before uploading.</p>
             </div>
 
@@ -58,7 +58,7 @@
                 <p>Compressing images before uploading is one of the fastest ways to improve website performance.</p>
 
                 <h2>Recommended image sizes for web</h2>
-                <table class="comparison-table">
+                <table class="comparison-table reveal">
                     <thead>
                         <tr>
                             <th>Use case</th>
@@ -101,11 +101,11 @@
 
                 <h2>Step-by-step workflow with TrimrPix</h2>
                 <ol class="step-list">
-                    <li>Open TrimrPix on your Mac</li>
-                    <li>Drag and drop your images into the window</li>
-                    <li>Adjust the quality slider &mdash; 80% is a good default for web</li>
-                    <li>Click Optimize</li>
-                    <li>Upload the optimized images to your website</li>
+                    <li class="reveal">Open TrimrPix on your Mac</li>
+                    <li class="reveal">Drag and drop your images into the window</li>
+                    <li class="reveal">Adjust the quality slider &mdash; 80% is a good default for web</li>
+                    <li class="reveal">Click Optimize</li>
+                    <li class="reveal">Upload the optimized images to your website</li>
                 </ol>
 
                 <h2>What to expect</h2>
@@ -116,7 +116,7 @@
                 <p>Learn more in the <a href="batch-image-compression.html">Batch Image Compression guide</a>.</p>
             </div>
 
-            <div class="article-cta">
+            <div class="article-cta reveal">
                 <h2>Try TrimrPix</h2>
                 <p>Compress images for your website in seconds. $1.99 on the Mac App Store.</p>
                 <a href="https://apps.apple.com/app/trimrpix/id6758639590" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Download on the App Store</a>
@@ -165,6 +165,16 @@
         "mainEntityOfPage": "https://trimrpix.iamjarl.com/compress-images-for-web.html",
         "image": "https://trimrpix.iamjarl.com/screenshot-1.png"
     }
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+    });
     </script>
 </body>
 </html>

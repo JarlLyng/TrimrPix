@@ -48,7 +48,7 @@
                 <p class="article-meta">Updated March 2026 &middot; by IAMJARL</p>
             </div>
 
-            <div class="answer-box">
+            <div class="answer-box reveal">
                 <p>To batch compress images on Mac, use TrimrPix. Drag and drop hundreds of JPEG, PNG, WebP, GIF, AVIF, or HEIC files into the app, set your quality preference, and click Optimize. For fully automatic compression, use the Watch Folder feature.</p>
             </div>
 
@@ -58,11 +58,11 @@
 
                 <h2>How to batch compress with TrimrPix</h2>
                 <ol class="step-list">
-                    <li>Open TrimrPix on your Mac</li>
-                    <li>Select or drag hundreds of images at once &mdash; all formats mixed</li>
-                    <li>Choose your quality level (60%&ndash;95%)</li>
-                    <li>Click Optimize &mdash; all images are processed</li>
-                    <li>Done. Every file is saved with a reduced size.</li>
+                    <li class="reveal">Open TrimrPix on your Mac</li>
+                    <li class="reveal">Select or drag hundreds of images at once &mdash; all formats mixed</li>
+                    <li class="reveal">Choose your quality level (60%&ndash;95%)</li>
+                    <li class="reveal">Click Optimize &mdash; all images are processed</li>
+                    <li class="reveal">Done. Every file is saved with a reduced size.</li>
                 </ol>
 
                 <h2>Watch Folder &mdash; automatic compression</h2>
@@ -86,7 +86,7 @@
                 </ul>
             </div>
 
-            <div class="article-cta">
+            <div class="article-cta reveal">
                 <h2>Try TrimrPix</h2>
                 <p>Batch compress images in seconds. $1.99 on the Mac App Store.</p>
                 <a href="https://apps.apple.com/app/trimrpix/id6758639590" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Download on the App Store</a>
@@ -135,6 +135,16 @@
         "mainEntityOfPage": "https://trimrpix.iamjarl.com/batch-image-compression.html",
         "image": "https://trimrpix.iamjarl.com/screenshot-1.png"
     }
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+    });
     </script>
 </body>
 </html>

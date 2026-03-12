@@ -48,7 +48,7 @@
                 <p class="article-meta">Updated March 2026 &middot; by IAMJARL</p>
             </div>
 
-            <div class="answer-box">
+            <div class="answer-box reveal">
                 <p>TrimrPix is a modern ImageOptim alternative for Mac. It supports JPEG, PNG, GIF, WebP, AVIF, and HEIC with drag-and-drop batch compression, Watch Folder automation, and adjustable quality &mdash; all fully offline for $1.99 one-time.</p>
             </div>
 
@@ -58,7 +58,7 @@
                 <p>TrimrPix is built as a modern native Mac app with these features included.</p>
 
                 <h2>TrimrPix vs ImageOptim</h2>
-                <table class="comparison-table">
+                <table class="comparison-table reveal">
                     <thead>
                         <tr>
                             <th>Feature</th>
@@ -150,7 +150,7 @@
                 </ul>
             </div>
 
-            <div class="article-cta">
+            <div class="article-cta reveal">
                 <h2>Try TrimrPix</h2>
                 <p>Drag, drop, optimize. $1.99 one-time on the Mac App Store.</p>
                 <a href="https://apps.apple.com/app/trimrpix/id6758639590" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Download on the App Store</a>
@@ -199,6 +199,16 @@
         "mainEntityOfPage": "https://trimrpix.iamjarl.com/imageoptim-alternative.html",
         "image": "https://trimrpix.iamjarl.com/screenshot-1.png"
     }
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+    });
     </script>
 </body>
 </html>

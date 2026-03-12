@@ -89,9 +89,9 @@
             <div class="container">
                 <h2 class="visually-hidden">TrimrPix in action</h2>
                 <div class="gallery-grid">
-                    <img src="screenshot-1.png" alt="TrimrPix main window – add images and optimize" width="800" height="533" loading="lazy" class="gallery-img">
-                    <img src="screenshot-2.png" alt="TrimrPix – compression settings and batch processing" width="800" height="533" loading="lazy" class="gallery-img">
-                    <img src="screenshot-3.png" alt="TrimrPix – before and after file sizes" width="800" height="533" loading="lazy" class="gallery-img">
+                    <img src="screenshot-1.png" alt="TrimrPix main window – add images and optimize" width="800" height="533" loading="lazy" class="gallery-img reveal">
+                    <img src="screenshot-2.png" alt="TrimrPix – compression settings and batch processing" width="800" height="533" loading="lazy" class="gallery-img reveal">
+                    <img src="screenshot-3.png" alt="TrimrPix – before and after file sizes" width="800" height="533" loading="lazy" class="gallery-img reveal">
                 </div>
             </div>
         </section>
@@ -102,32 +102,32 @@
                 <h2 class="section-title">Why TrimrPix?</h2>
                 <p class="section-subtitle">Built for Mac. Fast, private, no account required.</p>
                 <div class="features-grid">
-                    <article class="feature-card">
+                    <article class="feature-card reveal">
                         <span class="feature-icon" aria-hidden="true">📐</span>
                         <h3>Reduce size by up to 80%</h3>
                         <p>Smaller files in many cases with the quality you see preserved.</p>
                     </article>
-                    <article class="feature-card">
+                    <article class="feature-card reveal">
                         <span class="feature-icon" aria-hidden="true">🔒</span>
                         <h3>Fully offline</h3>
                         <p>No uploads, no cloud. Everything runs on your Mac.</p>
                     </article>
-                    <article class="feature-card">
+                    <article class="feature-card reveal">
                         <span class="feature-icon" aria-hidden="true">📦</span>
                         <h3>No account or subscription</h3>
                         <p>One-time purchase. Download and use — no sign-in.</p>
                     </article>
-                    <article class="feature-card">
+                    <article class="feature-card reveal">
                         <span class="feature-icon" aria-hidden="true">🖼️</span>
                         <h3>All major formats</h3>
                         <p>Optimize JPEG, PNG, GIF, WebP, AVIF, and HEIC in one app.</p>
                     </article>
-                    <article class="feature-card">
+                    <article class="feature-card reveal">
                         <span class="feature-icon" aria-hidden="true">⚡</span>
                         <h3>Drag & drop + batch</h3>
                         <p>Drop hundreds of images, hit optimize, save time.</p>
                     </article>
-                    <article class="feature-card">
+                    <article class="feature-card reveal">
                         <span class="feature-icon" aria-hidden="true">👁️</span>
                         <h3>Watch Folder</h3>
                         <p>Auto-optimize new images added to a folder.</p>
@@ -154,27 +154,27 @@
             <div class="container">
                 <h2 class="section-title">Frequently Asked Questions</h2>
                 <div class="faq-list">
-                    <article class="faq-item">
+                    <article class="faq-item reveal">
                         <h3>What image formats does TrimrPix support?</h3>
                         <p>TrimrPix supports JPEG, PNG, GIF, WebP, AVIF, and HEIC. Optimize all of them from one drag-and-drop interface.</p>
                     </article>
-                    <article class="faq-item">
+                    <article class="faq-item reveal">
                         <h3>How much can I reduce file sizes?</h3>
                         <p>It depends on the image and settings. Many images can be reduced by 30–80% while keeping visual quality high.</p>
                     </article>
-                    <article class="faq-item">
+                    <article class="faq-item reveal">
                         <h3>How much does TrimrPix cost?</h3>
                         <p>TrimrPix is a one-time purchase of $1.99 on the App Store. No subscription and no in-app purchases.</p>
                     </article>
-                    <article class="faq-item">
+                    <article class="faq-item reveal">
                         <h3>Does TrimrPix work offline?</h3>
                         <p>Yes. All processing happens on your Mac. Your images never leave your device.</p>
                     </article>
-                    <article class="faq-item">
+                    <article class="faq-item reveal">
                         <h3>What macOS version do I need?</h3>
                         <p>TrimrPix requires macOS 15.2 or later.</p>
                     </article>
-                    <article class="faq-item">
+                    <article class="faq-item reveal">
                         <h3>Can I optimize many images at once?</h3>
                         <p>Yes. Add as many images as you like and use batch optimization. Watch Folder can also auto-optimize new images in a folder.</p>
                     </article>
@@ -280,6 +280,16 @@
             { "@type": "Question", "name": "Can I optimize many images at once?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Batch optimization and Watch Folder for automatic processing." } }
         ]
     }
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+    });
     </script>
 </body>
 </html>

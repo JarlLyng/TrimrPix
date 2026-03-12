@@ -45,11 +45,11 @@
             <p style="color: var(--color-text-tertiary); margin-bottom: 2rem;">Last updated: February 2026</p>
 
             <div class="faq-list" style="margin: 0;">
-                <section class="faq-item">
+                <section class="faq-item reveal">
                     <h2 style="font-size: var(--text-lg); margin-bottom: 0.5rem;">Overview</h2>
                     <p>TrimrPix is committed to protecting your privacy. This policy explains how TrimrPix handles your data.</p>
                 </section>
-                <section class="faq-item">
+                <section class="faq-item reveal">
                     <h2 style="font-size: var(--text-lg); margin-bottom: 0.5rem;">Data collection</h2>
                     <p><strong>TrimrPix does not collect, store, or transmit any personal data.</strong></p>
                     <ul style="margin: 0.75rem 0 0 1.25rem; color: var(--color-text-secondary);">
@@ -59,15 +59,15 @@
                         <li>All processing is performed locally on your device</li>
                     </ul>
                 </section>
-                <section class="faq-item">
+                <section class="faq-item reveal">
                     <h2 style="font-size: var(--text-lg); margin-bottom: 0.5rem;">File access</h2>
                     <p>TrimrPix only accesses files that you explicitly drag and drop, select via the file picker, or add to a watched folder. All files are processed locally and never leave your Mac.</p>
                 </section>
-                <section class="faq-item">
+                <section class="faq-item reveal">
                     <h2 style="font-size: var(--text-lg); margin-bottom: 0.5rem;">Data storage</h2>
                     <p>User settings (e.g. compression preferences, watch folder) are stored locally on your device. No images or file content are stored permanently. No data is sent to any server.</p>
                 </section>
-                <section class="faq-item">
+                <section class="faq-item reveal">
                     <h2 style="font-size: var(--text-lg); margin-bottom: 0.5rem;">Contact</h2>
                     <p>Questions about this policy? Contact us at <a href="https://iamjarl.com/" target="_blank" rel="noopener noreferrer">iamjarl.com</a>.</p>
                 </section>
@@ -93,6 +93,16 @@
             { "@type": "ListItem", "position": 2, "name": "Privacy Policy", "item": "https://trimrpix.iamjarl.com/privacy.html" }
         ]
     }
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+    });
     </script>
 </body>
 </html>

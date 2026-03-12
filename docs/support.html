@@ -46,17 +46,17 @@
             <p class="support-intro">Need help with TrimrPix? Here’s how to get it.</p>
 
             <div class="support-blocks">
-                <div class="feature-card">
+                <div class="feature-card reveal">
                     <h2>FAQ</h2>
                     <p>Common questions about formats, batch processing, Watch Folder, pricing, and system requirements.</p>
                     <a href="index.html#faq" class="btn btn-primary">View FAQ on homepage</a>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card reveal">
                     <h2>Contact us</h2>
                     <p>For feedback, bug reports, or feature requests, reach out via our website.</p>
                     <a href="https://iamjarl.com/" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">iamjarl.com</a>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card reveal">
                     <h2>App Store</h2>
                     <p>TrimrPix is available on the Mac App Store. You can rate and review the app there.</p>
                     <a href="https://apps.apple.com/app/trimrpix/id6758639590" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View on App Store</a>
@@ -86,6 +86,16 @@
             { "@type": "ListItem", "position": 2, "name": "Support", "item": "https://trimrpix.iamjarl.com/support.html" }
         ]
     }
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+    });
     </script>
 </body>
 </html>
