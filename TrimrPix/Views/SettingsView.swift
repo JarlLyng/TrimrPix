@@ -6,134 +6,129 @@
 //
 
 import SwiftUI
+import IAMJARLDesignTokens
 
-/// Settings view panel for configuring application preferences
-/// Allows users to configure compression quality, save options, and watch folder settings
+/// Settings view – uses IAMJARL Design System tokens only
 struct SettingsView: View {
     @StateObject private var settings = Settings.shared
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: DesignTokens.Spacing.xl) {
             Text("Settings")
-                .font(DesignTokens.Typography.title2)
-                .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
-            
+                .font(.trimrPixTitle2)
+                .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
+
             VStack(alignment: .leading, spacing: DesignTokens.Spacing.lg) {
-                // Compression preset
                 VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
                     Text("Compression Preset")
-                        .font(DesignTokens.Typography.headline)
-                        .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
-                    
+                        .font(.trimrPixHeadline)
+                        .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
+
                     Picker("Preset", selection: $settings.compressionPreset) {
                         ForEach(CompressionPreset.allCases, id: \.self) { preset in
                             Text(preset.rawValue).tag(preset)
                         }
                     }
                     .pickerStyle(.segmented)
-                    .onChange(of: settings.compressionPreset) { newValue, oldValue in
+                    .onChange(of: settings.compressionPreset) { _, _ in
                         settings.updateQualityFromPreset()
                     }
                 }
-                
-                // Quality
+
                 VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
                     Text("Quality")
-                        .font(DesignTokens.Typography.headline)
-                        .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
-                    
+                        .font(.trimrPixHeadline)
+                        .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
+
                     HStack {
                         Slider(value: $settings.compressionQuality, in: 0.1...1.0, step: 0.1)
                         Text("\(Int(settings.compressionQuality * 100))%")
                             .frame(width: 40)
-                            .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
+                            .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
                     }
                     .disabled(settings.compressionPreset != .custom)
-                    
+
                     Text("Higher value = better quality, larger file")
-                        .font(DesignTokens.Typography.caption)
-                        .foregroundStyle(DesignTokens.Colors.textSecondary(for: colorScheme))
+                        .font(.trimrPixCaption)
+                        .foregroundStyle(DesignTokens.Common.Text.secondary(colorScheme))
                 }
-                
+
                 Divider()
-                
-                // Save settings
+                    .background(DesignTokens.Common.Border.subtle(colorScheme))
+
                 VStack(alignment: .leading, spacing: DesignTokens.Spacing.sm) {
                     Text("Save Settings")
-                        .font(DesignTokens.Typography.headline)
-                        .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
-                    
+                        .font(.trimrPixHeadline)
+                        .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
+
                     Toggle("Overwrite original files", isOn: $settings.overwriteOriginal)
                         .help("Overwrites the original images instead of creating new ones")
-                    
+
                     Toggle("Auto-save optimized images", isOn: $settings.autoSave)
                         .help("Automatically saves optimized images in the same folder as the original")
                         .disabled(settings.overwriteOriginal)
                 }
-                
+
                 Divider()
-                
-                // Watch Folder settings
+                    .background(DesignTokens.Common.Border.subtle(colorScheme))
+
                 VStack(alignment: .leading, spacing: DesignTokens.Spacing.sm) {
                     Text("Watch Folder")
-                        .font(DesignTokens.Typography.headline)
-                        .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
-                    
+                        .font(.trimrPixHeadline)
+                        .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
+
                     Toggle("Enable Watch Folder", isOn: $settings.watchFolderEnabled)
                         .help("Automatically monitors a folder for new images")
-                    
+
                     if settings.watchFolderEnabled {
                         HStack {
                             TextField("Folder path", text: $settings.watchFolderPath)
                                 .textFieldStyle(.roundedBorder)
-                            
+
                             Button("Choose Folder") {
                                 selectWatchFolder()
                             }
                         }
-                        
+
                         VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
                             Text("Processing Delay")
-                                .font(DesignTokens.Typography.subheadline)
-                                .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
-                            
+                                .font(.trimrPixSubheadline)
+                                .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
+
                             HStack {
                                 Slider(value: $settings.watchFolderDelay, in: 0.5...10.0, step: 0.5)
                                 Text("\(settings.watchFolderDelay, specifier: "%.1f")s")
                                     .frame(width: 50)
-                                    .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
+                                    .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
                             }
-                            
+
                             Text("Delay before processing new files (prevents processing incomplete files)")
-                                .font(DesignTokens.Typography.caption)
-                                .foregroundStyle(DesignTokens.Colors.textSecondary(for: colorScheme))
+                                .font(.trimrPixCaption)
+                                .foregroundStyle(DesignTokens.Common.Text.secondary(colorScheme))
                         }
                     }
                 }
             }
-            
+
             Spacer()
-            
-            // Buttons
+
             HStack {
                 Spacer()
-                
                 Button("Cancel") {
                     dismiss()
                 }
-                
+                .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
+
                 Button("Save") {
                     do {
-                        // Validate watch folder path if enabled
                         if settings.watchFolderEnabled {
                             try settings.validateWatchFolderPath()
                         }
                         try settings.saveSettings()
                     } catch {
                         Logger.shared.error("Failed to save settings: \(error.localizedDescription)")
-                        // Show error alert to user
                         let alert = NSAlert()
                         alert.messageText = "Fejl ved gemning"
                         alert.informativeText = error.localizedDescription
@@ -144,28 +139,31 @@ struct SettingsView: View {
                     }
                     dismiss()
                 }
-                .buttonStyle(.borderedProminent)
+                .foregroundStyle(DesignTokens.Common.OnPrimary.text(colorScheme))
+                .padding(.horizontal, DesignTokens.Spacing.xl)
+                .padding(.vertical, DesignTokens.Spacing.md)
+                .background(DesignTokens.Common.primary(colorScheme))
+                .clipShape(RoundedRectangle(cornerRadius: DesignTokens.Radius.md))
             }
         }
         .padding(.horizontal, DesignTokens.Spacing.xl)
         .padding(.vertical, DesignTokens.Spacing.xxxl)
         .frame(width: 500, height: 520)
+        .background(DesignTokens.Common.Background.app(colorScheme))
     }
-    
+
     private func selectWatchFolder() {
         let panel = NSOpenPanel()
         panel.canChooseFiles = false
         panel.canChooseDirectories = true
         panel.allowsMultipleSelection = false
         panel.prompt = "Choose Watch Folder"
-        
+
         if panel.runModal() == .OK, let url = panel.url {
             do {
-                // Create security-scoped bookmark for persistent access
                 try settings.setWatchFolder(url: url)
             } catch {
                 Logger.shared.error("Failed to create bookmark for watch folder: \(error.localizedDescription)")
-                // Fallback to just setting the path
                 settings.watchFolderPath = url.path
             }
         }

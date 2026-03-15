@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2F5AD0C22F65C81A000DEA3D /* IAMJARLDesignTokens in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5AD0C12F65C81A000DEA3D /* IAMJARLDesignTokens */; };
+		2F958D242F66B94100DAC8BA /* PhosphorSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2F958D232F66B94100DAC8BA /* PhosphorSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		3B5228482D6E843600CF16B0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F5AD0C22F65C81A000DEA3D /* IAMJARLDesignTokens in Frameworks */,
+				2F958D242F66B94100DAC8BA /* PhosphorSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +119,8 @@
 			);
 			name = TrimrPix;
 			packageProductDependencies = (
+				2F5AD0C12F65C81A000DEA3D /* IAMJARLDesignTokens */,
+				2F958D232F66B94100DAC8BA /* PhosphorSwift */,
 			);
 			productName = TrimrPix;
 			productReference = 3B5228362D6E843500CF16B0 /* TrimrPix.app */;
@@ -195,6 +204,10 @@
 			);
 			mainGroup = 3B52282D2D6E843500CF16B0;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				2F5AD0C02F65C81A000DEA3D /* XCRemoteSwiftPackageReference "iamjarl-design" */,
+				2F958D222F66B94100DAC8BA /* XCRemoteSwiftPackageReference "swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3B5228372D6E843500CF16B0 /* Products */;
 			projectDirPath = "";
@@ -413,9 +426,9 @@
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "TrimrPix - Modern image optimization tool";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 IAMJARL. All rights reserved.";
-				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -449,9 +462,9 @@
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "TrimrPix - Modern image optimization tool";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 IAMJARL. All rights reserved.";
-				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -573,6 +586,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2F5AD0C02F65C81A000DEA3D /* XCRemoteSwiftPackageReference "iamjarl-design" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jarllyng/iamjarl-design.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		2F958D222F66B94100DAC8BA /* XCRemoteSwiftPackageReference "swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/phosphor-icons/swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2F5AD0C12F65C81A000DEA3D /* IAMJARLDesignTokens */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F5AD0C02F65C81A000DEA3D /* XCRemoteSwiftPackageReference "iamjarl-design" */;
+			productName = IAMJARLDesignTokens;
+		};
+		2F958D232F66B94100DAC8BA /* PhosphorSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F958D222F66B94100DAC8BA /* XCRemoteSwiftPackageReference "swift" */;
+			productName = PhosphorSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3B52282E2D6E843500CF16B0 /* Project object */;
 }

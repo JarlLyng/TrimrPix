@@ -1,0 +1,24 @@
+{
+  "originHash" : "2974324a675223e398c571242026c8b5183d8ae3b87b71cd437ea067d655dd47",
+  "pins" : [
+    {
+      "identity" : "iamjarl-design",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jarllyng/iamjarl-design.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "4e7e3efb2a1721bd0410a28c02227117ed3b9348"
+      }
+    },
+    {
+      "identity" : "swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/phosphor-icons/swift",
+      "state" : {
+        "revision" : "9a9467181782bbe319ad4935d0993c77cd8a5fbc",
+        "version" : "2.1.0"
+      }
+    }
+  ],
+  "version" : 3
+}

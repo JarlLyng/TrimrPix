@@ -7,15 +7,16 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import IAMJARLDesignTokens
+import PhosphorSwift
 
 /// Main content view for the TrimrPix application
-/// Provides the primary user interface for image optimization
-/// Includes drag & drop support, image list, and optimization controls
+/// Uses IAMJARL Design System: DesignTokens.Common, Spacing, Radius, ColorToken.State
 struct ContentView: View {
     @StateObject private var viewModel = ImageOptimizationViewModel()
     @State private var showSettings = false
     @Environment(\.colorScheme) private var colorScheme
-    
+
     var body: some View {
         VStack(spacing: DesignTokens.Spacing.xl) {
             // Header
@@ -24,139 +25,137 @@ struct ContentView: View {
                     .renderingMode(.template)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 28, height: 28)
-                    .foregroundStyle(DesignTokens.Colors.primary(for: colorScheme))
+                    .frame(width: 24, height: 24)
+                    .foregroundStyle(DesignTokens.Common.primary(colorScheme))
                 Text("TrimrPix")
-                    .font(DesignTokens.Typography.title)
-                    .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
-                
+                    .font(.trimrPixTitle)
+                    .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
+
                 Spacer()
-                
+
                 HStack(spacing: DesignTokens.Spacing.md) {
-                    // Watch folder status
                     if viewModel.isWatchFolderActive {
                         HStack(spacing: DesignTokens.Spacing.xs) {
-                            Image(systemName: "eye.fill")
-                                .foregroundStyle(DesignTokens.Colors.States.success)
+                            Ph.eye.fill
+                                .color(DesignTokens.ColorToken.State.success)
+                                .frame(width: 20, height: 20)
+                                .aspectRatio(contentMode: .fit)
                             Text("Watch Folder")
-                                .font(DesignTokens.Typography.caption)
-                                .foregroundStyle(DesignTokens.Colors.States.success)
+                                .font(.trimrPixCaption)
+                                .foregroundStyle(DesignTokens.ColorToken.State.success)
                         }
                     }
-                    
-                    Button(action: {
-                        showSettings = true
-                    }) {
-                        Image(systemName: "gear")
-                            .imageScale(.large)
+
+                    Button(action: { showSettings = true }) {
+                        Ph.gear.regular
+                            .color(DesignTokens.Common.Text.primary(colorScheme))
+                            .frame(width: 24, height: 24)
+                            .aspectRatio(contentMode: .fit)
                     }
                     .buttonStyle(.borderless)
                 }
             }
-            
-            // Drag & Drop område
+
             DropZoneView(viewModel: viewModel)
-            
-            // Billedeliste
+
             if viewModel.images.isEmpty {
                 VStack(spacing: DesignTokens.Spacing.sm) {
                     Text("Drag images here to optimize")
-                        .font(DesignTokens.Typography.headline)
-                        .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
+                        .font(.trimrPixHeadline)
+                        .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
                     Text("Supported formats: JPEG, PNG, GIF, WebP, AVIF, HEIC")
-                        .font(DesignTokens.Typography.subheadline)
-                        .foregroundStyle(DesignTokens.Colors.textSecondary(for: colorScheme))
+                        .font(.trimrPixSubheadline)
+                        .foregroundStyle(DesignTokens.Common.Text.secondary(colorScheme))
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 ImageListView(viewModel: viewModel)
             }
-            
-            // Knapper
+
             HStack {
-                Button(action: {
-                    viewModel.clearImages()
-                }) {
-                    Label("Clear All", systemImage: "trash")
+                Button(action: { viewModel.clearImages() }) {
+                    Text("Clear All")
+                        .font(.trimrPixHeadline)
+                        .foregroundStyle(DesignTokens.ColorToken.State.onError)
+                        .padding(.horizontal, DesignTokens.Spacing.xl)
+                        .padding(.vertical, DesignTokens.Spacing.md)
+                        .background(DesignTokens.ColorToken.State.error)
+                        .clipShape(RoundedRectangle(cornerRadius: DesignTokens.Radius.md))
                 }
+                .buttonStyle(.plain)
                 .disabled(viewModel.images.isEmpty)
-                
+
                 Spacer()
-                
-                Button(action: {
-                    viewModel.optimizeAllImages()
-                }) {
-                    Label("Optimize All", systemImage: "wand.and.stars")
+
+                Button(action: { viewModel.optimizeAllImages() }) {
+                    Text("Optimize All")
+                        .font(.trimrPixHeadline)
+                        .foregroundStyle(DesignTokens.Common.OnPrimary.text(colorScheme))
+                        .padding(.horizontal, DesignTokens.Spacing.xl)
+                        .padding(.vertical, DesignTokens.Spacing.md)
+                        .background(DesignTokens.Common.primary(colorScheme))
+                        .clipShape(RoundedRectangle(cornerRadius: DesignTokens.Radius.md))
                 }
+                .buttonStyle(.plain)
                 .disabled(viewModel.images.isEmpty || viewModel.isOptimizing)
             }
             .padding(.horizontal, DesignTokens.Spacing.lg)
         }
         .padding(DesignTokens.Spacing.lg)
         .frame(minWidth: 600, minHeight: 400)
-        .background(DesignTokens.Colors.backgroundApp(for: colorScheme))
+        .background(DesignTokens.Common.Background.app(colorScheme))
         .alert("Error", isPresented: $viewModel.showError) {
-            Button("OK") {
-                viewModel.dismissError()
-            }
+            Button("OK") { viewModel.dismissError() }
         } message: {
             Text(viewModel.errorMessage ?? "An unknown error occurred")
         }
         .sheet(isPresented: $showSettings) {
             SettingsView()
         }
-        .onAppear {
-            viewModel.startWatchFolder()
-        }
-        .onDisappear {
-            viewModel.stopWatchFolder()
-        }
+        .onAppear { viewModel.startWatchFolder() }
+        .onDisappear { viewModel.stopWatchFolder() }
     }
 }
 
-/// Drag and drop zone view for accepting image files
-/// Provides visual feedback when files are dragged over the drop zone
+/// Drag and drop zone – border and background from design tokens
 struct DropZoneView: View {
     @ObservedObject var viewModel: ImageOptimizationViewModel
     @State private var isHighlighted = false
     @Environment(\.colorScheme) private var colorScheme
-    
+
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: DesignTokens.Radius.md)
                 .strokeBorder(
-                    isHighlighted 
-                        ? DesignTokens.Colors.primary(for: colorScheme)
-                        : DesignTokens.Colors.borderSubtle(for: colorScheme),
+                    isHighlighted
+                        ? DesignTokens.Common.primary(colorScheme)
+                        : DesignTokens.Common.Border.subtle(colorScheme),
                     style: StrokeStyle(lineWidth: 2, dash: [5])
                 )
-                .background(DesignTokens.Colors.backgroundMuted(for: colorScheme))
-                .cornerRadius(DesignTokens.Radius.md)
-            
+                .background(DesignTokens.Common.Background.muted(colorScheme))
+                .clipShape(RoundedRectangle(cornerRadius: DesignTokens.Radius.md))
+
             VStack {
-                Image(systemName: "arrow.down.doc")
-                    .font(.system(size: DesignTokens.Typography.Size.xl))
-                    .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
+                Ph.downloadSimple.regular
+                    .color(DesignTokens.Common.Text.primary(colorScheme))
+                    .frame(width: 24, height: 24)
+                    .aspectRatio(contentMode: .fit)
                 Text("Drop images here")
-                    .font(DesignTokens.Typography.headline)
-                    .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
+                    .font(.trimrPixHeadline)
+                    .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
             }
         }
         .frame(height: 120)
         .onDrop(of: [UTType.image.identifier], isTargeted: $isHighlighted) { providers in
-            Task {
-                await viewModel.handleDrop(providers: providers)
-            }
+            Task { await viewModel.handleDrop(providers: providers) }
             return true
         }
     }
 }
 
-/// List view displaying all images loaded for optimization
-/// Shows thumbnails, file sizes, and optimization status for each image
 struct ImageListView: View {
     @ObservedObject var viewModel: ImageOptimizationViewModel
-    
+
     var body: some View {
         List {
             ForEach(viewModel.images) { image in
@@ -167,101 +166,95 @@ struct ImageListView: View {
     }
 }
 
-/// Individual image item view within the list
-/// Displays thumbnail, filename, file sizes, and optimization controls
-/// Shows progress indicator during optimization and checkmark when complete
 struct ImageItemView: View {
     let imageId: UUID
     @ObservedObject var viewModel: ImageOptimizationViewModel
     @State private var thumbnail: NSImage?
     @Environment(\.colorScheme) private var colorScheme
-    
-    // Computed property to get current image from viewModel
+
     private var image: ImageItem? {
         viewModel.images.first(where: { $0.id == imageId })
     }
-    
+
     init(image: ImageItem, viewModel: ImageOptimizationViewModel) {
         self.imageId = image.id
         self.viewModel = viewModel
         self._thumbnail = State(initialValue: nil)
     }
-    
+
     var body: some View {
         if let image = image {
             HStack {
-                // Thumbnail (lazy loaded)
                 if let nsImage = thumbnail {
                     Image(nsImage: nsImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 60, height: 60)
-                        .cornerRadius(DesignTokens.Radius.sm)
+                        .clipShape(RoundedRectangle(cornerRadius: DesignTokens.Radius.sm))
                 } else {
                     RoundedRectangle(cornerRadius: DesignTokens.Radius.sm)
-                        .fill(DesignTokens.Colors.backgroundMuted(for: colorScheme))
+                        .fill(DesignTokens.Common.Background.muted(colorScheme))
                         .frame(width: 60, height: 60)
                         .onAppear {
-                            // Load thumbnail when view appears
                             var mutableImage = image
                             thumbnail = mutableImage.thumbnail
                         }
                 }
-                
-                // Filinfo
+
                 VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
                     Text(image.filename)
-                        .font(DesignTokens.Typography.headline)
-                        .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
-                    
+                        .font(.trimrPixHeadline)
+                        .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
+
                     HStack(spacing: DesignTokens.Spacing.xs) {
                         Text("Original: \(image.originalSize.formattedSize)")
-                            .foregroundStyle(DesignTokens.Colors.textSecondary(for: colorScheme))
-                        
+                            .foregroundStyle(DesignTokens.Common.Text.secondary(colorScheme))
+
                         if let optimizedSize = image.optimizedSize {
                             Text("→")
-                                .foregroundStyle(DesignTokens.Colors.textSecondary(for: colorScheme))
+                                .foregroundStyle(DesignTokens.Common.Text.secondary(colorScheme))
                             Text("Optimized: \(optimizedSize.formattedSize)")
-                                .foregroundStyle(DesignTokens.Colors.textPrimary(for: colorScheme))
+                                .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
                             Text("(\(image.savingsPercentage)% reduction)")
-                                .foregroundStyle(DesignTokens.Colors.States.success)
+                                .foregroundStyle(DesignTokens.ColorToken.State.success)
                                 .fontWeight(DesignTokens.Typography.Weight.semibold)
                         }
                     }
-                    .font(DesignTokens.Typography.subheadline)
+                    .font(.trimrPixSubheadline)
                 }
-                
+
                 Spacer()
-                
-                // Status and actions
+
                 HStack(spacing: DesignTokens.Spacing.sm) {
-                    // Remove button
-                    Button(action: {
-                        viewModel.removeImage(id: image.id)
-                    }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(DesignTokens.Colors.textSecondary(for: colorScheme))
+                    Button(action: { viewModel.removeImage(id: image.id) }) {
+                        Ph.xCircle.fill
+                            .color(DesignTokens.Common.Text.secondary(colorScheme))
+                            .frame(width: 20, height: 20)
+                            .aspectRatio(contentMode: .fit)
                     }
                     .buttonStyle(.borderless)
                     .help("Remove image from list")
                     .disabled(image.isOptimizing)
-                    
-                    // Status or optimize button
+
                     if image.isOptimizing {
                         ProgressView()
                             .scaleEffect(0.8)
                     } else if image.isOptimized {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(DesignTokens.Colors.States.success)
-                            .font(.system(size: DesignTokens.Typography.Size.xl))
+                        Ph.checkCircle.fill
+                            .color(DesignTokens.ColorToken.State.success)
+                            .frame(width: 24, height: 24)
+                            .aspectRatio(contentMode: .fit)
                     } else {
                         Button("Optimize") {
                             if let index = viewModel.images.firstIndex(where: { $0.id == image.id }) {
-                                Task {
-                                    await viewModel.optimizeImage(at: index)
-                                }
+                                Task { await viewModel.optimizeImage(at: index) }
                             }
                         }
+                        .foregroundStyle(DesignTokens.Common.OnPrimary.text(colorScheme))
+                        .padding(.horizontal, DesignTokens.Spacing.md)
+                        .padding(.vertical, DesignTokens.Spacing.xs)
+                        .background(DesignTokens.Common.primary(colorScheme))
+                        .clipShape(RoundedRectangle(cornerRadius: DesignTokens.Radius.sm))
                         .disabled(image.isOptimizing || image.isOptimized)
                     }
                 }
