@@ -67,8 +67,12 @@ final class CompressionService: CompressionServiceProtocol {
             throw error
         }
         
+        // Read original file size for comparison
+        let originalData = try Data(contentsOf: url)
+        let originalSize = originalData.count
+
         // Optimize image based on file type
-        let optimizedData: Data
+        var optimizedData: Data
         do {
             optimizedData = try await optimizeImageData(at: url, fileExtension: fileExtension)
         } catch let error as TrimrPixError {
@@ -78,6 +82,12 @@ final class CompressionService: CompressionServiceProtocol {
             let trimmedError = TrimrPixError.compressionFailed(url: url, underlyingError: error)
             logger.error("Compression failed: \(trimmedError.technicalDescription)")
             throw trimmedError
+        }
+
+        // Guard: if compressed data is larger than original, keep the original
+        if optimizedData.count >= originalSize {
+            logger.info("Compressed size (\(optimizedData.count) bytes) >= original (\(originalSize) bytes), keeping original")
+            optimizedData = originalData
         }
         
         // Generate suggested filename
