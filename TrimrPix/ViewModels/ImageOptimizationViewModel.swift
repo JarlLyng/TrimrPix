@@ -235,7 +235,9 @@ final class ImageOptimizationViewModel: ObservableObject {
             let runs = self.settings.incrementOptimizationRuns()
             if runs == 5 {
                 await MainActor.run {
-                    SKStoreReviewController.requestReview()
+                    if let controller = NSApplication.shared.keyWindow?.contentViewController {
+                        AppStore.requestReview(in: controller)
+                    }
                 }
             }
         }

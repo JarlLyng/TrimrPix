@@ -2,43 +2,43 @@
 
 ## Overview
 
-TrimrPix er en macOS-applikation bygget med SwiftUI, der tilbyder billedkomprimering og optimering. Projektet følger MVVM-arkitektur (Model-View-ViewModel) og benytter moderne Swift-konventioner inklusive async/await, dependency injection og protocol-orienteret design.
+TrimrPix is a macOS application built with SwiftUI that offers image compression and optimization. The project follows MVVM architecture (Model-View-ViewModel) and uses modern Swift conventions including async/await, dependency injection, and protocol-oriented design.
 
-## Arkitekturprincipper
+## Architecture Principles
 
 ### 1. Separation of Concerns
-Projektet er organiseret i klare lag med veldefinerede ansvarsområder:
-- **Models**: Datastrukturer og forretningslogik
-- **Views**: UI-komponenter og præsentation
-- **ViewModels**: Koordination mellem Views og Services
-- **Services**: Specialiserede funktioner for compression og filsystem-monitorering
+The project is organized into clear layers with well-defined responsibilities:
+- **Models**: Data structures and business logic
+- **Views**: UI components and presentation
+- **ViewModels**: Coordination between Views and Services
+- **Services**: Specialized functionality for compression and file system monitoring
 
 ### 2. Dependency Injection
-Alle services benytter protocol-baserede interfaces, der gør det muligt at injicere dependencies og forenkle testning:
+All services use protocol-based interfaces, enabling dependency injection and simplifying testing:
 - `CompressionServiceProtocol`
 - `WatchFolderServiceProtocol`
 - `SettingsProtocol`
 - `LoggerProtocol`
 - `FileManagerProtocol`
 
-Projektet bruger Swift 5.9+ existential any types (`any` keyword) for protocol types:
-- Påkrævet for bedre type safety
-- Gør det eksplicit når vi bruger protocol types
-- Bruges i property declarations, parameter types og return types
+The project uses Swift 5.9+ existential any types (`any` keyword) for protocol types:
+- Required for better type safety
+- Makes protocol type usage explicit
+- Used in property declarations, parameter types, and return types
 
 ### 3. Error Handling
-Centraliseret fejlhåndtering gennem `TrimrPixError` enum:
-- Strukturerede fejltyper med brugervenlige beskeder
-- Recovery-suggestions til brugere
-- Tekniske beskrivelser til logging
+Centralized error handling through `TrimrPixError` enum:
+- Structured error types with user-friendly messages
+- Recovery suggestions for users
+- Technical descriptions for logging
 
 ### 4. Logging
-Centraliseret logging-system gennem `Logger`:
-- Strukturerede log-niveauer (debug, info, warning, error, fault)
-- Integration med OSLog for Console.app
-- Protocol-baseret for testbarhed
+Centralized logging system through `Logger`:
+- Structured log levels (debug, info, warning, error, fault)
+- Integration with OSLog for Console.app
+- Protocol-based for testability
 
-## Projektstruktur
+## Project Structure
 
 ```
 TrimrPix/
@@ -121,118 +121,119 @@ Optimized file saved
 ### Models
 
 #### ImageItem
-- Repræsenterer et billede der skal optimeres
-- Indeholder original og optimeret filstørrelse
-- Beregner besparelsesprocent
+- Represents an image to be optimized
+- Contains original and optimized file size
+- Calculates savings percentage
 - Lazy-loaded thumbnails (max 120px) for memory optimization
-- Throwing initializer for bedre error handling
+- Throwing initializer for better error handling
 
 #### Settings
-- Singleton for applikationsindstillinger
-- Persisterer til UserDefaults
-- Validerer indstillingsværdier (compression quality, watch folder path)
-- Håndterer compression presets
-- Transparent migration fra legacy `jpegQuality` til `compressionQuality` key
-- Watch folder delay konfiguration (0.5-10s)
-- **Security-Scoped Bookmarks**: Gemmer og genoptager bookmarks for watch folder ved app restart
-- **Bookmark Management**: `setWatchFolder()` og `getWatchFolderURL()` metoder for persistent folder access
+- Singleton for application settings
+- Persists to UserDefaults
+- Validates setting values (compression quality, watch folder path)
+- Handles compression presets
+- Transparent migration from legacy `jpegQuality` to `compressionQuality` key
+- Watch folder delay configuration (0.5-10s)
+- **Security-Scoped Bookmarks**: Stores and restores bookmarks for watch folder on app restart
+- **Bookmark Management**: `setWatchFolder()` and `getWatchFolderURL()` methods for persistent folder access
 
 #### TrimrPixError
-- Centraliseret fejltyper for hele applikationen
-- Lokaliseret fejlbeskeder (dansk)
-- Recovery-suggestions
-- Tekniske beskrivelser til logging
+- Centralized error types for the entire application
+- Localized error messages
+- Recovery suggestions
+- Technical descriptions for logging
 
 ### ViewModels
 
 #### ImageOptimizationViewModel
-- Koordinerer image optimization workflow
-- Håndterer drag & drop operations
-- Managerer image list state
-- Koordinerer watch folder integration
+- Coordinates image optimization workflow
+- Handles drag & drop operations
+- Manages image list state
+- Coordinates watch folder integration
 - `@MainActor` for thread-safe UI updates
-- **Background Processing**: Optimering kører i `Task.detached` for at undgå UI-freezing
-- **Security-Scoped Access Management**: Tracks og stopper security-scoped resource access når billeder fjernes
-- **Dependency Injection**: Bruger injicerede services korrekt (fx compressionService til WatchFolderService)
+- **Background Processing**: Optimization runs in `Task.detached` to avoid UI freezing
+- **Security-Scoped Access Management**: Tracks and stops security-scoped resource access when images are removed
+- **Dependency Injection**: Uses injected services correctly (e.g. compressionService for WatchFolderService)
 
 ### Services
 
 #### CompressionService
-- Implementerer `CompressionServiceProtocol`
-- Håndterer format-specifik komprimering:
-  - JPEG: Kvalitets-komprimeret via NSBitmapImageRep (60%-95%)
-  - PNG: Optimized compression med alpha channel stripping for opaque images
-  - GIF: Validering og kopiering (ingen komprimering)
-  - WebP: Ægte komprimering via CGImageDestination (macOS 14+)
-  - AVIF: Komprimering via CGImageDestination med graceful fallback
-  - HEIC: Komprimering via CGImageDestination
-- Delt helper-metode `compressWithCGImageDestination()` for WebP/AVIF/HEIC
-- Filtype detection via UTType for robust identifikation
+- Implements `CompressionServiceProtocol`
+- Handles format-specific compression:
+  - JPEG: Quality-compressed via NSBitmapImageRep (60%-95%)
+  - PNG: Optimized compression with alpha channel stripping for opaque images
+  - GIF: Validation and copy (no compression)
+  - WebP: Real compression via CGImageDestination (macOS 14+)
+  - AVIF: Compression via CGImageDestination with graceful fallback
+  - HEIC: Compression via CGImageDestination
+- Shared helper method `compressWithCGImageDestination()` for WebP/AVIF/HEIC
+- File type detection via UTType for robust identification
 - Security-scoped resource access for sandboxed apps
-- Automatisk filnavn konflikthåndtering med unique naming
-- Fallback til save panel ved manglende folder access
+- Automatic filename conflict resolution with unique naming
+- Fallback to save panel when folder access is missing
+- **Size guard**: Keeps the original file if compression would increase file size
 
 #### WatchFolderService
-- Implementerer `WatchFolderServiceProtocol`
-- Monitører en mappe for nye billeder
-- Bruger `DispatchSourceFileSystemObject` til file system events
-- Debouncing med konfigurerbart delay (fra Settings, 0.5-10s) for at undgå overflødige events
-- Filstabilitets-check med konfigurerbart delay (fra Settings)
-- Validerer folder path og permissions før start
-- **Loop Prevention**: Filtrerer output-filer (`*-optimized*`) og tracker processed files for at undgå re-optimering
-- **Processed Files Tracking**: Set-baseret tracking af allerede-behandlede filer for at forhindre re-processing
+- Implements `WatchFolderServiceProtocol`
+- Monitors a folder for new images
+- Uses `DispatchSourceFileSystemObject` for file system events
+- Debouncing with configurable delay (from Settings, 0.5-10s) to avoid redundant events
+- File stability check with configurable delay (from Settings)
+- Validates folder path and permissions before starting
+- **Loop Prevention**: Filters output files (`*-optimized*`) and tracks processed files to avoid re-optimization
+- **Processed Files Tracking**: Set-based tracking of already-processed files to prevent re-processing
 
 #### Logger
-- Implementerer `LoggerProtocol`
-- Struktureret logging med OSLog
-- Forskellige log-niveauer
-- Automatisk source location tracking
-- Protocol extension giver default parameter values for nemmere brug
-- Specialiseret `logError()` metode for error objects med context
+- Implements `LoggerProtocol`
+- Structured logging with OSLog
+- Multiple log levels
+- Automatic source location tracking
+- Protocol extension provides default parameter values for easier use
+- Specialized `logError()` method for error objects with context
 
 ### Views
 
 #### ContentView
-- Hoved-UI view
-- Indeholder DropZoneView, ImageListView og controls
-- Håndterer error alerts
-- Starter/stopper watch folder
-- Real-time opdatering af optimization status via reactive bindings
+- Main UI view
+- Contains DropZoneView, ImageListView, and controls
+- Handles error alerts
+- Starts/stops watch folder
+- Real-time updates of optimization status via reactive bindings
 
 #### SettingsView
-- Indstillingspanel
-- Compression quality configuration med presets
+- Settings panel
+- Compression quality configuration with presets
 - Save options (overwrite/auto-save)
-- Watch folder configuration med path validation
-- Watch folder delay konfiguration (0.5-10s)
+- Watch folder configuration with path validation
+- Watch folder delay configuration (0.5-10s)
 
 ## Concurrency
 
-Applikationen bruger moderne Swift concurrency:
+The application uses modern Swift concurrency:
 
-- **async/await**: For asynkron operations (image loading, compression)
+- **async/await**: For asynchronous operations (image loading, compression)
 - **TaskGroup**: For concurrent batch processing
-- **Task.detached**: Optimering kører i baggrunden for at undgå UI-freezing
+- **Task.detached**: Optimization runs in the background to avoid UI freezing
 - **@MainActor**: For thread-safe UI updates
-- **Actor isolation**: ViewModel er markeret med @MainActor
-- **Data Race Prevention**: Settings værdier kopieres på main actor før baggrundsarbejde
+- **Actor isolation**: ViewModel is marked with @MainActor
+- **Data Race Prevention**: Settings values are copied on the main actor before background work
 
 ## Error Handling Strategy
 
-1. **Error Types**: Brug `TrimrPixError` enum for alle applikations-specifikke fejl
-2. **Logging**: Log alle fejl gennem Logger service
-3. **User Feedback**: Vis brugervenlige fejlbeskeder gennem alerts
-4. **Recovery**: Provide recovery suggestions i `TrimrPixError.recoverySuggestion`
+1. **Error Types**: Use `TrimrPixError` enum for all application-specific errors
+2. **Logging**: Log all errors through the Logger service
+3. **User Feedback**: Display user-friendly error messages through alerts
+4. **Recovery**: Provide recovery suggestions in `TrimrPixError.recoverySuggestion`
 
 ## Testing Considerations
 
-Arkitekturen er designet til testbarhed:
+The architecture is designed for testability:
 
-- **Protocols**: Alle services har protocol-definerede interfaces
-- **Dependency Injection**: Services kan injiceres i constructors
-- **Mocking**: Protocol-baserede services kan nemt mockes
+- **Protocols**: All services have protocol-defined interfaces
+- **Dependency Injection**: Services can be injected in constructors
+- **Mocking**: Protocol-based services can be easily mocked
 
-### Eksempel Test Setup
+### Example Test Setup
 
 ```swift
 // Mock Logger
@@ -252,60 +253,60 @@ let compressionService = CompressionService(logger: mockLogger)
 
 ## Performance Considerations
 
-1. **Concurrent Processing**: Batch optimization bruger TaskGroup for concurrent processing i baggrunden (`Task.detached`)
-2. **Memory Management**: Lazy-loaded thumbnails (max 120px) reducerer memory footprint
-3. **File System Monitoring**: Debouncing og konfigurerbart delay reducerer overflødige events
-4. **Security-Scoped Resources**: Automatisk håndtering af sandboxed file access med korrekt start/stop
-5. **UI Responsiveness**: Optimering kører i baggrunden, UI opdateres kun via `MainActor.run`
-6. **Processed Files Tracking**: Set-baseret tracking begrænset til 1000 entries for memory management
+1. **Concurrent Processing**: Batch optimization uses TaskGroup for concurrent processing in the background (`Task.detached`)
+2. **Memory Management**: Lazy-loaded thumbnails (max 120px) reduce memory footprint
+3. **File System Monitoring**: Debouncing and configurable delay reduce redundant events
+4. **Security-Scoped Resources**: Automatic handling of sandboxed file access with correct start/stop
+5. **UI Responsiveness**: Optimization runs in the background, UI updates only via `MainActor.run`
+6. **Processed Files Tracking**: Set-based tracking limited to 1000 entries for memory management
 
 ## Future Improvements
 
-### Arkitektur
-- [ ] Separate ImageRepository for bedre abstraktion
-- [ ] Event-baseret kommunikation mellem services
-- [ ] Caching layer for optimerede billeder
+### Architecture
+- [ ] Separate ImageRepository for better abstraction
+- [ ] Event-based communication between services
+- [ ] Caching layer for optimized images
 
 ### Error Handling
-- [ ] Retry-strategi for fejlende operations
-- [ ] Error reporting til analytics (hvis ønsket)
+- [ ] Retry strategy for failing operations
+- [ ] Error reporting to analytics (if desired)
 
 ### Performance
-- [ ] Stream-based image loading for store billeder
+- [ ] Stream-based image loading for large images
 - [ ] Background processing queue
 - [ ] Progress tracking for batch operations
 
 ### Testing
-- [ ] Unit tests for alle services
+- [ ] Unit tests for all services
 - [ ] Integration tests for workflows
-- [ ] UI tests med XCTest
+- [ ] UI tests with XCTest
 
 ## Dependencies
 
 - **SwiftUI**: UI framework
 - **Foundation**: Core functionality
-- **AppKit**: macOS-specifik functionality (NSSavePanel, NSImage)
+- **AppKit**: macOS-specific functionality (NSSavePanel, NSImage)
 - **ImageIO**: CGImageDestination for WebP/AVIF/HEIC compression
+- **StoreKit**: App Store review prompts
 - **OSLog**: Unified logging system
 - **UniformTypeIdentifiers**: File type identification
 
 ## Security Considerations
 
-- **Sandboxing**: Appen er sandboxed (TrimrPix.entitlements)
-- **Security-Scoped Resources**: Automatisk håndtering af file access via `startAccessingSecurityScopedResource()`
-- **File Access**: Restricted til bruger-valgte lokationer med fallback til save panel
-- **Error Messages**: Ingen sensitive data i fejlbeskeder
+- **Sandboxing**: The app is sandboxed (TrimrPix.entitlements)
+- **Security-Scoped Resources**: Automatic handling of file access via `startAccessingSecurityScopedResource()`
+- **File Access**: Restricted to user-selected locations with fallback to save panel
+- **Error Messages**: No sensitive data in error messages
 
 ## Code Quality Standards
 
-1. **Documentation**: Alle public APIs har dokumentation
-2. **Naming**: Klare og beskrivende navne
-3. **Error Handling**: Alle fejl håndteres eksplicit
-4. **Logging**: Alle vigtige operations logges
-5. **Type Safety**: Minimal brug af force unwrapping og optionals
+1. **Documentation**: All public APIs are documented
+2. **Naming**: Clear and descriptive names
+3. **Error Handling**: All errors are handled explicitly
+4. **Logging**: All important operations are logged
+5. **Type Safety**: Minimal use of force unwrapping and optionals
 
 ---
 
-**Opdateret**: 12. marts 2026
+**Updated**: March 18, 2026
 **Version**: 1.4
-

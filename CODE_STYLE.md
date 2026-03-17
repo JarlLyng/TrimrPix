@@ -1,38 +1,38 @@
 # Code Style Guide - TrimrPix
 
-## Oversigt
+## Overview
 
-Denne guide definerer kodestandarder og bedste praksis for TrimrPix-projektet. Alle udviklere bør følge disse retningslinjer for at sikre konsistent kodekvalitet.
+This guide defines coding standards and best practices for the TrimrPix project. All developers should follow these guidelines to ensure consistent code quality.
 
 ## Swift Style Guidelines
 
 ### Naming Conventions
 
 #### Classes, Structs, Enums, Protocols
-- **PascalCase** for alle typer
-- Beskrivende navne der angiver formålet
-- **Eksempel**: `CompressionService`, `ImageOptimizationViewModel`, `TrimrPixError`
+- **PascalCase** for all types
+- Descriptive names that indicate purpose
+- **Example**: `CompressionService`, `ImageOptimizationViewModel`, `TrimrPixError`
 
 #### Functions and Methods
-- **camelCase** for funktioner og metoder
-- Verb-baserede navne for action-methods
-- Beskrivende navne der angiver hvad metoden gør
-- **Eksempel**: `optimizeImage(at:)`, `startWatching(path:)`, `loadSettings()`
+- **camelCase** for functions and methods
+- Verb-based names for action methods
+- Descriptive names that indicate what the method does
+- **Example**: `optimizeImage(at:)`, `startWatching(path:)`, `loadSettings()`
 
 #### Variables and Properties
-- **camelCase** for variabler og properties
-- Beskrivende navne
-- Boolean properties skal starte med `is`, `has`, `can`, osv.
-- **Eksempel**: `isOptimizing`, `hasCompleted`, `canSave`, `compressionQuality`
+- **camelCase** for variables and properties
+- Descriptive names
+- Boolean properties should start with `is`, `has`, `can`, etc.
+- **Example**: `isOptimizing`, `hasCompleted`, `canSave`, `compressionQuality`
 
 #### Constants
-- **camelCase** for lokale konstanter
-- **SCREAMING_SNAKE_CASE** for globale konstanter (sjældent brugt)
-- **Eksempel**: `maxFileSize`, `defaultQuality`
+- **camelCase** for local constants
+- **SCREAMING_SNAKE_CASE** for global constants (rarely used)
+- **Example**: `maxFileSize`, `defaultQuality`
 
 ### File Organization
 
-Hver fil skal have følgende struktur:
+Each file should have the following structure:
 
 ```swift
 //
@@ -50,24 +50,24 @@ import SwiftUI
 /// Brief description of the type
 /// Additional details if needed
 class MyClass {
-    
+
     // MARK: - Properties
-    
+
     /// Property documentation
     var property: String
-    
+
     // MARK: - Initialization
-    
+
     /// Initializer documentation
     init() {}
-    
+
     // MARK: - Public Methods
-    
+
     /// Public method documentation
     func publicMethod() {}
-    
+
     // MARK: - Private Methods
-    
+
     /// Private method documentation
     private func privateMethod() {}
 }
@@ -76,7 +76,7 @@ class MyClass {
 ### Documentation Standards
 
 #### Type Documentation
-Alle typer (classes, structs, enums) skal have dokumentation:
+All types (classes, structs, enums) should have documentation:
 
 ```swift
 /// Service responsible for image compression and optimization
@@ -85,7 +85,7 @@ final class CompressionService: CompressionServiceProtocol {
 ```
 
 #### Method Documentation
-Alle public og internal metoder skal have dokumentation:
+All public and internal methods should have documentation:
 
 ```swift
 /// Optimizes an image at the given URL
@@ -96,7 +96,7 @@ func optimizeImage(at url: URL) async throws -> URL {
 ```
 
 #### Property Documentation
-Komplekse properties skal have dokumentation:
+Complex properties should have documentation:
 
 ```swift
 /// List of images currently loaded in the application
@@ -104,7 +104,7 @@ Komplekse properties skal have dokumentation:
 ```
 
 #### MARK Comments
-Brug MARK-kommentarer til at organisere kode:
+Use MARK comments to organize code:
 
 ```swift
 // MARK: - Properties
@@ -117,21 +117,21 @@ Brug MARK-kommentarer til at organisere kode:
 ### Code Formatting
 
 #### Indentation
-- **4 spaces** per indentation level (ingen tabs)
+- **4 spaces** per indentation level (no tabs)
 - Xcode standard indentation
 
 #### Line Length
-- Prøv at holde linjer under 120 karakterer
-- Break lange linjer logisk
+- Try to keep lines under 120 characters
+- Break long lines logically
 
 #### Spacing
-- Én tom linje mellem MARK-sektioner
-- Én tom linje mellem metoder
-- Ingen tomme linjer i starten eller slutningen af en type
+- One blank line between MARK sections
+- One blank line between methods
+- No blank lines at the start or end of a type
 
 #### Braces
-- Åbnende brace på samme linje som statement
-- Lukkende brace på ny linje
+- Opening brace on the same line as the statement
+- Closing brace on a new line
 
 ```swift
 if condition {
@@ -144,7 +144,7 @@ if condition {
 ### Error Handling
 
 #### Use TrimrPixError
-Brug altid `TrimrPixError` enum for applikations-specifikke fejl:
+Always use the `TrimrPixError` enum for application-specific errors:
 
 ```swift
 guard fileExists else {
@@ -155,7 +155,7 @@ guard fileExists else {
 ```
 
 #### Logging Errors
-Log alle fejl gennem Logger service:
+Log all errors through the Logger service:
 
 ```swift
 catch let error as TrimrPixError {
@@ -169,27 +169,27 @@ catch let error as TrimrPixError {
 ```
 
 #### Error Propagation
-- Propagate errors til kaldende funktion når det er relevant
-- Log fejl før propagation
-- Vis brugervenlige beskeder i UI-lag
+- Propagate errors to the calling function when relevant
+- Log errors before propagation
+- Display user-friendly messages in the UI layer
 
 ### Logging Guidelines
 
 #### Log Levels
 
-- **DEBUG**: Detaljeret information til development og debugging
-- **INFO**: Generelle informationsbeskeder om applikationsflow
-- **WARNING**: Advarsler om potentielt problematiske situationer
-- **ERROR**: Fejl som ikke stopper applikationen
-- **FAULT**: Kritiske fejl som kan forårsage applikationsfejl
+- **DEBUG**: Detailed information for development and debugging
+- **INFO**: General informational messages about application flow
+- **WARNING**: Warnings about potentially problematic situations
+- **ERROR**: Errors that do not stop the application
+- **FAULT**: Critical errors that may cause application failure
 
 #### When to Log
 
-- **Info**: Start/slut af vigtige operations, bruger-actions
-- **Debug**: Detaljeret flow, parameter-værdier
-- **Warning**: Uventede men ikke-kritiske situationer
-- **Error**: Alle fejl-conditions
-- **Fault**: Kritiske fejl der kan crash appen
+- **Info**: Start/end of important operations, user actions
+- **Debug**: Detailed flow, parameter values
+- **Warning**: Unexpected but non-critical situations
+- **Error**: All error conditions
+- **Fault**: Critical errors that may crash the app
 
 #### Log Message Format
 
@@ -208,7 +208,7 @@ print("Error: \(error)")
 ### Concurrency
 
 #### Async/Await
-Brug async/await for asynkron operations:
+Use async/await for asynchronous operations:
 
 ```swift
 func optimizeImage(at url: URL) async throws -> URL {
@@ -217,7 +217,7 @@ func optimizeImage(at url: URL) async throws -> URL {
 ```
 
 #### MainActor
-Marker UI-relateret kode med `@MainActor`:
+Mark UI-related code with `@MainActor`:
 
 ```swift
 @MainActor
@@ -227,7 +227,7 @@ final class ImageOptimizationViewModel: ObservableObject {
 ```
 
 #### TaskGroup for Concurrent Processing
-Brug TaskGroup for concurrent batch processing:
+Use TaskGroup for concurrent batch processing:
 
 ```swift
 await withTaskGroup(of: Void.self) { group in
@@ -243,9 +243,9 @@ await withTaskGroup(of: Void.self) { group in
 ### Type Safety
 
 #### Optionals
-- Undgå force unwrapping (`!`) når muligt
-- Brug optional binding eller optional chaining
-- Provide default values hvor det giver mening
+- Avoid force unwrapping (`!`) when possible
+- Use optional binding or optional chaining
+- Provide default values where it makes sense
 
 ```swift
 // Good
@@ -261,8 +261,8 @@ let value = optionalValue!  // Only when absolutely certain
 ```
 
 #### Type Annotations
-- Klare type annotations for complex types
-- Undgå overflødige annotations hvor compiler kan infer types
+- Clear type annotations for complex types
+- Avoid redundant annotations where the compiler can infer types
 
 ```swift
 // Good
@@ -276,7 +276,7 @@ var images = [ImageItem]()  // OK, but less clear
 ### Dependency Injection
 
 #### Protocol-Based
-Alle services skal have protocol-definerede interfaces:
+All services should have protocol-defined interfaces:
 
 ```swift
 protocol CompressionServiceProtocol {
@@ -289,9 +289,9 @@ final class CompressionService: CompressionServiceProtocol {
 ```
 
 #### Existential Any Types (Swift 5.9+)
-Brug `any` keyword for protocol types (existential any):
-- Påkrævet i Swift 5.9+ for bedre type safety
-- Gør det eksplicit at vi bruger protocol types
+Use the `any` keyword for protocol types (existential any):
+- Required in Swift 5.9+ for better type safety
+- Makes it explicit that we are using protocol types
 
 ```swift
 private let compressionService: any CompressionServiceProtocol
@@ -306,36 +306,36 @@ init(
 }
 ```
 
-**Note**: `any` keyword skal bruges:
-- I property declarations
-- I parameter types
-- I return types (hvis protocol returneret)
+**Note**: The `any` keyword must be used:
+- In property declarations
+- In parameter types
+- In return types (if a protocol is returned)
 
-**Ikke påkrævet** i:
+**Not required** in:
 - Protocol conformance declarations (`class X: Protocol {}`)
 - Generic constraints (`where T: Protocol`)
 
 ### Testing Considerations
 
 #### Testability
-- Design for testbarhed med protocols og dependency injection
-- Separation of concerns gør kode testbar
-- Undgå singleton-dependencies hvor muligt (brug dependency injection)
+- Design for testability with protocols and dependency injection
+- Separation of concerns makes code testable
+- Avoid singleton dependencies where possible (use dependency injection)
 
 #### Mocking
-- Alle services skal have protocols til mockning
-- Logging skal injectes for testbarhed
+- All services should have protocols for mocking
+- Logging should be injected for testability
 
 ### Comments
 
 #### When to Comment
-- **Kompleks logik**: Forklar hvordan og hvorfor, ikke hvad
-- **Workarounds**: Forklar begrænsninger og workarounds
-- **Business rules**: Dokumenter forretningslogik
+- **Complex logic**: Explain how and why, not what
+- **Workarounds**: Explain limitations and workarounds
+- **Business rules**: Document business logic
 
 #### Comment Style
 - **Code comments**: `//` for inline comments
-- **Documentation comments**: `///` for API dokumentation
+- **Documentation comments**: `///` for API documentation
 - **MARK comments**: `// MARK:` for organization
 
 ```swift
@@ -343,7 +343,7 @@ init(
 func publicMethod() {
     // Implementation detail explanation
     let result = complexCalculation()
-    
+
     // Workaround for macOS limitation
     // See: https://example.com/issue
     if needsWorkaround {
@@ -355,7 +355,7 @@ func publicMethod() {
 ### Constants
 
 #### Local Constants
-Lokale konstanter skal være ved brug:
+Local constants should be defined at the point of use:
 
 ```swift
 func processImage() {
@@ -365,7 +365,7 @@ func processImage() {
 ```
 
 #### Shared Constants
-Deling konstanter skal være i dedikerede structs eller enums:
+Shared constants should be in dedicated structs or enums:
 
 ```swift
 enum UserDefaultsKeys {
@@ -377,27 +377,27 @@ enum UserDefaultsKeys {
 ### File Organization
 
 #### Single Responsibility
-Hver fil skal have ét klart ansvar:
-- En klasse/strukt/enum per fil
-- Relaterede extensions i samme fil
+Each file should have one clear responsibility:
+- One class/struct/enum per file
+- Related extensions in the same file
 
 #### File Naming
-- **PascalCase** matcher type-navnet
-- **Eksempel**: `ImageItem.swift` for `ImageItem` type
+- **PascalCase** matching the type name
+- **Example**: `ImageItem.swift` for the `ImageItem` type
 
 ## Code Review Checklist
 
-Når du reviewer kode, tjek følgende:
+When reviewing code, check the following:
 
-- [ ] Alle public APIs har dokumentation
-- [ ] Error handling er korrekt implementeret
-- [ ] Alle fejl logges gennem Logger
-- [ ] Dependency injection bruges korrekt
-- [ ] MARK-kommentarer organiserer kode
-- [ ] Naming conventions følges
-- [ ] Type safety (ingen unødvendige force unwraps)
-- [ ] Concurrency er korrekt håndteret (@MainActor, async/await)
-- [ ] Code er testbar (protocols, dependency injection)
+- [ ] All public APIs have documentation
+- [ ] Error handling is correctly implemented
+- [ ] All errors are logged through Logger
+- [ ] Dependency injection is used correctly
+- [ ] MARK comments organize the code
+- [ ] Naming conventions are followed
+- [ ] Type safety (no unnecessary force unwraps)
+- [ ] Concurrency is handled correctly (@MainActor, async/await)
+- [ ] Code is testable (protocols, dependency injection)
 
 ## Examples
 
@@ -417,14 +417,14 @@ import AppKit
 /// Service responsible for image compression and optimization
 /// Implements CompressionServiceProtocol for dependency injection and testing
 final class CompressionService: CompressionServiceProtocol {
-    
+
     // MARK: - Dependencies
-    
+
     private let settings: SettingsProtocol
     private let logger: LoggerProtocol
-    
+
     // MARK: - Initialization
-    
+
     /// Initializes the compression service with dependencies
     /// - Parameters:
     ///   - settings: Settings protocol instance
@@ -436,22 +436,22 @@ final class CompressionService: CompressionServiceProtocol {
         self.settings = settings
         self.logger = logger
     }
-    
+
     // MARK: - Public Methods
-    
+
     /// Optimizes an image at the given URL
     /// - Parameter url: The URL of the image to optimize
     /// - Returns: The URL of the optimized image
     /// - Throws: TrimrPixError if optimization fails
     func optimizeImage(at url: URL) async throws -> URL {
         logger.info("Starting image optimization for: \(url.lastPathComponent)")
-        
+
         guard fileManager.fileExists(atPath: url.path) else {
             let error = TrimrPixError.fileNotFound(url)
             logger.logError(error, context: "Optimizing image")
             throw error
         }
-        
+
         // Implementation
     }
 }
@@ -465,15 +465,15 @@ import Foundation
 class CompressionService {
     var settings = Settings.shared
     var logger = Logger.shared
-    
+
     init() {}
-    
+
     func optimizeImage(at url: URL) async -> URL? {
         if !FileManager.default.fileExists(atPath: url.path) {
             print("File not found")
             return nil
         }
-        
+
         // Implementation without error handling
     }
 }
@@ -481,6 +481,5 @@ class CompressionService {
 
 ---
 
-**Opdateret**: 26. februar 2025  
-**Version**: 1.0
-
+**Updated**: March 18, 2026
+**Version**: 1.4

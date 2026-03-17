@@ -49,14 +49,14 @@ TrimrPix is a macOS app built with SwiftUI, focusing on high-quality image compr
 
 ## ⚙️ Architecture
 
-TrimrPix følger MVVM-arkitektur med protocol-orienteret design. Se [ARCHITECTURE.md](ARCHITECTURE.md) for detaljeret dokumentation.
+TrimrPix follows MVVM architecture with protocol-oriented design. See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed documentation.
 
-**Nøgleprincipper:**
-- MVVM med klar separation of concerns
+**Key principles:**
+- MVVM with clear separation of concerns
 - Protocol-based dependency injection
 - Security-scoped resource access for sandboxing
 - Async/await for concurrent processing
-- Centraliseret error handling og logging
+- Centralized error handling and logging
 
 ## 📁 Project Structure
 ```
