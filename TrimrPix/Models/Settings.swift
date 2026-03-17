@@ -64,6 +64,7 @@ final class Settings: SettingsProtocol {
         static let watchFolderPath = "watchFolderPath"
         static let watchFolderDelay = "watchFolderDelay"
         static let watchFolderBookmarkData = "watchFolderBookmarkData"
+        static let totalOptimizationRuns = "totalOptimizationRuns"
     }
     
     // MARK: - Initialization
@@ -281,6 +282,13 @@ final class Settings: SettingsProtocol {
         logger.info("Created security-scoped bookmark for watch folder: \(watchFolderPath)")
     }
     
+    /// Increments the total optimization runs counter and returns the new value
+    func incrementOptimizationRuns() -> Int {
+        let count = userDefaults.integer(forKey: UserDefaultsKeys.totalOptimizationRuns) + 1
+        userDefaults.set(count, forKey: UserDefaultsKeys.totalOptimizationRuns)
+        return count
+    }
+
     /// Gets the watch folder URL from bookmark if available
     /// - Returns: The watch folder URL, or nil if bookmark is not available or stale
     func getWatchFolderURL() -> URL? {

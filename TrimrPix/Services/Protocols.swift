@@ -94,5 +94,6 @@ protocol SettingsProtocol: ObservableObject {
     func validateWatchFolderPath() throws
     func setWatchFolder(url: URL) throws
     func getWatchFolderURL() -> URL?
+    func incrementOptimizationRuns() -> Int
 }
 

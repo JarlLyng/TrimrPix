@@ -1,4 +1,4 @@
-# App Store Texts – TrimrPix v1.3
+# App Store Texts – TrimrPix v1.4
 
 Klar til copy/paste i App Store Connect.
 
@@ -7,13 +7,9 @@ Klar til copy/paste i App Store Connect.
 ## What's New in This Version (Release Notes)
 
 ```
-Version 1.3 brings real compression for modern image formats:
+Version 1.4 — smarter compression:
 
-• WebP compression — true lossy compression, not just validation
-• AVIF compression — next-gen format with excellent size reduction
-• HEIC support — compress iPhone/iPad photos natively on Mac
-• Improved PNG optimization — automatic alpha channel stripping for opaque images
-• Quality slider now applies to all formats (JPEG, WebP, AVIF, HEIC)
+• Fixed: Images that were already well-optimized are no longer replaced with a larger file. TrimrPix now keeps the original when compression would increase file size.
 ```
 
 ---
@@ -65,7 +61,7 @@ Trim File Size. Keep Quality.
 ## Promotional Text (170 characters max, can be updated without review)
 
 ```
-NEW in 1.3: True WebP, AVIF & HEIC compression. Shrink images up to 80% — drag, drop, optimize. Fully offline, one-time purchase.
+NEW in 1.4: Smarter compression — TrimrPix now keeps the original if compression would increase file size. Supports JPEG, PNG, WebP, AVIF & HEIC.
 ```
 
 ---

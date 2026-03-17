@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import StoreKit
 import UniformTypeIdentifiers
 
 private extension ImageItem {
@@ -227,8 +228,16 @@ final class ImageOptimizationViewModel: ObservableObject {
             await MainActor.run {
                 self.isOptimizing = false
             }
-            
+
             self.logger.info("Completed optimization for all images")
+
+            // Request App Store review after 5 successful optimization runs
+            let runs = self.settings.incrementOptimizationRuns()
+            if runs == 5 {
+                await MainActor.run {
+                    SKStoreReviewController.requestReview()
+                }
+            }
         }
     }
     
