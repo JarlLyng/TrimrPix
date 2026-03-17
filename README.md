@@ -5,7 +5,9 @@
 [![Xcode](https://img.shields.io/badge/Xcode-15.0+-blue.svg)](https://developer.apple.com/xcode/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-<img src="App store images/Screenshots/screenshot-1.png" width="600" alt="TrimrPix Screenshot">
+![Co-created with AI](https://madebyhuman.iamjarl.com/badges/co-created-white.svg)
+
+<img src="App store images/Screenshots/app_screenshot.png" width="600" alt="TrimrPix Screenshot">
 
 ## 📋 Description
 TrimrPix is a macOS app built with SwiftUI, focusing on high-quality image compression with a simple user interface. The goal is to offer a modern and efficient image optimization solution with the same core functionality as [ImageOptim](https://github.com/ImageOptim/ImageOptim), but with newer technology and optimized performance.
