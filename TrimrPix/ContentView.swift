@@ -250,6 +250,7 @@ struct ImageItemView: View {
                                 Task { await viewModel.optimizeImage(at: index) }
                             }
                         }
+                        .buttonStyle(.plain)
                         .foregroundStyle(DesignTokens.Common.OnPrimary.text(colorScheme))
                         .padding(.horizontal, DesignTokens.Spacing.md)
                         .padding(.vertical, DesignTokens.Spacing.xs)

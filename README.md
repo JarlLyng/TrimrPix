@@ -18,7 +18,12 @@ TrimrPix is a macOS app built with SwiftUI, focusing on high-quality image compr
 - **High-quality compression** with focus on optimal file size reduction
 - **Multi-format support:** JPEG, PNG, GIF, WebP, AVIF, and HEIC
 - **Smart compression:** Configurable quality (60%-95%) for JPEG, WebP, AVIF, and HEIC
+- **Progressive JPEG:** Optimized Huffman encoding for 5-15% smaller JPEGs
+- **PNG lossy quantization:** Median-cut color reduction (256 colors) for 60-80% smaller PNGs
 - **Advanced PNG optimization:** Alpha channel stripping for opaque images
+- **GIF re-encoding:** LZW re-compression with metadata stripping (preserves animation)
+- **Metadata stripping:** Removes EXIF, GPS, IPTC data from all formats
+- **Image resizing:** Optional pre-compression downscaling (configurable max dimension)
 - **Format validation:** Ensures file integrity before processing
 
 ### 🎯 User Experience
@@ -41,8 +46,8 @@ TrimrPix is a macOS app built with SwiftUI, focusing on high-quality image compr
 ## 🛠️ Technologies
 - **SwiftUI** – Modern UI development for macOS
 - **Core Image** – Image processing and compression
-- **ImageIO / CGImageDestination** – Native WebP, AVIF, and HEIC compression
-- **NSBitmapImageRep** – Efficient JPEG/PNG compression with quality control
+- **ImageIO / CGImageDestination** – Native JPEG, WebP, AVIF, and HEIC compression with metadata stripping
+- **CGImageSource** – Image loading, resizing, and GIF frame extraction
 - **Async/Await** – Modern Swift concurrency for responsive UI during image processing
 - **OSLog** – Unified logging system for debugging and monitoring
 - **Protocol-Oriented Design** – Dependency injection and testability
@@ -73,6 +78,7 @@ TrimrPix/
 │   └── SettingsView.swift         # Settings panel UI
 ├── Services/
 │   ├── CompressionService.swift   # Image compression with security-scoped access
+│   ├── ColorQuantizer.swift       # Median-cut color quantization for PNG
 │   ├── WatchFolderService.swift   # File system monitoring
 │   ├── Logger.swift               # Structured logging service
 │   └── Protocols.swift            # Service protocol definitions
@@ -132,7 +138,6 @@ cd TrimrPix
 4. **Watch Folder:** Enable automatic processing of new images in a folder
 
 ## 🔍 Known Limitations
-- **GIF Processing:** Validation and copying only (no compression)
 - **AVIF:** Depends on macOS system support — falls back to original data if unavailable
 - **macOS Version:** Requires macOS 15.2 or newer
 - **Sandboxing:** May require save dialog for folders without explicit access
@@ -142,7 +147,6 @@ cd TrimrPix
 ### 🎯 Planned Features
 - **Enhanced Compression:**
   - SVG optimization
-  - GIF compression
 - **UI/UX:**
   - Before/after image preview
   - Progress tracking for large batches

@@ -59,6 +59,54 @@ struct SettingsView: View {
                     .background(DesignTokens.Common.Border.subtle(colorScheme))
 
                 VStack(alignment: .leading, spacing: DesignTokens.Spacing.sm) {
+                    Text("Image Resize")
+                        .font(.trimrPixHeadline)
+                        .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
+
+                    Toggle("Downscale large images before compression", isOn: $settings.resizeEnabled)
+                        .help("Reduces image dimensions before compressing. Never upscales.")
+
+                    if settings.resizeEnabled {
+                        HStack {
+                            Text("Max dimension")
+                                .foregroundStyle(DesignTokens.Common.Text.secondary(colorScheme))
+                            Picker("", selection: $settings.maxDimension) {
+                                Text("4096 px").tag(4096)
+                                Text("2048 px").tag(2048)
+                                Text("1920 px").tag(1920)
+                                Text("1440 px").tag(1440)
+                                Text("1024 px").tag(1024)
+                                Text("768 px").tag(768)
+                            }
+                            .frame(width: 120)
+                        }
+
+                        Text("Images larger than this will be downscaled, maintaining aspect ratio")
+                            .font(.trimrPixCaption)
+                            .foregroundStyle(DesignTokens.Common.Text.secondary(colorScheme))
+                    }
+                }
+
+                Divider()
+                    .background(DesignTokens.Common.Border.subtle(colorScheme))
+
+                VStack(alignment: .leading, spacing: DesignTokens.Spacing.sm) {
+                    Text("PNG Optimization")
+                        .font(.trimrPixHeadline)
+                        .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
+
+                    Toggle("Lossy PNG quantization", isOn: $settings.pngQuantizationEnabled)
+                        .help("Reduces PNG colors to 256 for dramatically smaller files. Slight quality trade-off.")
+
+                    Text("Reduces file size by 60-80% for photo PNGs by limiting to 256 colors")
+                        .font(.trimrPixCaption)
+                        .foregroundStyle(DesignTokens.Common.Text.secondary(colorScheme))
+                }
+
+                Divider()
+                    .background(DesignTokens.Common.Border.subtle(colorScheme))
+
+                VStack(alignment: .leading, spacing: DesignTokens.Spacing.sm) {
                     Text("Save Settings")
                         .font(.trimrPixHeadline)
                         .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
@@ -148,7 +196,7 @@ struct SettingsView: View {
         }
         .padding(.horizontal, DesignTokens.Spacing.xl)
         .padding(.vertical, DesignTokens.Spacing.xxxl)
-        .frame(width: 500, height: 520)
+        .frame(width: 500, height: 700)
         .background(DesignTokens.Common.Background.app(colorScheme))
     }
 

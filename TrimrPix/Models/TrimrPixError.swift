@@ -20,6 +20,7 @@ enum TrimrPixError: LocalizedError {
     case compressionFailed(url: URL, underlyingError: Error?)
     case jpegCompressionFailed(URL)
     case pngCompressionFailed(URL)
+    case gifCompressionFailed(URL)
     case webpCompressionFailed(URL)
     case avifCompressionFailed(URL)
     case heicCompressionFailed(URL)
@@ -69,6 +70,8 @@ enum TrimrPixError: LocalizedError {
             return "JPEG komprimering fejlede: \(url.lastPathComponent)"
         case .pngCompressionFailed(let url):
             return "PNG komprimering fejlede: \(url.lastPathComponent)"
+        case .gifCompressionFailed(let url):
+            return "GIF komprimering fejlede: \(url.lastPathComponent)"
         case .webpCompressionFailed(let url):
             return "WebP komprimering fejlede: \(url.lastPathComponent)"
         case .avifCompressionFailed(let url):
@@ -153,6 +156,8 @@ enum TrimrPixError: LocalizedError {
             return "JPEGCompressionFailed(url: \(url.path))"
         case .pngCompressionFailed(let url):
             return "PNGCompressionFailed(url: \(url.path))"
+        case .gifCompressionFailed(let url):
+            return "GIFCompressionFailed(url: \(url.path))"
         case .webpCompressionFailed(let url):
             return "WebPCompressionFailed(url: \(url.path))"
         case .avifCompressionFailed(let url):
@@ -204,7 +209,7 @@ enum TrimrPixError: LocalizedError {
         case .imageTooLarge:
             return "Reducer billedets opløsning eller størrelse først"
         case .compressionFailed, .jpegCompressionFailed, .pngCompressionFailed,
-             .webpCompressionFailed, .avifCompressionFailed, .heicCompressionFailed:
+             .gifCompressionFailed, .webpCompressionFailed, .avifCompressionFailed, .heicCompressionFailed:
             return "Prøv at genåbne filen eller konverter til et andet format"
         case .fileNotFound:
             return "Sørg for at filen eksisterer og prøv igen"

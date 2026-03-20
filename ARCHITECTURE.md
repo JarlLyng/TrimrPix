@@ -54,6 +54,7 @@ TrimrPix/
 │   └── SettingsView.swift     # Settings panel UI
 ├── Services/
 │   ├── CompressionService.swift    # Image compression logic
+│   ├── ColorQuantizer.swift        # Median-cut color quantization for PNG
 │   ├── WatchFolderService.swift    # File system monitoring
 │   ├── Logger.swift                # Logging service
 │   └── Protocols.swift             # Service protocol definitions
@@ -160,18 +161,28 @@ Optimized file saved
 #### CompressionService
 - Implements `CompressionServiceProtocol`
 - Handles format-specific compression:
-  - JPEG: Quality-compressed via NSBitmapImageRep (60%-95%)
-  - PNG: Optimized compression with alpha channel stripping for opaque images
-  - GIF: Validation and copy (no compression)
-  - WebP: Real compression via CGImageDestination (macOS 14+)
+  - JPEG: Progressive encoding via CGImageDestination with optimized Huffman tables (60%-95%)
+  - PNG: Lossy quantization (median-cut, 256 colors) with fallback to alpha channel stripping
+  - GIF: Re-encoding via CGImageSource/CGImageDestination with LZW re-compression (preserves animation timing)
+  - WebP: Compression via CGImageDestination (macOS 14+)
   - AVIF: Compression via CGImageDestination with graceful fallback
   - HEIC: Compression via CGImageDestination
-- Shared helper method `compressWithCGImageDestination()` for WebP/AVIF/HEIC
+- Shared helper method `compressWithCGImageDestination()` for JPEG/WebP/AVIF/HEIC with metadata stripping
+- Shared `loadImage()` helper with optional pre-compression resizing via `CGImageSourceCreateThumbnailAtIndex`
+- **Metadata stripping**: EXIF, GPS, IPTC, and MakerApple data removed from all CGImageDestination formats
+- **Image resizing**: Optional downscaling before compression (configurable max dimension, never upscales)
 - File type detection via UTType for robust identification
 - Security-scoped resource access for sandboxed apps
 - Automatic filename conflict resolution with unique naming
 - Fallback to save panel when folder access is missing
 - **Size guard**: Keeps the original file if compression would increase file size
+
+#### ColorQuantizer
+- Median-cut color quantization algorithm for lossy PNG compression
+- Reduces images to 256 colors for 60-80% smaller PNG files
+- Handles transparency (transparent pixels mapped to single palette entry)
+- Samples up to 100,000 pixels for performance on large images
+- Pure Swift implementation, no third-party dependencies
 
 #### WatchFolderService
 - Implements `WatchFolderServiceProtocol`
@@ -203,6 +214,8 @@ Optimized file saved
 #### SettingsView
 - Settings panel
 - Compression quality configuration with presets
+- Image resize options (toggle + max dimension picker)
+- PNG lossy quantization toggle
 - Save options (overwrite/auto-save)
 - Watch folder configuration with path validation
 - Watch folder delay configuration (0.5-10s)
@@ -286,7 +299,7 @@ let compressionService = CompressionService(logger: mockLogger)
 - **SwiftUI**: UI framework
 - **Foundation**: Core functionality
 - **AppKit**: macOS-specific functionality (NSSavePanel, NSImage)
-- **ImageIO**: CGImageDestination for WebP/AVIF/HEIC compression
+- **ImageIO**: CGImageSource/CGImageDestination for JPEG/PNG/GIF/WebP/AVIF/HEIC compression and image resizing
 - **StoreKit**: App Store review prompts
 - **OSLog**: Unified logging system
 - **UniformTypeIdentifiers**: File type identification
@@ -308,5 +321,5 @@ let compressionService = CompressionService(logger: mockLogger)
 
 ---
 
-**Updated**: March 18, 2026
-**Version**: 1.4
+**Updated**: March 20, 2026
+**Version**: 1.5

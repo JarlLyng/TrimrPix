@@ -38,6 +38,9 @@ final class Settings: SettingsProtocol {
     @Published var watchFolderEnabled: Bool = false
     @Published var watchFolderPath: String = ""
     @Published var watchFolderDelay: Double = 2.0 // Delay in seconds before processing new files
+    @Published var resizeEnabled: Bool = false
+    @Published var maxDimension: Int = 2048
+    @Published var pngQuantizationEnabled: Bool = true
     
     /// Security-scoped bookmark data for watch folder (persists across app restarts)
     /// This is required for sandboxed apps to maintain access to the folder
@@ -65,6 +68,9 @@ final class Settings: SettingsProtocol {
         static let watchFolderDelay = "watchFolderDelay"
         static let watchFolderBookmarkData = "watchFolderBookmarkData"
         static let totalOptimizationRuns = "totalOptimizationRuns"
+        static let resizeEnabled = "resizeEnabled"
+        static let maxDimension = "maxDimension"
+        static let pngQuantizationEnabled = "pngQuantizationEnabled"
     }
     
     // MARK: - Initialization
@@ -180,6 +186,20 @@ final class Settings: SettingsProtocol {
             logger.warning("Invalid watch folder delay, resetting to default: 2.0 seconds")
         }
         
+        // Load resize settings
+        if userDefaults.object(forKey: UserDefaultsKeys.resizeEnabled) != nil {
+            resizeEnabled = userDefaults.bool(forKey: UserDefaultsKeys.resizeEnabled)
+        }
+        let savedMaxDimension = userDefaults.integer(forKey: UserDefaultsKeys.maxDimension)
+        if savedMaxDimension > 0 {
+            maxDimension = savedMaxDimension
+        }
+
+        // Load PNG quantization setting
+        if userDefaults.object(forKey: UserDefaultsKeys.pngQuantizationEnabled) != nil {
+            pngQuantizationEnabled = userDefaults.bool(forKey: UserDefaultsKeys.pngQuantizationEnabled)
+        }
+
         // Ensure autoSave is disabled if overwriteOriginal is enabled
         if overwriteOriginal && autoSave {
             autoSave = false
@@ -209,7 +229,10 @@ final class Settings: SettingsProtocol {
             userDefaults.set(watchFolderEnabled, forKey: UserDefaultsKeys.watchFolderEnabled)
             userDefaults.set(watchFolderPath, forKey: UserDefaultsKeys.watchFolderPath)
             userDefaults.set(watchFolderDelay, forKey: UserDefaultsKeys.watchFolderDelay)
-            
+            userDefaults.set(resizeEnabled, forKey: UserDefaultsKeys.resizeEnabled)
+            userDefaults.set(maxDimension, forKey: UserDefaultsKeys.maxDimension)
+            userDefaults.set(pngQuantizationEnabled, forKey: UserDefaultsKeys.pngQuantizationEnabled)
+
             // Save watch folder bookmark data if available
             if let bookmarkData = watchFolderBookmarkData {
                 userDefaults.set(bookmarkData, forKey: UserDefaultsKeys.watchFolderBookmarkData)

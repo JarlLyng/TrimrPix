@@ -145,86 +145,63 @@ final class CompressionService: CompressionServiceProtocol {
         }
     }
     
-    /// Optimizes JPEG image data
+    /// Optimizes JPEG image data using CGImageDestination for progressive encoding
     /// - Parameter url: The URL of the JPEG image
     /// - Returns: The optimized JPEG data
     /// - Throws: TrimrPixError if optimization fails
     private func optimizeJPEGData(at url: URL) async throws -> Data {
         logger.debug("Optimizing JPEG: \(url.lastPathComponent)")
-        
-        // Load image
-        guard let image = NSImage(contentsOf: url) else {
-            let error = TrimrPixError.imageLoadFailed(url: url, underlyingError: nil)
-            logger.error("Failed to load JPEG: \(error.technicalDescription)")
-            throw error
-        }
-        
-        // Get compression quality from settings
-        let compressionQuality = settings.compressionQuality
-        
-        // Convert NSImage to JPEG data
-        guard let tiffData = image.tiffRepresentation,
-              let bitmapImage = NSBitmapImageRep(data: tiffData) else {
-            let error = TrimrPixError.jpegCompressionFailed(url)
-            logger.error("Failed to create bitmap representation: \(error.technicalDescription)")
-            throw error
-        }
-        
-        // Build JPEG properties with compression quality
-        let jpegProperties: [NSBitmapImageRep.PropertyKey: Any] = [
-            .compressionFactor: compressionQuality
+
+        let extraOptions: [CFString: Any] = [
+            kCGImagePropertyJFIFDictionary: [
+                kCGImagePropertyJFIFIsProgressive: true
+            ] as CFDictionary
         ]
-        
-        guard let jpegData = bitmapImage.representation(using: .jpeg, properties: jpegProperties) else {
-            let error = TrimrPixError.jpegCompressionFailed(url)
-            logger.error("JPEG compression failed: \(error.technicalDescription)")
-            throw error
-        }
-        
-        // Note: Metadata (EXIF, IPTC) is automatically stripped when re-encoding through NSBitmapImageRep
-        // No additional stripping needed as we're creating a fresh bitmap representation
-        
-        logger.debug("JPEG optimization completed, quality: \(Int(compressionQuality * 100))%, size: \(jpegData.count) bytes")
-        return jpegData
+
+        return try await compressWithCGImageDestination(
+            at: url, type: .jpeg,
+            extraOptions: extraOptions,
+            errorFactory: TrimrPixError.jpegCompressionFailed
+        )
     }
     
-    /// Optimizes PNG image data
+    /// Optimizes PNG image data with optional lossy quantization
     /// - Parameter url: The URL of the PNG image
     /// - Returns: The optimized PNG data
     /// - Throws: TrimrPixError if optimization fails
     private func optimizePNGData(at url: URL) async throws -> Data {
         logger.debug("Optimizing PNG: \(url.lastPathComponent)")
-        
-        // Load image
-        guard let image = NSImage(contentsOf: url) else {
-            let error = TrimrPixError.imageLoadFailed(url: url, underlyingError: nil)
-            logger.error("Failed to load PNG: \(error.technicalDescription)")
-            throw error
+
+        let cgImage = try loadImage(at: url, errorFactory: TrimrPixError.pngCompressionFailed)
+
+        // Try lossy quantization first (biggest win for photo-PNGs)
+        if settings.pngQuantizationEnabled {
+            let quantizer = ColorQuantizer(maxColors: 256, logger: logger)
+            if let quantizedImage = quantizer.quantize(cgImage) {
+                // Encode quantized image via CGImageDestination
+                let outputData = NSMutableData()
+                if let destination = CGImageDestinationCreateWithData(outputData, UTType.png.identifier as CFString, 1, nil) {
+                    CGImageDestinationAddImage(destination, quantizedImage, nil)
+                    if CGImageDestinationFinalize(destination) {
+                        let result = outputData as Data
+                        logger.debug("PNG quantization completed, size: \(result.count) bytes")
+                        return result
+                    }
+                }
+                logger.debug("PNG quantization encoding failed, falling back to standard optimization")
+            }
         }
-        
-        guard let tiffData = image.tiffRepresentation,
-              let bitmapImage = NSBitmapImageRep(data: tiffData) else {
-            let error = TrimrPixError.pngCompressionFailed(url)
-            logger.error("Failed to create bitmap representation: \(error.technicalDescription)")
-            throw error
-        }
-        
-        // Optimize PNG by reducing bit depth if possible and removing unnecessary color channels
-        // First, try to optimize the bitmap representation
-        let optimizedBitmap = optimizeBitmapForPNG(bitmapImage)
-        
-        // Convert to PNG - NSBitmapImageRep uses zlib compression by default
-        // Note: macOS doesn't expose PNG compression level directly, but we can optimize
-        // by reducing color depth and removing alpha channel if not needed
+
+        // Fallback: standard PNG optimization with alpha stripping
+        let bitmap = NSBitmapImageRep(cgImage: cgImage)
+        let optimizedBitmap = optimizeBitmapForPNG(bitmap)
+
         guard let pngData = optimizedBitmap.representation(using: .png, properties: [:]) else {
             let error = TrimrPixError.pngCompressionFailed(url)
             logger.error("PNG compression failed: \(error.technicalDescription)")
             throw error
         }
-        
-        // Note: Metadata (tEXt, iTXt chunks) is automatically stripped when re-encoding through NSBitmapImageRep
-        // No additional stripping needed as we're creating a fresh bitmap representation
-        
+
         logger.debug("PNG optimization completed, size: \(pngData.count) bytes")
         return pngData
     }
@@ -287,40 +264,82 @@ final class CompressionService: CompressionServiceProtocol {
         return strippedBitmap
     }
     
-    /// Validates and copies GIF data (no compression in MVP)
+    /// Optimizes GIF data by re-encoding through CGImageDestination
+    /// Strips metadata and re-compresses LZW. Preserves animation frame timing.
     /// - Parameter url: The URL of the GIF image
-    /// - Returns: The validated GIF data
-    /// - Throws: TrimrPixError if validation fails
+    /// - Returns: The optimized GIF data
+    /// - Throws: TrimrPixError if optimization fails
     private func optimizeGIFData(at url: URL) async throws -> Data {
-        logger.debug("Validating GIF: \(url.lastPathComponent)")
-        
+        logger.debug("Optimizing GIF: \(url.lastPathComponent)")
+
+        let data: Data
         do {
-            let data = try Data(contentsOf: url)
-            
-            // Validate GIF header
-            guard data.count > 6 else {
-                let error = TrimrPixError.invalidImageData(url)
-                logger.error("Invalid GIF data: \(error.technicalDescription)")
-                throw error
-            }
-            
-            let header = data.prefix(6)
-            guard let headerString = String(data: header, encoding: .ascii),
-                  headerString == "GIF87a" || headerString == "GIF89a" else {
-                let error = TrimrPixError.invalidImageData(url)
-                logger.error("Invalid GIF format: \(error.technicalDescription)")
-                throw error
-            }
-            
-            logger.debug("GIF validation completed (no compression applied)")
-            return data
-        } catch let error as TrimrPixError {
-            throw error
+            data = try Data(contentsOf: url)
         } catch {
             let trimmedError = TrimrPixError.fileReadError(url: url, underlyingError: error)
             logger.error("Failed to read GIF: \(trimmedError.technicalDescription)")
             throw trimmedError
         }
+
+        // Validate GIF header
+        guard data.count > 6,
+              let headerString = String(data: data.prefix(6), encoding: .ascii),
+              headerString == "GIF87a" || headerString == "GIF89a" else {
+            let error = TrimrPixError.invalidImageData(url)
+            logger.error("Invalid GIF format: \(error.technicalDescription)")
+            throw error
+        }
+
+        // Re-encode through CGImageSource/CGImageDestination to strip metadata and re-compress
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
+            let error = TrimrPixError.gifCompressionFailed(url)
+            logger.error("Failed to create GIF image source: \(error.technicalDescription)")
+            throw error
+        }
+
+        let frameCount = CGImageSourceGetCount(source)
+        let outputData = NSMutableData()
+
+        guard let destination = CGImageDestinationCreateWithData(
+            outputData, UTType.gif.identifier as CFString, frameCount, nil
+        ) else {
+            let error = TrimrPixError.gifCompressionFailed(url)
+            logger.error("Failed to create GIF destination: \(error.technicalDescription)")
+            throw error
+        }
+
+        // Copy global GIF properties (loop count etc.)
+        if let sourceProperties = CGImageSourceCopyProperties(source, nil) as? [CFString: Any],
+           let gifProperties = sourceProperties[kCGImagePropertyGIFDictionary] {
+            let globalProps: [CFString: Any] = [kCGImagePropertyGIFDictionary: gifProperties]
+            CGImageDestinationSetProperties(destination, globalProps as CFDictionary)
+        }
+
+        // Copy each frame with its timing properties
+        for i in 0..<frameCount {
+            guard let frameImage = CGImageSourceCreateImageAtIndex(source, i, nil) else {
+                continue
+            }
+
+            // Preserve frame delay and other per-frame GIF properties
+            var frameOptions: [CFString: Any] = [:]
+            if let frameProperties = CGImageSourceCopyPropertiesAtIndex(source, i, nil) as? [CFString: Any],
+               let gifFrameProps = frameProperties[kCGImagePropertyGIFDictionary] {
+                frameOptions[kCGImagePropertyGIFDictionary] = gifFrameProps
+            }
+
+            CGImageDestinationAddImage(destination, frameImage, frameOptions as CFDictionary)
+        }
+
+        guard CGImageDestinationFinalize(destination) else {
+            let error = TrimrPixError.gifCompressionFailed(url)
+            logger.error("GIF re-encoding failed: \(error.technicalDescription)")
+            throw error
+        }
+
+        let result = outputData as Data
+        logger.debug("GIF optimization completed, frames: \(frameCount), size: \(result.count) bytes")
+        return result
     }
     
     /// Optimizes WebP image data using CGImageDestination
@@ -358,28 +377,21 @@ final class CompressionService: CompressionServiceProtocol {
     // MARK: - CGImageDestination Compression
 
     /// Compresses an image using CGImageDestination for a given UTType
-    /// Shared logic for WebP, AVIF, and HEIC compression
+    /// Shared logic for JPEG, WebP, AVIF, and HEIC compression
     /// - Parameters:
     ///   - url: The URL of the image to compress
-    ///   - type: The UTType to write (e.g. .webP, .avif, .heic)
+    ///   - type: The UTType to write (e.g. .jpeg, .webP, .avif, .heic)
+    ///   - extraOptions: Additional format-specific options (e.g. progressive JPEG)
     ///   - errorFactory: A closure that creates the appropriate TrimrPixError for the format
     /// - Returns: The compressed image data
     /// - Throws: TrimrPixError if compression fails
-    private func compressWithCGImageDestination(at url: URL, type: UTType, errorFactory: (URL) -> TrimrPixError) async throws -> Data {
-        // Load image
-        guard let image = NSImage(contentsOf: url) else {
-            let error = TrimrPixError.imageLoadFailed(url: url, underlyingError: nil)
-            logger.error("Failed to load image: \(error.technicalDescription)")
-            throw error
-        }
-
-        guard let tiffData = image.tiffRepresentation,
-              let bitmap = NSBitmapImageRep(data: tiffData),
-              let cgImage = bitmap.cgImage else {
-            let error = errorFactory(url)
-            logger.error("Failed to create CGImage: \(error.technicalDescription)")
-            throw error
-        }
+    private func compressWithCGImageDestination(
+        at url: URL,
+        type: UTType,
+        extraOptions: [CFString: Any] = [:],
+        errorFactory: (URL) -> TrimrPixError
+    ) async throws -> Data {
+        let cgImage = try loadImage(at: url, errorFactory: errorFactory)
 
         let outputData = NSMutableData()
         guard let destination = CGImageDestinationCreateWithData(
@@ -390,9 +402,20 @@ final class CompressionService: CompressionServiceProtocol {
             return try Data(contentsOf: url)
         }
 
-        let options: [CFString: Any] = [
-            kCGImageDestinationLossyCompressionQuality: settings.compressionQuality
+        // Base options: lossy quality + metadata stripping
+        var options: [CFString: Any] = [
+            kCGImageDestinationLossyCompressionQuality: settings.compressionQuality,
+            kCGImagePropertyExifDictionary: kCFNull as Any,
+            kCGImagePropertyGPSDictionary: kCFNull as Any,
+            kCGImagePropertyIPTCDictionary: kCFNull as Any,
+            kCGImagePropertyMakerAppleDictionary: kCFNull as Any,
         ]
+
+        // Merge format-specific options
+        for (key, value) in extraOptions {
+            options[key] = value
+        }
+
         CGImageDestinationAddImage(destination, cgImage, options as CFDictionary)
 
         guard CGImageDestinationFinalize(destination) else {
@@ -404,6 +427,50 @@ final class CompressionService: CompressionServiceProtocol {
         let result = outputData as Data
         logger.debug("\(type.identifier) optimization completed, quality: \(Int(settings.compressionQuality * 100))%, size: \(result.count) bytes")
         return result
+    }
+
+    /// Loads an image from URL and returns a CGImage, optionally resizing if enabled
+    /// - Parameters:
+    ///   - url: The URL of the image to load
+    ///   - errorFactory: A closure that creates the appropriate TrimrPixError
+    /// - Returns: A CGImage ready for compression
+    /// - Throws: TrimrPixError if loading fails
+    private func loadImage(at url: URL, errorFactory: (URL) -> TrimrPixError) throws -> CGImage {
+        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) else {
+            let error = TrimrPixError.imageLoadFailed(url: url, underlyingError: nil)
+            logger.error("Failed to create image source: \(error.technicalDescription)")
+            throw error
+        }
+
+        // Check if resize is needed
+        if settings.resizeEnabled {
+            let properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [CFString: Any]
+            let width = properties?[kCGImagePropertyPixelWidth] as? Int ?? 0
+            let height = properties?[kCGImagePropertyPixelHeight] as? Int ?? 0
+            let maxDim = settings.maxDimension
+
+            if width > maxDim || height > maxDim {
+                let thumbnailOptions: [CFString: Any] = [
+                    kCGImageSourceThumbnailMaxPixelSize: maxDim,
+                    kCGImageSourceCreateThumbnailFromImageAlways: true,
+                    kCGImageSourceCreateThumbnailWithTransform: true,
+                ]
+
+                if let resizedImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, thumbnailOptions as CFDictionary) {
+                    logger.debug("Resized image from \(width)x\(height) to max \(maxDim)px")
+                    return resizedImage
+                }
+            }
+        }
+
+        // No resize needed — load full image
+        guard let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
+            let error = errorFactory(url)
+            logger.error("Failed to create CGImage: \(error.technicalDescription)")
+            throw error
+        }
+
+        return cgImage
     }
 
     // MARK: - Private Save Methods

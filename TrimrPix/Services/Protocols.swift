@@ -87,7 +87,10 @@ protocol SettingsProtocol: ObservableObject {
     var watchFolderEnabled: Bool { get set }
     var watchFolderPath: String { get set }
     var watchFolderDelay: Double { get set }
-    
+    var resizeEnabled: Bool { get set }
+    var maxDimension: Int { get set }
+    var pngQuantizationEnabled: Bool { get set }
+
     func saveSettings() throws
     func loadSettings() throws
     func updateQualityFromPreset()
