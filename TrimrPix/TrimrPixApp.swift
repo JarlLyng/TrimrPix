@@ -11,6 +11,10 @@ import SwiftUI
 /// Configures the main window and initializes the application lifecycle
 @main
 struct TrimrPixApp: App {
+    init() {
+        MetricsService.shared.start()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()

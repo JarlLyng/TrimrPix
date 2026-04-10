@@ -402,13 +402,12 @@ final class CompressionService: CompressionServiceProtocol {
             return try Data(contentsOf: url)
         }
 
-        // Base options: lossy quality + metadata stripping
+        // Base options: lossy quality
+        // Metadata (EXIF, GPS, IPTC) is already stripped because we load a raw CGImage
+        // without copying source properties — no need to null out dictionaries here,
+        // which can cause CGImageDestinationFinalize to fail for some formats (e.g. HEIC).
         var options: [CFString: Any] = [
             kCGImageDestinationLossyCompressionQuality: settings.compressionQuality,
-            kCGImagePropertyExifDictionary: kCFNull as Any,
-            kCGImagePropertyGPSDictionary: kCFNull as Any,
-            kCGImagePropertyIPTCDictionary: kCFNull as Any,
-            kCGImagePropertyMakerAppleDictionary: kCFNull as Any,
         ]
 
         // Merge format-specific options
