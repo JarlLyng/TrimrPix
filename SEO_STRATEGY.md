@@ -1,566 +1,227 @@
-# TrimrPix macOS — SEO & ASO Strategy 2026
+# SEO, ASO & GEO Strategy — TrimrPix macOS
 
-## 1. Overview
-
-**TrimrPix macOS** is a high-performance image compression utility for macOS built with SwiftUI. It reduces file sizes while preserving visual quality, supporting JPEG, PNG, GIF, WebP, AVIF, and HEIC formats.
-
-- **Website:** https://trimrpix.iamjarl.com
-- **Mac App Store:** Available (direct submission link)
-- **GitHub:** Open source
-- **Developer:** IAMJARL / Jarl Lyng
-- **Target Users:** Web developers, designers, photographers, WordPress admins, content creators, storage-conscious Mac users
-- **Primary Platform:** macOS 15.2+
-- **Key Differentiator:** Modern alternative to ImageOptim with native SwiftUI UI, batch processing, and emerging format support (AVIF, WebP, HEIC)
+Site: https://trimrpix.iamjarl.com  
+Mac App Store: https://apps.apple.com/app/trimrpix/id6758639590  
+GitHub: https://github.com/JarlLyng/TrimrPix  
+Google Search Console: Connected  
+Umami Analytics: Connected  
+Last updated: 2026-04-15
 
 ---
 
-## 2. Core SEO/ASO Positioning
+## 1. Product positioning
 
-**Primary Positioning:** "Trim file size. Keep quality. The modern image optimizer for Mac."
+TrimrPix er en macOS billedkomprimerings-app med drag-and-drop, batch-processing og support for JPEG, PNG, GIF, WebP, AVIF og HEIC. Open source, betalt ($1.99) på Mac App Store. Watch Folder-funktion til automatisk processing.
 
-**Secondary Angles:**
-- Batch image optimization for web developers
-- Modern format support (WebP, AVIF, HEIC compression)
-- Privacy-first (all processing local, no cloud uploads)
-- Open source transparency
-
-**Why Now (2026):**
-- AVIF adoption growing on web (better compression than JPEG, WebP)
-- macOS storage constraints drive optimization searches
-- Web performance metrics (CLS, LCP) incentivize image optimization
-- AI tools generate larger images → demand for compression
+SEO positioning: **den moderne ImageOptim-erstatning** — differentierer via AVIF/WebP/HEIC-support, SwiftUI native UI, Watch Folder og batch-processing.
 
 ---
 
-## 3. Keywords
+## 2. Hvad der allerede er på plads
 
-### Primary Keywords (High Intent)
+### Website technical SEO (done)
+
+- [x] Statisk HTML, GitHub Pages (`docs/` mappe)
+- [x] `robots.txt` + `sitemap.xml` (8 URL'er, med image-extensions)
+- [x] SoftwareApplication JSON-LD på homepage (pris: $1.99, korrekt)
+- [x] BreadcrumbList JSON-LD på alle sider
+- [x] FAQPage JSON-LD på homepage (6 spørgsmål)
+- [x] Article JSON-LD på alle 5 indholdssider
+- [x] OG tags, Twitter cards, canonical URL'er på alle sider
+- [x] `apple-itunes-app` meta tag (app-id=6758639590) på alle sider
+- [x] `meta name="keywords"` på homepage
+- [x] Google Search Console connected + verified (verification file til stede)
+- [x] Umami analytics
+- [x] Dark mode support
+- [x] Responsive design
+
+### Homepage (done)
+
+- [x] Titel: "TrimrPix – Trim File Size. Keep Quality. | Image Optimizer for Mac"
+- [x] Stærk meta description med procent-reduktion og format-liste
+- [x] 6-item FAQ med FAQPage JSON-LD
+- [x] Feature-sektion, format-oversigt, screenshots
+- [x] App Store CTA
+
+### SEO landing pages — 5 indholdssider (done)
+
+| Side | Schema(er) | Målsøgning |
+|------|-----------|-------------|
+| `imageoptim-alternative.html` | BreadcrumbList + Article | imageoptim alternative |
+| `image-formats-guide.html` | BreadcrumbList + Article | image formats guide, avif vs webp |
+| `compress-images-for-web.html` | BreadcrumbList + Article | compress images for web |
+| `batch-image-compression.html` | BreadcrumbList + Article | batch image compression mac |
+| `optimize-images-app-store.html` | BreadcrumbList + Article | optimize images for app store |
+
+### Cross-linking (delvist done)
+
+- [x] Footer linker til: iamjarl.com, privacy, support, alle guides
+- [x] Intern linking mellem indholdssider
+- [ ] Mangler links til andre IAMJARL-projekter
+
+### Off-site (delvist done)
+
+- [x] Product Hunt — lanceret
+- [ ] Reddit — ikke postet endnu
+
+---
+
+## 3. ASO — Mac App Store Optimization
+
+### Nuværende metadata
+
+**App name:** TrimrPix  
+**Subtitle:** `Trim File Size. Keep Quality.` (30 tegn)  
+**Pris:** $1.99
+
+### DU SKAL: Opdater keyword-felt
+
+Nuværende keyword-felt fra strategien bruger mellemrum efter kommaer — det spilder tegn. Apple bruger max 100 tegn, ingen mellemrum:
+
+**Anbefalet (100 tegn):**
+```
+image,compression,batch,webp,avif,heic,optimizer,converter,png,jpeg,gif,resize,metadata,strip,photo
+```
+
+### Screenshots-strategi
+
+- Screenshot 1: "Drag and drop to compress — reduce file sizes up to 80%"
+- Screenshot 2: "Batch process 1000+ images at once"
+- Screenshot 3: "JPEG, PNG, WebP, AVIF, HEIC, GIF — all formats"
+- Screenshot 4: "Quality presets and advanced compression options"
+- Screenshot 5: "Watch Folder — automatic processing"
+
+---
+
+## 4. Keyword-strategi
+
+### Tier 1 — Højeste relevans
+
 - image compression mac
 - compress images macos
-- batch image compression
 - imageoptim alternative
+- batch image compression mac
 - webp converter mac
-- avif converter
-- heic to jpeg converter mac
-- png compression mac
-- metadata removal image
+- image optimizer mac
+
+### Tier 2 — Informationelle (dækket af landing pages)
+
+- avif vs webp comparison
+- image formats guide 2026
+- compress images for web
+- optimize images for app store
+- batch image compression
+
+### Tier 3 — Differentiering
+
+- offline image optimizer mac
+- image metadata remover mac
 - progressive jpeg tool
+- png quantization mac
+- heic to jpeg converter mac
+- watch folder image compression
 
-### Secondary Keywords
-- reduce image file size mac
-- image optimizer macos
-- photo compression app mac
-- image quality preservation
-- batch image resizer
-- format conversion tool
-- web image optimization
-- storage cleanup mac
-- image minifier
-- lossy compression
+### Tier 4 — Long-tail
 
-### Long-Tail Keywords
-- best image compression software for mac 2026
-- how to compress images without losing quality mac
-- batch convert png to webp macos
-- avif format converter download
-- free alternative to imageoptim
-- image metadata stripper mac
-- progressive jpeg creator
-- heic file compression
-- png quantization tool mac
-- lightweight image compression app
-
-### App Store Keyword Field (100 char max)
-`image compression, batch, webp, avif, heic, optimizer, converter, mac`
+- "best image compression software for mac 2026"
+- "how to compress images without losing quality mac"
+- "batch convert png to webp macos"
+- "free alternative to imageoptim"
 
 ---
 
-## 4. Metadata — Copy-Paste Ready
+## 5. DU SKAL: Udvid cross-linking
 
-### Website Title Tags (50–60 chars)
-- Home: `TrimrPix — Image Compression for macOS`
-- Pricing/Download: `Download TrimrPix | Mac App Store`
-- Blog: `Image Compression Guide — TrimrPix`
-- Features: `TrimrPix Features — Batch Compression & Format Conversion`
+### Footer-links til andre IAMJARL-projekter
 
-### Meta Descriptions (150–160 chars)
-- Home: `High-speed image compression for macOS. Batch process JPEG, PNG, WebP, AVIF, HEIC. Drag-and-drop. Preserve quality. Open source.`
-- Features: `Compress images on macOS with batch processing, format conversion, metadata removal, and progressive JPEG support. Fast, local, privacy-first.`
-- Download: `Get TrimrPix on Mac App Store. Optimize images without losing quality. Professional compression in seconds.`
+Tilføj til footer på alle sider:
 
-### H1s (Landing Page)
-- Primary: `Trim file size. Keep quality.`
-- Section: `Why TrimrPix?`
-- Section: `All Major Formats Supported`
-- Section: `Batch Optimization for Web Developers`
+- [iamjarl.com](https://iamjarl.com) — allerede til stede
+- [TrimrPix for iOS](https://trimrpix-ios.iamjarl.com) — når den lanceres
+- [Made by Human](https://madebyhuman.iamjarl.com) — IAMJARL brand
 
-### H2s (Supporting Sections)
-- High-Quality Compression Algorithms
-- Supports Modern Image Formats (AVIF, WebP)
-- Batch Processing & Drag-and-Drop
-- Metadata Removal & Privacy
-- Integration with Web Workflows
-- Real-Time Preview
-- Open Source & Transparent
+### Fra andre projekter
+
+- TrimrPix for iOS → "Desktop version on Mac App Store"
+- IAMJARL portfolio → feature TrimrPix som flagship app
+- Alle projekters blogs → TrimrPix ved billedoptimering
 
 ---
 
-## 5. App Store Optimization (ASO)
+## 6. GEO — Generative Engine Optimization
 
-### Mac App Store Listing
+### Hvad der er på plads
 
-**App Name:**
-`TrimrPix — Image Compression`
+Homepage FAQ er velstruktureret (6 spørgsmål med direkte svar, FAQPage JSON-LD). Article-schema på alle indholdssider. Sitemap med image-extensions.
 
-**Subtitle:**
-`Trim File Size. Keep Quality.`
+### DU SKAL: Tilføj konkrete datapunkter til landing pages
 
-**Description (First 2 sentences critical for AI indexing):**
-`TrimrPix shrinks image file sizes on your Mac without visible quality loss. Compress JPEG, PNG, GIF, WebP, AVIF, and HEIC files — drag, drop, optimize. Batch process hundreds of images at once, strip metadata, and use progressive JPEG encoding and lossy PNG quantization. All processing is local — your images never leave your Mac.`
+- "Reduce file sizes by up to 80% while preserving visual quality"
+- "Supports 6 image formats: JPEG, PNG, GIF, WebP, AVIF, HEIC"
+- "Batch process unlimited files — no file count or size limits"
+- "All processing is local — images never leave your Mac"
+- "Progressive JPEG encoding reduces JPEG files by an additional 5-15%"
+- "PNG quantization with median-cut algorithm reduces PNG by 60-80%"
 
-**Keywords (App Store field):**
-`image compression, batch, webp, avif, heic, optimizer, converter, mac`
+**Target queries for AI-citation:**
 
-**Support URL:**
-`https://trimrpix.iamjarl.com/support`
-
-**Privacy Policy URL:**
-`https://trimrpix.iamjarl.com/privacy`
-
-**Screenshots (AI-Readable):**
-1. Main interface + drag-and-drop zone
-   - Caption: "Drag & drop to compress. One click to optimize."
-2. Batch processing in progress
-   - Caption: "Compress 1,000+ images at once"
-3. Compression results (before/after sizes)
-   - Caption: "Reduce file sizes by up to 80%"
-4. Settings panel (quality presets, PNG quantization)
-   - Caption: "Quality presets and advanced compression options"
-5. Settings panel (metadata, progressive JPEG toggle)
-   - Caption: "Advanced controls for professionals"
-
-**Preview Video (30 sec):**
-- Show drag-and-drop → compression → export in real time
-- Display file size reduction percentage
-- Show format conversion (2–3 seconds per batch)
+- "Best image compression app for Mac" → homepage
+- "ImageOptim alternative 2026" → `imageoptim-alternative.html`
+- "How to compress images for web" → `compress-images-for-web.html`
+- "AVIF vs WebP comparison" → `image-formats-guide.html`
+- "Batch compress images Mac" → `batch-image-compression.html`
 
 ---
 
-## 6. GEO Strategy — JSON-LD & AI Visibility
+## 7. Indhold der stadig mangler
 
-### Triple JSON-LD Stacking
+### P2 — Næste skridt
 
-**1. SoftwareApplication Schema** (Homepage)
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "TrimrPix — Image Compression for macOS",
-  "applicationCategory": "Utility",
-  "operatingSystem": "macOS 15.2+",
-  "url": "https://trimrpix.iamjarl.com",
-  "downloadUrl": "https://apps.apple.com/app/trimrpix/...",
-  "author": {
-    "@type": "Person",
-    "name": "Jarl Lyng",
-    "url": "https://iamjarl.com"
-  },
-  "description": "Professional image compression for macOS with support for JPEG, PNG, WebP, AVIF, HEIC, and GIF. Batch process, convert formats, preserve quality.",
-  "offers": {
-    "@type": "Offer",
-    "price": "[Price]",
-    "priceCurrency": "USD"
-  },
-  <!-- Add aggregateRating only when you have real App Store reviews -->
+- **Product Hunt launch** — "Shrink images up to 80% — fast, private, fully offline"
+- **Reddit posts** — r/webdev, r/macapps, r/web_design
+- **Core Web Vitals check** — bekræft LCP < 2.5s
 
-  "screenshot": "https://trimrpix.iamjarl.com/images/screenshot1.png"
-}
-```
+### P3 — Nice to have
 
-**2. ItemList Schema** (Features/Formats supported)
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "Supported Image Formats",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "JPEG Compression",
-      "description": "Lossy compression with quality preservation and progressive JPEG support"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "WebP Conversion",
-      "description": "Convert PNG and JPEG to WebP with up to 25% better compression"
-    },
-    {
-      "@type": "ListItem",
-      "position": 3,
-      "name": "AVIF Format",
-      "description": "Next-gen image format with superior compression ratios for modern web"
-    },
-    {
-      "@type": "ListItem",
-      "position": 4,
-      "name": "PNG Quantization",
-      "description": "Reduce PNG file size using intelligent color quantization"
-    },
-    {
-      "@type": "ListItem",
-      "position": 5,
-      "name": "HEIC Support",
-      "description": "Compress and convert Apple's native image format"
-    }
-  ]
-}
-```
-
-**3. FAQPage Schema** (Addresses AI answer extraction)
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "How much can TrimrPix reduce image file sizes?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Most images see 40-70% file size reduction while preserving visual quality. JPEG files typically reduce by 30-50%, PNG by 20-40%, and conversion to WebP or AVIF can achieve 50-70% savings."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is image compression local on my Mac?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. All image compression processing happens locally on your Mac. Your images never leave your device or are uploaded to any server."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can TrimrPix batch process images?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. TrimrPix supports unlimited batch processing. Compress hundreds or thousands of images at once with consistent quality settings."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What is AVIF and why should I use it?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "AVIF (AV1 Image Format) is a modern image format that offers 20-30% better compression than JPEG and WebP while maintaining quality. It's the recommended format for cutting-edge web performance."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I remove metadata from images?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. TrimrPix can strip EXIF, IPTC, and XMP metadata during compression to reduce file size and protect privacy."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is TrimrPix open source?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. The source code is available on GitHub, allowing developers to audit the app and contribute improvements."
-      }
-    }
-  ]
-}
-```
-
-### AI Answer Optimization
-
-**Each page section must stand alone as a complete answer:**
-
-- Create a **Statistics section** on landing page (use real numbers only):
-  - "Reduce file sizes by up to 80%"
-  - "Supported formats: 6 (JPEG, PNG, GIF, WebP, AVIF, HEIC)"
-  - "One-time purchase: $1.99"
-
-- **Citations & Proof:**
-  - Link to web performance studies (Core Web Vitals impact)
-  - Reference AVIF adoption stats from caniuse.com
+- **"Remove EXIF Data on Mac"** landing page — privacy-vinkel, metadata stripping
+- **"WordPress Image Optimization"** guide — stor audience
+- **YouTube demo** — 30 sek compression-demo
+- **Hacker News Show HN** — "I built a modern ImageOptim alternative in SwiftUI"
+- **Comparison page**: TrimrPix vs. Squoosh vs. TinyPNG
+- **Lokalisering**: Tysk ASO-lokalisering (stort marked for dev-tools)
 
 ---
 
-## 7. Content Strategy
+## 8. Where to make noise
 
-### Landing Page Structure (Copy-Paste Ready)
+### Reddit
 
-```
-[Hero Section]
-H1: Trim file size. Keep quality.
-Subheading: Shrink image file sizes on your Mac without visible quality loss. Drag, drop, optimize — fast, private, fully offline.
-CTA: Download on the App Store ($1.99)
-
-[Social Proof]
-- Available on the Mac App Store
-- One-time purchase, no subscription
-- Open source on GitHub
-
-[Section: Why TrimrPix?]
-H2: Why TrimrPix?
-- Built with SwiftUI (native Mac app, not Electron)
-- Support for JPEG, PNG, GIF, WebP, AVIF, HEIC
-- Batch processing (hundreds of images at once)
-- Metadata removal (EXIF, GPS, IPTC)
-- Progressive JPEG encoding
-- Lossy PNG quantization
-- Open source & privacy-first
-
-[Section: Supported Formats]
-H2: Support for All Image Formats
-Display as JSON-LD ItemList + visual grid:
-- JPEG (with quality slider, progressive option)
-- PNG (with quantization)
-- WebP (modern, smaller than JPEG)
-- AVIF (next-gen, best compression)
-- HEIC (Apple's format)
-- GIF (animated support)
-
-[Section: How It Works]
-H2: Three Steps to Compression
-1. Drag & Drop (or select files)
-2. Choose Quality & Format
-3. Export & Save
-
-[Section: For Web Developers]
-H2: Optimize Your Website's Images
-- Batch convert entire asset libraries to WebP/AVIF
-- Metadata stripping (removes sensitive EXIF)
-- Integration with build workflows
-- Speed up Core Web Vitals
-
-[Section: FAQ]
-H2: Frequently Asked Questions
-- How much will my images shrink? (40-70%)
-- Is my data private? (Yes, all local)
-- What about GIF and animated images? (Supported)
-- Is there a Windows version? (macOS only, iOS version coming soon)
-
-[CTA Section]
-H2: Ready to Compress?
-Button: Download on Mac App Store
-Secondary: View on GitHub
-```
-
-### Blog/Articles to Create
-
-1. **"How to Optimize Images for Web Performance in 2026"**
-   - Target: `image optimization 2026 web`
-   - Include Core Web Vitals data
-   - Show JPEG vs. WebP vs. AVIF comparison
-   - Link to TrimrPix
-
-2. **"AVIF Format Explained: The Future of Image Compression"**
-   - Target: `avif format compression`
-   - Technical breakdown
-   - Browser support table
-   - When to use AVIF vs. WebP
-   - Link conversion feature
-
-3. **"Why ImageOptim Alternatives Matter in 2026"**
-   - Target: `imageoptim alternative 2026`
-   - Discuss modern formats ImageOptim lacks
-   - Explain SwiftUI benefits
-   - Link to feature comparison
-
-4. **"Batch Image Compression for WordPress: Save Storage & Speed"**
-   - Target: `wordpress image optimization batch`
-   - Step-by-step guide
-   - Case study: 10GB media library → 2GB
-   - Link to TrimrPix
-
-5. **"Metadata Privacy: Why You Should Strip EXIF Data"**
-   - Target: `remove exif data mac privacy`
-   - Explain what EXIF contains
-   - Privacy risks
-   - How-to with TrimrPix
-
-### FAQ Page Structure
-- Ensure each answer is 40–80 words (AI extraction optimal)
-- Include statistics where possible
-- Link to related blog posts
-
----
-
-## 8. Cross-Linking Strategy
-
-**From TrimrPix to Other IAMJARL Projects:**
-
-1. **Homepage bottom:** "More Tools by IAMJARL" section linking to:
-   - iamjarl.com (main portfolio)
-   - TrimrPix for iOS (when launched)
-   - Other tools with brief descriptions
-
-2. **Blog/content:** Natural references to:
-   - "Need compression on iOS? TrimrPix for iOS is coming soon"
-   - Mention portfolio when discussing indie dev tools
-
-3. **GitHub README:** Links to:
-   - iamjarl.com portfolio
-   - Donate/support page
-   - Other open source projects
-
-**From Other Projects to TrimrPix:**
-- TrimrPix for iOS (when launched) → "Desktop version on Mac App Store"
-- Portfolio hub → feature TrimrPix as flagship app
-- Any blog post mentioning image optimization → TrimrPix
-
----
-
-## 9. Where to Make Noise
-
-### Subreddits (Post Strategy)
-
-1. **r/webdev** (80K members)
-   - Post: "Show HQ: I built a modern ImageOptim alternative in SwiftUI. Open source. Now with AVIF."
-   - Comment in threads about web performance, image optimization
-   - Share blog post "AVIF Explained"
-
-2. **r/macapps** (150K members)
-   - Post: "TrimrPix — Batch image compression for macOS. Supports AVIF, WebP, HEIC. $1.99 on Mac App Store."
-   - Build community; answer questions
-
-3. **r/web_design** (280K members)
-   - Post: "Tool I Made: Compress entire design asset libraries to WebP/AVIF in seconds (macOS)"
-   - Show before/after file sizes
-
-4. **r/photography** (400K members)
-   - Post: "How photographers can optimize photos for web using TrimrPix"
-   - Target niche: photographers building portfolios
-
-5. **r/graphic_design** (500K members)
-   - Comment on storage/export optimization threads
-   - Mention as solution
-
-6. **r/wordpress** (120K members)
-   - Post: "Batch compress your media library before uploading. Save 50-70% storage."
+- **r/webdev** (~80k) — "Show HQ: modern ImageOptim alternative in SwiftUI"
+- **r/macapps** (~150k) — batch image compression, $1.99
+- **r/web_design** (~280k) — design asset libraries til WebP/AVIF
+- **r/photography** (~400k) — portfolio-optimering
+- **r/wordpress** (~120k) — media library-optimering
+- **r/SideProject** — indie dev-vinkel
 
 ### Product Hunt
-- **Timing:** Launch when major macOS update or AVIF adoption news breaks
-- **Tagline:** "Shrink images up to 80% — fast, private, fully offline"
-- **Description:** Lead with real capabilities; emphasize modern formats and privacy
 
-### Indie Hacker Communities
-- Hacker News: "Show HN: I built a modern ImageOptim alternative in SwiftUI"
-- Indie Hackers: Post progress updates, lessons learned
+- Tagline: "Shrink images up to 80% — fast, private, fully offline"
+- Kategori: Developer Tools / Productivity
+- Maker story: "modern ImageOptim alternative"
 
-### Developer Directories
-- Setapp (if revenue model supports)
-- MacRumors Marketplace
-- App Advice
-- MacUpdate
+### Andre kanaler
 
-### Newsletter Mentions
-- Steuart Mackenzie's "Mac Productivity" newsletter
-- Webdev/design newsletters (Dev.to, CSS Tricks, Smashing Magazine)
+- **Hacker News** — Show HN: SwiftUI, open source
+- **Indie Hackers** — progress updates
+- **MacUpdate / MacRumors** — app directories
+- **Dev.to / CSS Tricks** — billedoptimering-artikler
+- **Twitter/X** — #buildinpublic, #indiedev, #webdev
 
 ---
 
-## 10. Technical SEO Checklist
+## 9. Monitoring
 
-- [ ] **Canonical Tags:** All pages have self-referencing canonicals
-- [ ] **Sitemap:** XML sitemap submitted to Google Search Console & Bing
-- [ ] **Robots.txt:** Allow all crawlers; disallow /admin only
-- [ ] **Mobile-Friendly:** Responsive design; 100/100 Lighthouse on mobile
-- [ ] **Page Speed:** Lighthouse score ≥95; Core Web Vitals all green
-  - [ ] LCP ≤2.5s
-  - [ ] FID ≤100ms (or INP ≤200ms)
-  - [ ] CLS ≤0.1
-- [ ] **HTTPS:** All pages HTTPS; HTTP redirects to HTTPS
-- [ ] **Schema.org:** Triple JSON-LD stack (SoftwareApplication, ItemList, FAQPage)
-- [ ] **Open Graph Tags:** All pages have og:title, og:description, og:image
-- [ ] **Twitter Card Tags:** twitter:card, twitter:title, twitter:description
-- [ ] **Internal Linking:** Breadcrumb structure; 3+ contextual links per page
-- [ ] **Image Alt Text:** All images have descriptive alt text (for AI + accessibility)
-- [ ] **H1-H6 Hierarchy:** One H1 per page; proper nesting
-- [ ] **Meta Descriptions:** 150–160 chars; unique per page
-- [ ] **URL Structure:** Descriptive, hyphenated, lowercase (e.g., /blog/avif-compression-guide)
-- [ ] **Search Console:** 0 crawl errors; no manual penalties
-- [ ] **Backlink Audit:** Monitor DA/PA; disavow spammy links
-- [ ] **Structured Data Validation:** All JSON-LD passes schema.org validator
-- [ ] **Hreflang Tags:** N/A (English-only for now)
-
----
-
-## 11. 90-Day Roadmap
-
-### Month 1: Foundation (Days 1–30)
-
-**Week 1–2:**
-- [ ] Publish landing page with all JSON-LD schemas
-- [ ] Submit XML sitemap to GSC + Bing
-- [ ] Create FAQ page with FAQPage schema
-- [ ] Launch blog with "AVIF Format Explained" article
-
-**Week 3–4:**
-- [ ] Publish "Image Compression for Web Performance 2026"
-- [ ] Post on r/webdev, r/macapps (Show HQ)
-- [ ] Optimize Mac App Store listing + update all fields
-- [ ] Set up analytics (GA4 + App Store Connect metrics)
-
-### Month 2: Content & Community (Days 31–60)
-
-**Week 5–6:**
-- [ ] Publish "ImageOptim Alternatives" article
-- [ ] Create content comparison table (TrimrPix vs. ImageOptim, Squoosh, TinyPNG)
-- [ ] Monthly blog: "WordPress Image Optimization Guide"
-- [ ] Post on r/photography, r/wordpress threads (3–4 times)
-
-**Week 7–8:**
-- [ ] Launch Product Hunt (if momentum allows)
-- [ ] Publish "Metadata Privacy & EXIF" article
-- [ ] Comment/engage on Hacker News & Indie Hackers weekly
-- [ ] Create YouTube short-form video (compression demo, 15–30s)
-
-### Month 3: Scale & Optimization (Days 61–90)
-
-**Week 9–10:**
-- [ ] Analyze GSC data; identify top-performing pages
-- [ ] Refresh underperforming articles (add stats, improve examples)
-- [ ] Build backlinks: outreach to design/dev blogs for guest post
-- [ ] Monitor organic traffic; iterate keyword strategy
-
-**Week 11–12:**
-- [ ] Announce iOS version (when ready) on r/iphone, r/ipad
-- [ ] Publish case study: "How [Design Agency] Saves 100GB Monthly"
-- [ ] Refresh YouTube demo; post to r/macapps
-- [ ] Plan Q2 content calendar (integration posts, feature spotlights)
-
-### Success Metrics (Track Monthly)
-
-| Metric | Target (Day 90) |
-|--------|-----------------|
-| Organic visitors | 5,000+ |
-| App Store page rank (keyword "image compression") | Top 3 |
-| Blog posts | 5 published |
-| Backlinks (DA >20) | 15+ |
-| Reddit engagement | 50+ upvotes per post |
-| Product Hunt upvotes | 500+ (if launched) |
-| App Store reviews | 100+ new 4–5★ |
-| GitHub stars | 50+ |
-
----
-
-## Quick Links Reference
-
-- **Website:** https://trimrpix.iamjarl.com
-- **Mac App Store:** (Add link)
-- **GitHub:** (Add link)
-- **Support/Docs:** https://trimrpix.iamjarl.com/support
-- **Privacy Policy:** https://trimrpix.iamjarl.com/privacy
-- **Portfolio Hub:** https://iamjarl.com
-
----
-
-**Last Updated:** 2026-04-15  
-**Next Review:** 2026-07-15
+- **Google Search Console**: Ugentlig — impressions, clicks, average position, crawl errors, Core Web Vitals
+- **Umami Analytics**: Sidevisninger, referral sources, top sider
+- **App Store Connect**: Downloads, keyword rankings
+- **Nøgletal**: Organisk trafik, "imageoptim alternative" ranking, App Store reviews
