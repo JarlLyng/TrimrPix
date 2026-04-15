@@ -40,4 +40,4 @@ Index also has: SoftwareApplication + FAQPage structured data.
 
 Content pages also have: Article structured data, GEO answer boxes.
 
-See `SEO_STRATEGY.md` for keyword strategy and content roadmap.
+SEO and marketing tasks are tracked as [GitHub Issues](https://github.com/JarlLyng/TrimrPix/issues).

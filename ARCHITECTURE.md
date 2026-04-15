@@ -275,24 +275,7 @@ let compressionService = CompressionService(logger: mockLogger)
 
 ## Future Improvements
 
-### Architecture
-- [ ] Separate ImageRepository for better abstraction
-- [ ] Event-based communication between services
-- [ ] Caching layer for optimized images
-
-### Error Handling
-- [ ] Retry strategy for failing operations
-- [ ] Error reporting to analytics (if desired)
-
-### Performance
-- [ ] Stream-based image loading for large images
-- [ ] Background processing queue
-- [ ] Progress tracking for batch operations
-
-### Testing
-- [ ] Unit tests for all services
-- [ ] Integration tests for workflows
-- [ ] UI tests with XCTest
+Planned improvements are tracked as [GitHub Issues](https://github.com/JarlLyng/TrimrPix/issues). Key areas include architecture refinements, error handling improvements, performance optimizations, and expanded test coverage.
 
 ## Dependencies
 
