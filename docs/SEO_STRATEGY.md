@@ -31,7 +31,7 @@ Key differentiators:
 - Fully offline (privacy-first)
 - One-time purchase (no subscription)
 - Native Mac app (fast, no Electron)
-- Supports JPEG, PNG, GIF, WebP, AVIF
+- Supports JPEG, PNG, GIF, WebP, AVIF, HEIC
 
 ---
 
@@ -76,7 +76,7 @@ Current H1 is strong: "Trim file size. Keep quality."
 Sections that help SEO:
 
 1. What TrimrPix does (hero with clear value prop)
-2. Supported formats (JPEG, PNG, GIF, WebP, AVIF)
+2. Supported formats (JPEG, PNG, GIF, WebP, AVIF, HEIC)
 3. Key features (batch, Watch Folder, offline)
 4. FAQ with structured data
 5. Clear CTA to App Store

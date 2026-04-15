@@ -481,5 +481,5 @@ class CompressionService {
 
 ---
 
-**Updated**: March 18, 2026
-**Version**: 1.4
+**Updated**: April 15, 2026
+**Version**: 1.5.1

@@ -321,5 +321,5 @@ let compressionService = CompressionService(logger: mockLogger)
 
 ---
 
-**Updated**: March 20, 2026
-**Version**: 1.5
+**Updated**: April 15, 2026
+**Version**: 1.5.1
