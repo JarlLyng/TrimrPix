@@ -5,7 +5,7 @@
 [![Xcode](https://img.shields.io/badge/Xcode-15.0+-blue.svg)](https://developer.apple.com/xcode/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-![Co-created with AI](https://madebyhuman.iamjarl.com/badges/co-created-white.svg)
+[![Co-created with AI](https://madebyhuman.iamjarl.com/badges/co-created-white.svg)](https://madebyhuman.iamjarl.com)
 
 <img src="App store images/Screenshots/app_screenshot.png" width="600" alt="TrimrPix Screenshot">
 
