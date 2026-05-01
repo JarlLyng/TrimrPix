@@ -350,6 +350,22 @@ body {
     margin-top: var(--spacing-md);
 }
 
+.hero-ios {
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-sm);
+}
+
+.hero-ios a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+}
+
+.hero-ios a:hover {
+    opacity: 0.8;
+}
+
 .hero-cta {
     display: flex;
     gap: var(--spacing-lg);
