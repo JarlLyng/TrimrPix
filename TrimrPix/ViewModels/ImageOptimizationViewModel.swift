@@ -263,12 +263,15 @@ final class ImageOptimizationViewModel: ObservableObject {
         }
         logger.info("Starting optimization for: \(imageItem.filename)")
 
+        // Snapshot settings on the main actor before crossing into background work.
+        let settingsSnapshot = settings.compressionSnapshot
+
         if let idx = images.firstIndex(where: { $0.id == id }) {
             images[idx].isOptimizing = true
         }
 
         do {
-            let optimizedURL = try await compressionService.optimizeImage(at: imageItem.url)
+            let optimizedURL = try await compressionService.optimizeImage(at: imageItem.url, settings: settingsSnapshot)
 
             do {
                 let attributes = try FileManager.default.attributesOfItem(atPath: optimizedURL.path)

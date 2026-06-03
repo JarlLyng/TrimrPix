@@ -197,6 +197,7 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
         let path = watchedPath
         let delaySeconds = settings.watchFolderDelay
         let extensions = supportedExtensions
+        let compressionSettings = settings.compressionSnapshot
         let compressionService = self.compressionService
         let logger = self.logger
 
@@ -237,6 +238,7 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
                 await WatchFolderService.processImageFile(
                     at: fullPath,
                     delaySeconds: delaySeconds,
+                    settings: compressionSettings,
                     compressionService: compressionService,
                     logger: logger
                 )
@@ -257,6 +259,7 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
     nonisolated private static func processImageFile(
         at url: URL,
         delaySeconds: Double,
+        settings: CompressionSettings,
         compressionService: any CompressionServiceProtocol,
         logger: any LoggerProtocol
     ) async {
@@ -303,7 +306,7 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
 
         // Optimize the image.
         do {
-            let optimizedURL = try await compressionService.optimizeImage(at: url)
+            let optimizedURL = try await compressionService.optimizeImage(at: url, settings: settings)
             logger.info("Successfully optimized image from watch folder: \(optimizedURL.lastPathComponent)")
         } catch let error as TrimrPixError {
             logger.error("Failed to optimize image from watch folder: \(error.technicalDescription)")

@@ -26,7 +26,10 @@ enum CompressionPreset: String, CaseIterable {
 }
 
 /// Application settings management
-/// Implements SettingsProtocol for dependency injection and testing
+/// Implements SettingsProtocol for dependency injection and testing.
+/// `@MainActor`-isolated: settings are owned by the UI; background work reads an
+/// immutable `CompressionSettings` snapshot instead of this mutable type.
+@MainActor
 final class Settings: SettingsProtocol {
     
     // MARK: - Published Properties

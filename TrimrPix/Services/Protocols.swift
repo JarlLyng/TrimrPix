@@ -16,10 +16,13 @@ import AppKit
 /// file-processing work in `WatchFolderService`.
 protocol CompressionServiceProtocol: Sendable {
     /// Optimizes an image at the given URL
-    /// - Parameter url: The URL of the image to optimize
-    /// - Returns: The URL of the optimized image, or nil if optimization failed
+    /// - Parameters:
+    ///   - url: The URL of the image to optimize
+    ///   - settings: A Sendable snapshot of the settings to use for this compression.
+    ///     Pass `someSettings.compressionSnapshot`, captured on the main actor.
+    /// - Returns: The URL of the optimized image
     /// - Throws: TrimrPixError if optimization fails
-    func optimizeImage(at url: URL) async throws -> URL
+    func optimizeImage(at url: URL, settings: CompressionSettings) async throws -> URL
 }
 
 // MARK: - Watch Folder Service Protocol
@@ -84,7 +87,10 @@ protocol ImageRepositoryProtocol {
 
 // MARK: - Settings Protocol
 
-/// Protocol for application settings management
+/// Protocol for application settings management.
+/// `@MainActor`-isolated: settings are owned by the UI and only mutated/read on the
+/// main actor. Background work takes an immutable `CompressionSettings` snapshot instead.
+@MainActor
 protocol SettingsProtocol: ObservableObject {
     var compressionQuality: Double { get set }
     var compressionPreset: CompressionPreset { get set }
@@ -104,5 +110,32 @@ protocol SettingsProtocol: ObservableObject {
     func setWatchFolder(url: URL) throws
     func getWatchFolderURL() -> URL?
     func incrementOptimizationRuns() -> Int
+}
+
+extension SettingsProtocol {
+    /// An immutable, `Sendable` snapshot of the settings a single compression needs.
+    /// Capture this on the main actor, then hand it to background compression work so
+    /// `CompressionService` never reads mutable settings state off the main thread.
+    var compressionSnapshot: CompressionSettings {
+        CompressionSettings(
+            compressionQuality: compressionQuality,
+            pngQuantizationEnabled: pngQuantizationEnabled,
+            resizeEnabled: resizeEnabled,
+            maxDimension: maxDimension,
+            overwriteOriginal: overwriteOriginal,
+            autoSave: autoSave
+        )
+    }
+}
+
+/// Immutable, `Sendable` snapshot of the settings required to perform one compression.
+/// Decouples the background compression pipeline from the main-actor-isolated `Settings`.
+struct CompressionSettings: Sendable {
+    let compressionQuality: Double
+    let pngQuantizationEnabled: Bool
+    let resizeEnabled: Bool
+    let maxDimension: Int
+    let overwriteOriginal: Bool
+    let autoSave: Bool
 }
 

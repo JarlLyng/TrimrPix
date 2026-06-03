@@ -87,7 +87,7 @@ struct TrimrPixTests {
     
     // MARK: - Settings Tests
     
-    @Test func testSettingsValidation() async throws {
+    @Test @MainActor func testSettingsValidation() async throws {
         let settings = Settings.shared
         
         // Test compression quality validation
@@ -101,7 +101,7 @@ struct TrimrPixTests {
         #expect(settings.compressionQuality == 0.95)
     }
     
-    @Test func testWatchFolderPathValidation() async throws {
+    @Test @MainActor func testWatchFolderPathValidation() async throws {
         let settings = Settings.shared
         
         // Test with invalid path
