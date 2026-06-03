@@ -24,8 +24,9 @@ enum LogLevel: String, CaseIterable {
 }
 
 /// Protocol defining the logging interface
-/// Enables dependency injection and testing by allowing mock implementations
-protocol LoggerProtocol {
+/// Enables dependency injection and testing by allowing mock implementations.
+/// `Sendable` so a logger can be used from background work (e.g. watch-folder processing).
+protocol LoggerProtocol: Sendable {
     /// Logs a message with the specified severity level
     /// - Parameters:
     ///   - level: The severity level of the log message
@@ -88,7 +89,7 @@ extension LoggerProtocol {
 
 /// Centralized logging service implementation using OSLog
 /// Provides structured logging with different severity levels using Apple's unified logging system
-final class Logger: LoggerProtocol {
+final class Logger: LoggerProtocol, @unchecked Sendable {
     /// Shared singleton instance
     static let shared = Logger()
     
