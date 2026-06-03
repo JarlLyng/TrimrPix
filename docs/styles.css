@@ -356,7 +356,7 @@ body {
 }
 
 .hero-ios a {
-    color: var(--color-accent);
+    color: var(--color-primary);
     text-decoration: none;
     font-weight: 500;
     transition: opacity 0.2s ease;
@@ -1151,13 +1151,15 @@ body {
 }
 
 /* ---- Scroll reveal animations ---- */
-.reveal {
+/* Only hide for reveal when JS is available — otherwise content (FAQ, tables,
+   feature cards) would be permanently invisible for no-JS users and crawlers. */
+.js .reveal {
     opacity: 0;
     transform: translateY(24px);
     transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.reveal.revealed {
+.js .reveal.revealed {
     opacity: 1;
     transform: translateY(0);
 }
@@ -1297,6 +1299,12 @@ body {
 }
 
 /* ---- Accessibility ---- */
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -1307,7 +1315,7 @@ body {
         scroll-behavior: auto !important;
     }
 
-    .reveal {
+    .js .reveal {
         opacity: 1;
         transform: none;
     }
