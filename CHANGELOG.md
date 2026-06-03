@@ -2,6 +2,17 @@
 
 All notable changes to TrimrPix are documented here.
 
+## [1.5.2] - 2026-06-03
+
+### Fixed
+- "Optimize All" could update the wrong image if one was removed while optimization was running
+- Watch Folder could leak a folder-access handle when monitoring was stopped
+- Hardened concurrency in Watch Folder monitoring to prevent data races
+
+### Changed
+- Lower peak memory when optimizing large batches: optimizations now run with bounded concurrency, and original files are no longer fully read into memory just to measure their size
+- Adopted Swift 6 language mode with complete data-race checking across all targets
+
 ## [1.5.1] - 2026-04-15
 
 ### Fixed
