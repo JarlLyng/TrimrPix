@@ -19,6 +19,7 @@ import Combine
 
 /// In-memory settings stub. Avoids touching UserDefaults / Settings.shared
 /// so tests don't pollute the user's real preferences.
+@MainActor
 final class StubSettings: SettingsProtocol {
     @Published var compressionQuality: Double = 0.8
     @Published var compressionPreset: CompressionPreset = .medium
@@ -98,16 +99,18 @@ final class TempDir {
 // MARK: - Tests
 
 @Suite("CompressionService")
+@MainActor
 struct CompressionServiceTests {
 
     // MARK: Error paths
 
     @Test func throwsFileNotFoundForMissingFile() async throws {
-        let service = CompressionService(settings: StubSettings())
+        let service = CompressionService()
+        let settings = StubSettings().compressionSnapshot
         let missing = URL(fileURLWithPath: "/tmp/trimrpix-nonexistent-\(UUID().uuidString).jpg")
 
         await #expect(throws: TrimrPixError.self) {
-            _ = try await service.optimizeImage(at: missing)
+            _ = try await service.optimizeImage(at: missing, settings: settings)
         }
     }
 
@@ -116,10 +119,10 @@ struct CompressionServiceTests {
         let bogus = tmp.file("file.xyz")
         try Data("not an image".utf8).write(to: bogus)
 
-        let service = CompressionService(settings: StubSettings())
+        let service = CompressionService()
 
         do {
-            _ = try await service.optimizeImage(at: bogus)
+            _ = try await service.optimizeImage(at: bogus, settings: StubSettings().compressionSnapshot)
             Issue.record("Expected unsupportedImageFormat error")
         } catch let error as TrimrPixError {
             if case .unsupportedImageFormat = error { /* ok */ }
@@ -132,10 +135,10 @@ struct CompressionServiceTests {
         let fake = tmp.file("fake.gif")
         try Data("NOPE_NOT_A_GIF_HEADER".utf8).write(to: fake)
 
-        let service = CompressionService(settings: StubSettings())
+        let service = CompressionService()
 
         do {
-            _ = try await service.optimizeImage(at: fake)
+            _ = try await service.optimizeImage(at: fake, settings: StubSettings().compressionSnapshot)
             Issue.record("Expected error for corrupt GIF")
         } catch let error as TrimrPixError {
             // GIF validation runs the header check, so we expect invalidImageData.
@@ -155,8 +158,8 @@ struct CompressionServiceTests {
         settings.autoSave = true
         settings.overwriteOriginal = false
 
-        let service = CompressionService(settings: settings)
-        let output = try await service.optimizeImage(at: input)
+        let service = CompressionService()
+        let output = try await service.optimizeImage(at: input, settings: settings.compressionSnapshot)
 
         #expect(FileManager.default.fileExists(atPath: output.path))
         #expect(output.lastPathComponent.contains("-optimized"))
@@ -170,8 +173,8 @@ struct CompressionServiceTests {
         let input = tmp.file("graphic.png")
         try TestImage.write(to: input, type: .png)
 
-        let service = CompressionService(settings: StubSettings())
-        let output = try await service.optimizeImage(at: input)
+        let service = CompressionService()
+        let output = try await service.optimizeImage(at: input, settings: StubSettings().compressionSnapshot)
 
         #expect(FileManager.default.fileExists(atPath: output.path))
         #expect(output.pathExtension.lowercased() == "png")
@@ -182,8 +185,8 @@ struct CompressionServiceTests {
         let input = tmp.file("photo.heic")
         try TestImage.write(to: input, type: .heic)
 
-        let service = CompressionService(settings: StubSettings())
-        let output = try await service.optimizeImage(at: input)
+        let service = CompressionService()
+        let output = try await service.optimizeImage(at: input, settings: StubSettings().compressionSnapshot)
 
         #expect(FileManager.default.fileExists(atPath: output.path))
         #expect(output.pathExtension.lowercased() == "heic")
@@ -201,8 +204,8 @@ struct CompressionServiceTests {
         settings.overwriteOriginal = true
         settings.compressionQuality = 0.6 // force smaller output
 
-        let service = CompressionService(settings: settings)
-        let output = try await service.optimizeImage(at: input)
+        let service = CompressionService()
+        let output = try await service.optimizeImage(at: input, settings: settings.compressionSnapshot)
 
         #expect(output.path == input.path)
         let newSize = try Data(contentsOf: input).count
@@ -221,8 +224,8 @@ struct CompressionServiceTests {
         let collision = tmp.file("photo-optimized.jpg")
         try Data("existing".utf8).write(to: collision)
 
-        let service = CompressionService(settings: StubSettings())
-        let output = try await service.optimizeImage(at: input)
+        let service = CompressionService()
+        let output = try await service.optimizeImage(at: input, settings: StubSettings().compressionSnapshot)
 
         #expect(output.path != collision.path)
         #expect(output.lastPathComponent.hasPrefix("photo-optimized"))
@@ -241,8 +244,8 @@ struct CompressionServiceTests {
         settings.resizeEnabled = true
         settings.maxDimension = 256
 
-        let service = CompressionService(settings: settings)
-        let output = try await service.optimizeImage(at: input)
+        let service = CompressionService()
+        let output = try await service.optimizeImage(at: input, settings: settings.compressionSnapshot)
 
         guard let src = CGImageSourceCreateWithURL(output as CFURL, nil),
               let props = CGImageSourceCopyPropertiesAtIndex(src, 0, nil) as? [CFString: Any],

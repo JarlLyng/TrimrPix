@@ -12,7 +12,10 @@ import MetricKit
 /// Crash reports, hang diagnostics, and performance metrics are delivered
 /// through Apple's anonymised pipeline — no user-identifiable data leaves
 /// the device, and no third-party services are involved.
-final class MetricsService: NSObject, MXMetricManagerSubscriber {
+///
+/// `@unchecked Sendable`: holds no mutable state (only an immutable `let logger`),
+/// so the `shared` singleton is safe to reference from any context.
+final class MetricsService: NSObject, MXMetricManagerSubscriber, @unchecked Sendable {
 
     static let shared = MetricsService()
     private let logger: any LoggerProtocol

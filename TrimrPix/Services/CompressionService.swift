@@ -18,24 +18,22 @@ import UniformTypeIdentifiers
 final class CompressionService: CompressionServiceProtocol, @unchecked Sendable {
     
     // MARK: - Dependencies
-    
-    private let settings: any SettingsProtocol
+
     private let fileManager: any FileManagerProtocol
     private let logger: any LoggerProtocol
-    
+
     // MARK: - Initialization
-    
-    /// Initializes the compression service with dependencies
+
+    /// Initializes the compression service with dependencies.
+    /// Settings are not held here — they are passed per call as a `CompressionSettings`
+    /// snapshot so the service stays stateless and free of cross-actor reads.
     /// - Parameters:
-    ///   - settings: Settings protocol instance (defaults to Settings.shared)
     ///   - fileManager: File manager protocol instance (defaults to FileManager.default)
     ///   - logger: Logger protocol instance (defaults to Logger.shared)
     init(
-        settings: any SettingsProtocol = Settings.shared,
         fileManager: any FileManagerProtocol = FileManager.default,
         logger: any LoggerProtocol = Logger.shared
     ) {
-        self.settings = settings
         self.fileManager = fileManager
         self.logger = logger
     }
@@ -43,10 +41,12 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
     // MARK: - Public Methods
     
     /// Optimizes an image at the given URL
-    /// - Parameter url: The URL of the image to optimize
+    /// - Parameters:
+    ///   - url: The URL of the image to optimize
+    ///   - settings: A Sendable snapshot of the settings to use
     /// - Returns: The URL of the optimized image
     /// - Throws: TrimrPixError if optimization fails
-    func optimizeImage(at url: URL) async throws -> URL {
+    func optimizeImage(at url: URL, settings: CompressionSettings) async throws -> URL {
         logger.info("Starting image optimization for: \(url.lastPathComponent)")
         
         // Determine file type using UTType for better detection
@@ -76,7 +76,7 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
         // Optimize image based on file type
         var optimizedData: Data
         do {
-            optimizedData = try await optimizeImageData(at: url, fileExtension: fileExtension)
+            optimizedData = try await optimizeImageData(at: url, fileExtension: fileExtension, settings: settings)
         } catch let error as TrimrPixError {
             logger.error("Compression failed: \(error.technicalDescription)")
             throw error
@@ -126,20 +126,20 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
     ///   - fileExtension: The file extension (lowercased)
     /// - Returns: The optimized image data
     /// - Throws: TrimrPixError if optimization fails
-    private func optimizeImageData(at url: URL, fileExtension: String) async throws -> Data {
+    private func optimizeImageData(at url: URL, fileExtension: String, settings: CompressionSettings) async throws -> Data {
         switch fileExtension {
         case "jpg", "jpeg":
-            return try await optimizeJPEGData(at: url)
+            return try await optimizeJPEGData(at: url, settings: settings)
         case "png":
-            return try await optimizePNGData(at: url)
+            return try await optimizePNGData(at: url, settings: settings)
         case "gif":
             return try await optimizeGIFData(at: url)
         case "webp":
-            return try await optimizeWebPData(at: url)
+            return try await optimizeWebPData(at: url, settings: settings)
         case "avif":
-            return try await optimizeAVIFData(at: url)
+            return try await optimizeAVIFData(at: url, settings: settings)
         case "heic", "heif":
-            return try await optimizeHEICData(at: url)
+            return try await optimizeHEICData(at: url, settings: settings)
         default:
             let error = TrimrPixError.unsupportedImageFormat(fileExtension)
             logger.warning("Unsupported format: \(error.technicalDescription)")
@@ -151,7 +151,7 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
     /// - Parameter url: The URL of the JPEG image
     /// - Returns: The optimized JPEG data
     /// - Throws: TrimrPixError if optimization fails
-    private func optimizeJPEGData(at url: URL) async throws -> Data {
+    private func optimizeJPEGData(at url: URL, settings: CompressionSettings) async throws -> Data {
         logger.debug("Optimizing JPEG: \(url.lastPathComponent)")
 
         let extraOptions: [CFString: Any] = [
@@ -162,6 +162,7 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
 
         return try await compressWithCGImageDestination(
             at: url, type: .jpeg,
+            settings: settings,
             extraOptions: extraOptions,
             errorFactory: TrimrPixError.jpegCompressionFailed
         )
@@ -171,10 +172,10 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
     /// - Parameter url: The URL of the PNG image
     /// - Returns: The optimized PNG data
     /// - Throws: TrimrPixError if optimization fails
-    private func optimizePNGData(at url: URL) async throws -> Data {
+    private func optimizePNGData(at url: URL, settings: CompressionSettings) async throws -> Data {
         logger.debug("Optimizing PNG: \(url.lastPathComponent)")
 
-        let cgImage = try loadImage(at: url, errorFactory: TrimrPixError.pngCompressionFailed)
+        let cgImage = try loadImage(at: url, settings: settings, errorFactory: TrimrPixError.pngCompressionFailed)
 
         // Try lossy quantization first (biggest win for photo-PNGs)
         if settings.pngQuantizationEnabled {
@@ -348,9 +349,9 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
     /// - Parameter url: The URL of the WebP image
     /// - Returns: The optimized WebP data
     /// - Throws: TrimrPixError if optimization fails
-    private func optimizeWebPData(at url: URL) async throws -> Data {
+    private func optimizeWebPData(at url: URL, settings: CompressionSettings) async throws -> Data {
         logger.debug("Optimizing WebP: \(url.lastPathComponent)")
-        return try await compressWithCGImageDestination(at: url, type: .webP, errorFactory: TrimrPixError.webpCompressionFailed)
+        return try await compressWithCGImageDestination(at: url, type: .webP, settings: settings, errorFactory: TrimrPixError.webpCompressionFailed)
     }
     
     /// Optimizes AVIF image data using CGImageDestination
@@ -358,22 +359,22 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
     /// - Parameter url: The URL of the AVIF image
     /// - Returns: The optimized AVIF data
     /// - Throws: TrimrPixError if optimization fails
-    private func optimizeAVIFData(at url: URL) async throws -> Data {
+    private func optimizeAVIFData(at url: URL, settings: CompressionSettings) async throws -> Data {
         logger.debug("Optimizing AVIF: \(url.lastPathComponent)")
         guard let avifType = UTType("public.avif") else {
             logger.warning("AVIF UTType not available, returning original data")
             return try Data(contentsOf: url)
         }
-        return try await compressWithCGImageDestination(at: url, type: avifType, errorFactory: TrimrPixError.avifCompressionFailed)
+        return try await compressWithCGImageDestination(at: url, type: avifType, settings: settings, errorFactory: TrimrPixError.avifCompressionFailed)
     }
 
     /// Optimizes HEIC image data using CGImageDestination
     /// - Parameter url: The URL of the HEIC image
     /// - Returns: The optimized HEIC data
     /// - Throws: TrimrPixError if optimization fails
-    private func optimizeHEICData(at url: URL) async throws -> Data {
+    private func optimizeHEICData(at url: URL, settings: CompressionSettings) async throws -> Data {
         logger.debug("Optimizing HEIC: \(url.lastPathComponent)")
-        return try await compressWithCGImageDestination(at: url, type: .heic, errorFactory: TrimrPixError.heicCompressionFailed)
+        return try await compressWithCGImageDestination(at: url, type: .heic, settings: settings, errorFactory: TrimrPixError.heicCompressionFailed)
     }
     
     // MARK: - CGImageDestination Compression
@@ -390,10 +391,11 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
     private func compressWithCGImageDestination(
         at url: URL,
         type: UTType,
+        settings: CompressionSettings,
         extraOptions: [CFString: Any] = [:],
         errorFactory: (URL) -> TrimrPixError
     ) async throws -> Data {
-        let cgImage = try loadImage(at: url, errorFactory: errorFactory)
+        let cgImage = try loadImage(at: url, settings: settings, errorFactory: errorFactory)
 
         let outputData = NSMutableData()
         guard let destination = CGImageDestinationCreateWithData(
@@ -436,7 +438,7 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
     ///   - errorFactory: A closure that creates the appropriate TrimrPixError
     /// - Returns: A CGImage ready for compression
     /// - Throws: TrimrPixError if loading fails
-    private func loadImage(at url: URL, errorFactory: (URL) -> TrimrPixError) throws -> CGImage {
+    private func loadImage(at url: URL, settings: CompressionSettings, errorFactory: (URL) -> TrimrPixError) throws -> CGImage {
         guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) else {
             let error = TrimrPixError.imageLoadFailed(url: url, underlyingError: nil)
             logger.error("Failed to create image source: \(error.technicalDescription)")
