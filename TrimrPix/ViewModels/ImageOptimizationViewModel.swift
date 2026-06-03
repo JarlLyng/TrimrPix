@@ -10,16 +10,6 @@ import SwiftUI
 import StoreKit
 import UniformTypeIdentifiers
 
-private extension ImageItem {
-    static var placeholder: ImageItem {
-        // Create a minimal placeholder that won't be used; values won't be accessed
-        // Use a temporary file URL as a dummy
-        let tempURL = URL(fileURLWithPath: "/dev/null")
-        // Force-try is acceptable here because it's only used when index is missing and won't be accessed
-        return try! ImageItem(url: tempURL)
-    }
-}
-
 /// ViewModel responsible for managing image optimization operations
 /// Coordinates between UI, compression service, and watch folder service
 @MainActor
@@ -51,6 +41,11 @@ final class ImageOptimizationViewModel: ObservableObject {
     /// Tracks security-scoped resource access for dropped files
     /// Maps image ID to whether access was granted
     private var securityScopedAccess: [UUID: Bool] = [:]
+
+    /// The watch-folder URL we started security-scoped access on, if any.
+    /// Kept so `stopWatchFolder()` can balance the `startAccessingSecurityScopedResource()`
+    /// call and avoid leaking a security-scope reference on each start.
+    private var watchFolderScopedURL: URL?
     
     // MARK: - Initialization
     
@@ -246,81 +241,73 @@ final class ImageOptimizationViewModel: ObservableObject {
     /// Optimizes a single image at the specified index
     /// - Parameter index: The index of the image to optimize
     func optimizeImage(at index: Int) async {
-        guard index < images.count else {
+        guard images.indices.contains(index) else {
             logger.warning("Optimize image called with invalid index: \(index)")
             return
         }
-        
-        let imageItem: ImageItem = await MainActor.run { self.images[index] }
-        logger.info("Starting optimization for: \(imageItem.filename)")
-        
-        // Set optimizing state on main actor
-        await MainActor.run {
-            self.images[index].isOptimizing = true
-        }
-        
-        // Optimize the image in background
-        do {
-            let optimizedURL = try await compressionService.optimizeImage(at: imageItem.url)
-            
-            // Get optimized file size
-            do {
-                let attributes = try FileManager.default.attributesOfItem(atPath: optimizedURL.path)
-                let optimizedSize = attributes[.size] as? Int64 ?? 0
-                
-                // Update image item on main actor
-                await MainActor.run {
-                    self.images[index].optimizedSize = optimizedSize
-                    self.images[index].isOptimized = true
-                    self.images[index].isOptimizing = false
-                }
-                
-                let savings: Int = await MainActor.run { self.images[index].savingsPercentage }
-                self.logger.info("Successfully optimized: \(imageItem.filename) - \(savings)% reduction")
-                
-            } catch {
-                let error = TrimrPixError.fileSizeReadError(optimizedURL, underlyingError: error)
-                logger.error("Error reading optimized file size: \(error.technicalDescription)")
-                await MainActor.run {
-                    self.images[index].isOptimizing = false
-                    self.showError(message: error.errorDescription ?? "Kunne ikke læse filstørrelse")
-                }
-            }
-            
-        } catch let error as TrimrPixError {
-            logger.error("Optimization failed: \(error.technicalDescription)")
-            await MainActor.run {
-                self.images[index].isOptimizing = false
-                self.showError(message: error.errorDescription ?? "Kunne ikke optimere billede")
-            }
-        } catch {
-            let trimmedError = TrimrPixError.compressionFailed(url: imageItem.url, underlyingError: error)
-            logger.error("Optimization failed: \(trimmedError.technicalDescription)")
-            await MainActor.run {
-                self.images[index].isOptimizing = false
-                self.showError(message: trimmedError.errorDescription ?? "Kunne ikke optimere billede")
-            }
-        }
+        // Delegate to the ID-based implementation so the operation stays correct
+        // even if the list is mutated while compression is running.
+        await optimizeImage(withID: images[index].id)
     }
-    
-    /// Optimizes a single image identified by its ID
+
+    /// Optimizes a single image identified by its ID.
+    ///
+    /// The image's current index is re-resolved from its ID after every suspension
+    /// point. If the image is removed or reordered while compression runs, the update
+    /// is skipped gracefully instead of crashing or mutating the wrong item.
     /// - Parameter id: The ID of the image to optimize
     private func optimizeImage(withID id: UUID) async {
-        // Resolve the current index for this ID on the main actor
-        let result = await MainActor.run {
-            if let idx = self.images.firstIndex(where: { $0.id == id }) {
-                return (idx, self.images[idx])
-            } else {
-                return (-1, ImageItem.placeholder)
-            }
-        }
-        
-        guard result.0 >= 0 else {
+        guard let imageItem = images.first(where: { $0.id == id }) else {
             logger.warning("Optimize image called with missing ID: \(id)")
             return
         }
-        
-        await optimizeImage(at: result.0)
+        logger.info("Starting optimization for: \(imageItem.filename)")
+
+        if let idx = images.firstIndex(where: { $0.id == id }) {
+            images[idx].isOptimizing = true
+        }
+
+        do {
+            let optimizedURL = try await compressionService.optimizeImage(at: imageItem.url)
+
+            do {
+                let attributes = try FileManager.default.attributesOfItem(atPath: optimizedURL.path)
+                let optimizedSize = attributes[.size] as? Int64 ?? 0
+
+                // Re-resolve the index after the await — the list may have changed.
+                guard let idx = images.firstIndex(where: { $0.id == id }) else {
+                    logger.debug("Image removed during optimization, skipping update: \(imageItem.filename)")
+                    return
+                }
+                images[idx].optimizedSize = optimizedSize
+                images[idx].isOptimized = true
+                images[idx].isOptimizing = false
+                logger.info("Successfully optimized: \(imageItem.filename) - \(images[idx].savingsPercentage)% reduction")
+
+            } catch {
+                let error = TrimrPixError.fileSizeReadError(optimizedURL, underlyingError: error)
+                logger.error("Error reading optimized file size: \(error.technicalDescription)")
+                clearOptimizing(id: id)
+                showError(message: error.errorDescription ?? "Kunne ikke læse filstørrelse")
+            }
+
+        } catch let error as TrimrPixError {
+            logger.error("Optimization failed: \(error.technicalDescription)")
+            clearOptimizing(id: id)
+            showError(message: error.errorDescription ?? "Kunne ikke optimere billede")
+        } catch {
+            let trimmedError = TrimrPixError.compressionFailed(url: imageItem.url, underlyingError: error)
+            logger.error("Optimization failed: \(trimmedError.technicalDescription)")
+            clearOptimizing(id: id)
+            showError(message: trimmedError.errorDescription ?? "Kunne ikke optimere billede")
+        }
+    }
+
+    /// Clears the `isOptimizing` flag for the image with the given ID, if it still exists.
+    private func clearOptimizing(id: UUID) {
+        if let idx = images.firstIndex(where: { $0.id == id }) {
+            images[idx].isOptimizing = false
+        }
     }
     
     /// Starts watch folder monitoring if enabled in settings
@@ -333,8 +320,11 @@ final class ImageOptimizationViewModel: ObservableObject {
         // Try to get watch folder URL from bookmark first
         var watchFolderPath: String
         if let bookmarkURL = settings.getWatchFolderURL() {
-            // Start accessing security-scoped resource from bookmark
-            _ = bookmarkURL.startAccessingSecurityScopedResource()
+            // Start accessing security-scoped resource from bookmark.
+            // Track the URL so stopWatchFolder() can balance this call (avoids leaking a scope reference).
+            if bookmarkURL.startAccessingSecurityScopedResource() {
+                watchFolderScopedURL = bookmarkURL
+            }
             watchFolderPath = bookmarkURL.path
             logger.debug("Using watch folder from bookmark: \(watchFolderPath)")
         } else if !settings.watchFolderPath.isEmpty {
@@ -373,11 +363,20 @@ final class ImageOptimizationViewModel: ObservableObject {
     
     /// Stops watch folder monitoring
     func stopWatchFolder() {
+        // Balance the security-scoped access started in startWatchFolder().
+        // Done unconditionally (before the isWatching guard) so a scope acquired
+        // during a start that later failed to begin watching is still released.
+        if let scopedURL = watchFolderScopedURL {
+            scopedURL.stopAccessingSecurityScopedResource()
+            watchFolderScopedURL = nil
+            logger.debug("Stopped security-scoped access for watch folder")
+        }
+
         guard watchFolderService.isWatching else {
             logger.debug("Watch folder not active, skipping stop")
             return
         }
-        
+
         watchFolderService.stopWatching()
         logger.info("Watch folder stopped")
     }
