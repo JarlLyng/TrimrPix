@@ -438,7 +438,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -474,7 +474,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};
@@ -491,7 +491,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamjarl.trimrpix.TrimrPixTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TrimrPix.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TrimrPix";
 			};
 			name = Debug;
@@ -509,7 +509,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamjarl.trimrpix.TrimrPixTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TrimrPix.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TrimrPix";
 			};
 			name = Release;
@@ -525,7 +525,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamjarl.trimrpix.TrimrPixUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TEST_TARGET_NAME = TrimrPix;
 			};
 			name = Debug;
@@ -541,7 +541,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamjarl.trimrpix.TrimrPixUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TEST_TARGET_NAME = TrimrPix;
 			};
 			name = Release;
