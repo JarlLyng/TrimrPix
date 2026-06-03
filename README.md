@@ -1,8 +1,8 @@
 # TrimrPix
 
 [![macOS](https://img.shields.io/badge/macOS-15.2+-blue.svg)](https://www.apple.com/macos/)
-[![Swift](https://img.shields.io/badge/Swift-5.9+-orange.svg)](https://swift.org/)
-[![Xcode](https://img.shields.io/badge/Xcode-15.0+-blue.svg)](https://developer.apple.com/xcode/)
+[![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg)](https://swift.org/)
+[![Xcode](https://img.shields.io/badge/Xcode-26+-blue.svg)](https://developer.apple.com/xcode/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 [![Co-created with AI](https://madebyhuman.iamjarl.com/badges/co-created-white.svg)](https://madebyhuman.iamjarl.com)

@@ -152,7 +152,7 @@ Optimized file saved
 - Manages image list state
 - Coordinates watch folder integration
 - `@MainActor` for thread-safe UI updates
-- **Background Processing**: Optimization runs in `Task.detached` to avoid UI freezing
+- **Background Processing**: Optimization runs off the main actor with bounded concurrency (capped at the processor count) to avoid UI freezing and memory spikes on large batches
 - **Security-Scoped Access Management**: Tracks and stops security-scoped resource access when images are removed
 - **Dependency Injection**: Uses injected services correctly (e.g. compressionService for WatchFolderService)
 
@@ -226,10 +226,10 @@ The application uses modern Swift concurrency:
 
 - **async/await**: For asynchronous operations (image loading, compression)
 - **TaskGroup**: For concurrent batch processing
-- **Task.detached**: Optimization runs in the background to avoid UI freezing
-- **@MainActor**: For thread-safe UI updates
-- **Actor isolation**: ViewModel is marked with @MainActor
-- **Data Race Prevention**: Settings values are copied on the main actor before background work
+- **Bounded concurrency**: Batch optimization runs at most `min(processorCount, 4)` jobs at once via a `TaskGroup`, so large drops don't decode every image into memory simultaneously
+- **@MainActor**: For thread-safe UI updates; `ImageOptimizationViewModel`, `WatchFolderService`, `Settings` and `SettingsProtocol` are all main-actor isolated
+- **Data Race Prevention**: Settings are captured into an immutable `Sendable` `CompressionSettings` snapshot on the main actor before any background work; `CompressionService` is stateless and reads no shared state off-main
+- **Swift 6**: The project builds in Swift 6 language mode with complete data-race checking enabled
 
 ## Error Handling Strategy
 
@@ -266,7 +266,7 @@ let compressionService = CompressionService(logger: mockLogger)
 
 ## Performance Considerations
 
-1. **Concurrent Processing**: Batch optimization uses TaskGroup for concurrent processing in the background (`Task.detached`)
+1. **Concurrent Processing**: Batch optimization uses a `TaskGroup` with bounded concurrency, so peak memory stays low even on large batches
 2. **Memory Management**: Lazy-loaded thumbnails (max 120px) reduce memory footprint
 3. **File System Monitoring**: Debouncing and configurable delay reduce redundant events
 4. **Security-Scoped Resources**: Automatic handling of sandboxed file access with correct start/stop
@@ -304,5 +304,5 @@ Planned improvements are tracked as [GitHub Issues](https://github.com/JarlLyng/
 
 ---
 
-**Updated**: April 15, 2026
-**Version**: 1.5.1
+**Updated**: June 3, 2026
+**Version**: 1.5.2
