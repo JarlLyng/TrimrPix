@@ -11,8 +11,10 @@ import AppKit
 // MARK: - Compression Service Protocol
 
 /// Protocol defining the interface for image compression operations
-/// Enables dependency injection and testing
-protocol CompressionServiceProtocol {
+/// Enables dependency injection and testing.
+/// `Sendable` so a compression service can be safely shared with the background
+/// file-processing work in `WatchFolderService`.
+protocol CompressionServiceProtocol: Sendable {
     /// Optimizes an image at the given URL
     /// - Parameter url: The URL of the image to optimize
     /// - Returns: The URL of the optimized image, or nil if optimization failed
@@ -22,7 +24,11 @@ protocol CompressionServiceProtocol {
 
 // MARK: - Watch Folder Service Protocol
 
-/// Protocol defining the interface for file system monitoring
+/// Protocol defining the interface for file system monitoring.
+/// `@MainActor`-isolated: the service owns mutable state (watch status, processed
+/// files) that is only ever touched from the main actor; background file I/O is
+/// dispatched internally with Sendable values only.
+@MainActor
 protocol WatchFolderServiceProtocol {
     /// Starts monitoring a folder for new images
     /// - Parameter path: The folder path to monitor

@@ -12,8 +12,10 @@ import ImageIO
 import UniformTypeIdentifiers
 
 /// Service responsible for image compression and optimization
-/// Implements CompressionServiceProtocol for dependency injection and testing
-final class CompressionService: CompressionServiceProtocol {
+/// Implements CompressionServiceProtocol for dependency injection and testing.
+/// `@unchecked Sendable`: all stored dependencies are immutable `let`s; the service
+/// holds no mutable state, so it is safe to share across concurrency domains.
+final class CompressionService: CompressionServiceProtocol, @unchecked Sendable {
     
     // MARK: - Dependencies
     
