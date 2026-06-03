@@ -209,14 +209,26 @@ final class ImageOptimizationViewModel: ObservableObject {
             // Capture a stable snapshot of the image IDs to process
             let idsToProcess: [UUID] = await MainActor.run { self.images.map { $0.id } }
             
-            // Perform concurrent processing without touching MainActor-isolated state directly
+            // Process with a bounded number of concurrent optimizations. Each running
+            // optimization decodes a full image into memory, so an unbounded group
+            // would load the entire batch at once — a memory spike on large drops.
+            let maxConcurrent = max(1, min(4, ProcessInfo.processInfo.activeProcessorCount))
             await withTaskGroup(of: Void.self) { group in
-                for id in idsToProcess {
-                    group.addTask { [weak self] in
-                        await self?.optimizeImage(withID: id)
+                var index = 0
+                // Prime the group up to the concurrency limit.
+                while index < maxConcurrent, index < idsToProcess.count {
+                    let id = idsToProcess[index]
+                    group.addTask { [weak self] in await self?.optimizeImage(withID: id) }
+                    index += 1
+                }
+                // As each finishes, start the next one, keeping at most `maxConcurrent` in flight.
+                while await group.next() != nil {
+                    if index < idsToProcess.count {
+                        let id = idsToProcess[index]
+                        group.addTask { [weak self] in await self?.optimizeImage(withID: id) }
+                        index += 1
                     }
                 }
-                await group.waitForAll()
             }
             
             // Update UI state on main actor

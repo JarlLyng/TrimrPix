@@ -69,9 +69,17 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
             throw error
         }
         
-        // Read original file size for comparison
-        let originalData = try Data(contentsOf: url)
-        let originalSize = originalData.count
+        // Read original file size for comparison — via attributes, without loading
+        // the whole file into memory (matters for large batches).
+        let originalSize: Int
+        do {
+            let attributes = try fileManager.attributesOfItem(atPath: url.path)
+            originalSize = (attributes[.size] as? Int) ?? 0
+        } catch {
+            let trimmedError = TrimrPixError.fileSizeReadError(url, underlyingError: error)
+            logger.error("Failed to read original file size: \(trimmedError.technicalDescription)")
+            throw trimmedError
+        }
 
         // Optimize image based on file type
         var optimizedData: Data
@@ -86,10 +94,12 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
             throw trimmedError
         }
 
-        // Guard: if compressed data is larger than original, keep the original
-        if optimizedData.count >= originalSize {
+        // Guard: if compression didn't shrink the file, keep the original bytes.
+        // The original is read lazily here, so the common (successful) path never
+        // loads the whole source file.
+        if originalSize > 0, optimizedData.count >= originalSize {
             logger.info("Compressed size (\(optimizedData.count) bytes) >= original (\(originalSize) bytes), keeping original")
-            optimizedData = originalData
+            optimizedData = try Data(contentsOf: url)
         }
         
         // Generate suggested filename
