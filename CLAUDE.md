@@ -35,7 +35,8 @@ Target audience, positioning, pricing reasoning, SEO/ASO playbooks, and competit
 - No subscription / IAP.
 
 ## Requirements & build
-- **macOS 15.2+**, **Swift 6** (toolchain 5.9+), SwiftUI, async/await.
+- Runtime: **macOS 15.2+** (deployment target). Language: **Swift 6** mode, SwiftUI, async/await.
+- **Builds with Xcode 26 / macOS 26 SDK** — older Xcodes (e.g. 16.2) fail to compile because MetricsService uses MetricKit payload APIs absent from the macOS 15.x SDK. CI runs on `macos-26`.
 - Open `TrimrPix.xcodeproj` and run the **TrimrPix** scheme. Tests in `TrimrPixTests`.
 
 ## Conventions
