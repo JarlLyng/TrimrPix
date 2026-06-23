@@ -1,0 +1,87 @@
+# Copy to <repo>/.github/ISSUE_TEMPLATE/bug_report.yml and replace TrimrPix / JarlLyng/TrimrPix / trimrpix.iamjarl.com.
+name: Bug report
+description: Something in the TrimrPix app or marketing site is broken or behaves unexpectedly.
+title: '[Bug] '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. The more concrete the details, the faster it can be fixed.
+        For security vulnerabilities, **do not file a public issue** — see [SECURITY.md](https://github.com/JarlLyng/TrimrPix/blob/main/SECURITY.md) for the private reporting channel.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: A one-line description of what's wrong.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where did this happen?
+      options:
+        - App
+        - Marketing website (trimrpix.iamjarl.com)
+        - Both
+        - Other / unsure
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: App version
+      description: From the App Store listing or in-app About screen. Leave blank if the bug is on the marketing site.
+
+  - type: input
+    id: os_version
+    attributes:
+      label: OS version
+      description: e.g. iOS 26.2 / macOS 15.
+
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      description: iPhone / iPad / Mac model.
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The exact steps needed to see the bug. A numbered list is ideal.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshots or screen recording (optional)
+      description: Drag and drop images / videos here. Crops and short clips help a lot for visual bugs.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submit checks
+      options:
+        - label: I searched existing issues and didn't find a duplicate
+          required: true
+        - label: This is a public bug report (security issues go to SECURITY.md)
+          required: true
