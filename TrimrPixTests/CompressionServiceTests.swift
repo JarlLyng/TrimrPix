@@ -43,7 +43,7 @@ final class StubSettings: SettingsProtocol {
 
 // MARK: - Test Image Generation
 
-private enum TestImage {
+enum TestImage {
     /// Generates a solid-color test image as raw CGImage data.
     static func cgImage(width: Int = 200, height: Int = 200, color: NSColor = .systemRed) -> CGImage {
         let colorSpace = CGColorSpaceCreateDeviceRGB()
