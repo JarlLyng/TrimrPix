@@ -56,47 +56,47 @@ enum TrimrPixError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .imageLoadFailed(let url, _):
-            return "Kunne ikke indlæse billede: \(url.lastPathComponent)"
+            return "Could not load image: \(url.lastPathComponent)"
         case .unsupportedImageFormat(let format):
-            return "Ikke-understøttet billedformat: \(format). Støttede formater: JPEG, PNG, GIF, WebP, AVIF, HEIC"
+            return "Unsupported image format: \(format). Supported formats: JPEG, PNG, GIF, WebP, AVIF, HEIC"
         case .invalidImageData(let url):
-            return "Ugyldig billeddata: \(url.lastPathComponent)"
+            return "Invalid image data: \(url.lastPathComponent)"
         case .imageTooLarge(let url, let maxSize):
-            return "Billede er for stort (\(ByteCountFormatter.string(fromByteCount: maxSize, countStyle: .file))): \(url.lastPathComponent)"
-            
+            return "Image is too large (\(ByteCountFormatter.string(fromByteCount: maxSize, countStyle: .file))): \(url.lastPathComponent)"
+
         case .compressionFailed(let url, _):
-            return "Kunne ikke komprimere billede: \(url.lastPathComponent)"
+            return "Could not compress image: \(url.lastPathComponent)"
         case .jpegCompressionFailed(let url):
-            return "JPEG komprimering fejlede: \(url.lastPathComponent)"
+            return "JPEG compression failed: \(url.lastPathComponent)"
         case .pngCompressionFailed(let url):
-            return "PNG komprimering fejlede: \(url.lastPathComponent)"
+            return "PNG compression failed: \(url.lastPathComponent)"
         case .gifCompressionFailed(let url):
-            return "GIF komprimering fejlede: \(url.lastPathComponent)"
+            return "GIF compression failed: \(url.lastPathComponent)"
         case .webpCompressionFailed(let url):
-            return "WebP komprimering fejlede: \(url.lastPathComponent)"
+            return "WebP compression failed: \(url.lastPathComponent)"
         case .avifCompressionFailed(let url):
-            return "AVIF komprimering fejlede: \(url.lastPathComponent)"
+            return "AVIF compression failed: \(url.lastPathComponent)"
         case .heicCompressionFailed(let url):
-            return "HEIC komprimering fejlede: \(url.lastPathComponent)"
+            return "HEIC compression failed: \(url.lastPathComponent)"
         case .formatNotSupported(let format):
-            return "Format ikke understøttet: \(format)"
-            
+            return "Format not supported: \(format)"
+
         case .fileNotFound(let url):
-            return "Fil ikke fundet: \(url.lastPathComponent)"
+            return "File not found: \(url.lastPathComponent)"
         case .fileReadError(let url, _):
-            return "Kunne ikke læse fil: \(url.lastPathComponent)"
+            return "Could not read file: \(url.lastPathComponent)"
         case .fileWriteError(let url, let error):
-            var message = "Kunne ikke skrive fil: \(url.lastPathComponent)"
+            var message = "Could not write file: \(url.lastPathComponent)"
             if let error = error {
                 let nsError = error as NSError
                 if nsError.domain == NSCocoaErrorDomain {
                     switch nsError.code {
                     case NSFileWriteNoPermissionError:
-                        message += " (Ingen skriveadgang)"
+                        message += " (No write permission)"
                     case NSFileWriteFileExistsError:
-                        message += " (Fil eksisterer allerede)"
+                        message += " (File already exists)"
                     case NSFileWriteVolumeReadOnlyError:
-                        message += " (Drev er skrivebeskyttet)"
+                        message += " (Volume is read-only)"
                     default:
                         message += " (\(error.localizedDescription))"
                     }
@@ -106,36 +106,36 @@ enum TrimrPixError: LocalizedError {
             }
             return message
         case .fileSizeReadError(let url, _):
-            return "Kunne ikke læse filstørrelse: \(url.lastPathComponent)"
+            return "Could not read file size: \(url.lastPathComponent)"
         case .invalidFilePath(let path):
-            return "Ugyldig filsti: \(path)"
+            return "Invalid file path: \(path)"
         case .directoryNotFound(let url):
-            return "Mappe ikke fundet: \(url.path)"
+            return "Folder not found: \(url.path)"
         case .permissionDenied(let url):
-            return "Adgang nægtet til: \(url.lastPathComponent)"
-            
+            return "Access denied to: \(url.lastPathComponent)"
+
         case .watchFolderSetupFailed(let path, _):
-            return "Kunne ikke opsætte watch folder: \(path)"
+            return "Could not set up watch folder: \(path)"
         case .watchFolderNotFound(let path):
-            return "Watch folder ikke fundet: \(path)"
+            return "Watch folder not found: \(path)"
         case .watchFolderPermissionDenied(let path):
-            return "Adgang nægtet til watch folder: \(path)"
-            
+            return "Access denied to watch folder: \(path)"
+
         case .settingsLoadFailed:
-            return "Kunne ikke indlæse indstillinger"
+            return "Could not load settings"
         case .settingsSaveFailed:
-            return "Kunne ikke gemme indstillinger"
+            return "Could not save settings"
         case .invalidSettingsValue(let value):
-            return "Ugyldig indstillingsværdi: \(value)"
-            
+            return "Invalid settings value: \(value)"
+
         case .userCancelled:
-            return "Operation annulleret af bruger"
-            
+            return "Operation cancelled by user"
+
         case .unknown(let error):
             if let error = error {
-                return "Ukendt fejl: \(error.localizedDescription)"
+                return "Unknown error: \(error.localizedDescription)"
             }
-            return "Ukendt fejl opstod"
+            return "An unknown error occurred"
         }
     }
     
@@ -203,26 +203,26 @@ enum TrimrPixError: LocalizedError {
     var recoverySuggestion: String? {
         switch self {
         case .imageLoadFailed, .invalidImageData:
-            return "Sørg for at billedet ikke er beskadiget og prøv igen"
+            return "Make sure the image isn't corrupted and try again"
         case .unsupportedImageFormat:
-            return "Konverter billedet til et understøttet format først"
+            return "Convert the image to a supported format first"
         case .imageTooLarge:
-            return "Reducer billedets opløsning eller størrelse først"
+            return "Reduce the image's resolution or size first"
         case .compressionFailed, .jpegCompressionFailed, .pngCompressionFailed,
              .gifCompressionFailed, .webpCompressionFailed, .avifCompressionFailed, .heicCompressionFailed:
-            return "Prøv at genåbne filen eller konverter til et andet format"
+            return "Try reopening the file or convert it to a different format"
         case .fileNotFound:
-            return "Sørg for at filen eksisterer og prøv igen"
+            return "Make sure the file exists and try again"
         case .fileWriteError, .permissionDenied:
-            return "Sørg for at du har skriveadgang til destinationen"
+            return "Make sure you have write access to the destination"
         case .watchFolderNotFound:
-            return "Vælg en gyldig mappe i indstillingerne"
+            return "Choose a valid folder in Settings"
         case .watchFolderPermissionDenied:
-            return "Giv appen adgang til mappen i Systemindstillinger"
+            return "Grant the app access to the folder in System Settings"
         case .settingsLoadFailed, .settingsSaveFailed:
-            return "Prøv at nulstille indstillingerne eller genstart appen"
+            return "Try resetting settings or restart the app"
         default:
-            return "Prøv igen. Hvis problemet vedvarer, genstart appen"
+            return "Try again. If the problem persists, restart the app"
         }
     }
 }

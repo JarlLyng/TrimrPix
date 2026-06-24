@@ -134,7 +134,7 @@ final class ImageOptimizationViewModel: ObservableObject {
                     failedCount += 1
                     let error = TrimrPixError.imageLoadFailed(url: url, underlyingError: error)
                     logger.error("Error creating image item: \(error.technicalDescription)")
-                    showError(message: error.errorDescription ?? "Kunne ikke indlæse billede")
+                    showError(message: error.errorDescription ?? "Could not load image")
                 }
                 
             } catch {
@@ -142,7 +142,7 @@ final class ImageOptimizationViewModel: ObservableObject {
                 let errorURL = attemptedURL ?? URL(fileURLWithPath: "unknown")
                 let error = TrimrPixError.imageLoadFailed(url: errorURL, underlyingError: error)
                 logger.error("Error loading image from provider: \(error.technicalDescription)")
-                showError(message: error.errorDescription ?? "Kunne ikke indlæse billede")
+                showError(message: error.errorDescription ?? "Could not load image")
             }
         }
         
@@ -303,18 +303,18 @@ final class ImageOptimizationViewModel: ObservableObject {
                 let error = TrimrPixError.fileSizeReadError(optimizedURL, underlyingError: error)
                 logger.error("Error reading optimized file size: \(error.technicalDescription)")
                 clearOptimizing(id: id)
-                showError(message: error.errorDescription ?? "Kunne ikke læse filstørrelse")
+                showError(message: error.errorDescription ?? "Could not read file size")
             }
 
         } catch let error as TrimrPixError {
             logger.error("Optimization failed: \(error.technicalDescription)")
             clearOptimizing(id: id)
-            showError(message: error.errorDescription ?? "Kunne ikke optimere billede")
+            showError(message: error.errorDescription ?? "Could not optimize image")
         } catch {
             let trimmedError = TrimrPixError.compressionFailed(url: imageItem.url, underlyingError: error)
             logger.error("Optimization failed: \(trimmedError.technicalDescription)")
             clearOptimizing(id: id)
-            showError(message: trimmedError.errorDescription ?? "Kunne ikke optimere billede")
+            showError(message: trimmedError.errorDescription ?? "Could not optimize image")
         }
     }
 
@@ -354,12 +354,12 @@ final class ImageOptimizationViewModel: ObservableObject {
             try settings.validateWatchFolderPath()
         } catch let error as TrimrPixError {
             logger.error("Watch folder path validation failed: \(error.technicalDescription)")
-            showError(message: error.errorDescription ?? "Ugyldig watch folder sti")
+            showError(message: error.errorDescription ?? "Invalid watch folder path")
             return
         } catch {
             let trimmedError = TrimrPixError.watchFolderSetupFailed(watchFolderPath, underlyingError: error)
             logger.error("Watch folder path validation failed: \(trimmedError.technicalDescription)")
-            showError(message: trimmedError.errorDescription ?? "Ugyldig watch folder sti")
+            showError(message: trimmedError.errorDescription ?? "Invalid watch folder path")
             return
         }
         
@@ -368,11 +368,11 @@ final class ImageOptimizationViewModel: ObservableObject {
             logger.info("Watch folder started: \(watchFolderPath)")
         } catch let error as TrimrPixError {
             logger.error("Failed to start watch folder: \(error.technicalDescription)")
-            showError(message: error.errorDescription ?? "Kunne ikke starte watch folder")
+            showError(message: error.errorDescription ?? "Could not start watch folder")
         } catch {
             let trimmedError = TrimrPixError.watchFolderSetupFailed(watchFolderPath, underlyingError: error)
             logger.error("Failed to start watch folder: \(trimmedError.technicalDescription)")
-            showError(message: trimmedError.errorDescription ?? "Kunne ikke starte watch folder")
+            showError(message: trimmedError.errorDescription ?? "Could not start watch folder")
         }
     }
     
