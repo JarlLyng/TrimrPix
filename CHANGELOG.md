@@ -2,6 +2,14 @@
 
 All notable changes to TrimrPix are documented here.
 
+## [1.6.0] - 2026-07-15
+
+### Added
+- Live progress for "Optimize All" — a progress bar and an "N of M" counter while a batch runs
+
+### Changed
+- Faster, lighter list previews: thumbnails are now generated off the main thread at preview size, so dropping many large photos no longer stutters the list
+
 ## [1.5.2] - 2026-06-03
 
 ### Fixed
