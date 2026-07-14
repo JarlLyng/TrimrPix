@@ -21,13 +21,18 @@ import UniformTypeIdentifiers
 final class MockCompressionService: CompressionServiceProtocol, @unchecked Sendable {
     let shouldThrow: Bool
     let outputBytes: Int
+    let delayNanos: UInt64
 
-    init(shouldThrow: Bool = false, outputBytes: Int = 16) {
+    init(shouldThrow: Bool = false, outputBytes: Int = 16, delayNanos: UInt64 = 0) {
         self.shouldThrow = shouldThrow
         self.outputBytes = outputBytes
+        self.delayNanos = delayNanos
     }
 
     func optimizeImage(at url: URL, settings: CompressionSettings) async throws -> URL {
+        if delayNanos > 0 {
+            try? await Task.sleep(nanoseconds: delayNanos)
+        }
         if shouldThrow {
             throw TrimrPixError.compressionFailed(url: url, underlyingError: nil)
         }
@@ -132,6 +137,24 @@ struct ImageOptimizationViewModelTests {
         #expect(vm.isOptimizing == false)
     }
 
+    @Test func optimizeAllReportsBatchProgress() async throws {
+        let tmp = TempDir()
+        // A small per-image delay makes the mid-flight progress state observable.
+        let vm = makeViewModel(compression: MockCompressionService(outputBytes: 8, delayNanos: 30_000_000))
+        vm.images = try (0..<3).map { try makeImageItem(in: tmp, name: "img\($0).jpg") }
+
+        #expect(vm.batchProgress == nil)
+        vm.optimizeAllImages()
+
+        // Progress appears with the right total while the batch runs...
+        try await waitUntil { vm.batchProgress != nil }
+        #expect(vm.batchProgress?.total == 3)
+
+        // ...and clears when the batch completes.
+        try await waitUntil { vm.batchProgress == nil && !vm.isOptimizing }
+        #expect(vm.images.allSatisfy { $0.isOptimized })
+    }
+
     @Test func removeImageRemovesById() async throws {
         let tmp = TempDir()
         let vm = makeViewModel()
@@ -206,6 +229,40 @@ struct WatchFolderServiceTests {
     // (opens an fd, spins a background source) and is environment-sensitive on CI, so
     // it isn't unit-tested here. Start/stop semantics are covered at the view-model
     // layer via MockWatchFolderService (see watchFolderActiveReflectsService).
+}
+
+// MARK: - ImageItem thumbnails
+
+@Suite("ImageItem.loadThumbnail", .serialized)
+struct ImageItemThumbnailTests {
+
+    @Test func generatesThumbnailAtPreviewSize() async throws {
+        let tmp = TempDir()
+        let url = tmp.file("big.jpg")
+        try TestImage.write(to: url, type: .jpeg, width: 1000, height: 600)
+
+        let thumb = await ImageItem.loadThumbnail(from: url)
+        let unwrapped = try #require(thumb)
+        // Decoded at thumbnail size, not full resolution.
+        #expect(max(unwrapped.width, unwrapped.height) <= 240)
+        // Aspect ratio preserved (wide image stays wide).
+        #expect(unwrapped.width > unwrapped.height)
+    }
+
+    @Test func returnsNilForMissingFile() async {
+        let missing = URL(fileURLWithPath: "/tmp/trimrpix-missing-\(UUID().uuidString).jpg")
+        let thumb = await ImageItem.loadThumbnail(from: missing)
+        #expect(thumb == nil)
+    }
+
+    @Test func returnsNilForNonImageFile() async throws {
+        let tmp = TempDir()
+        let bogus = tmp.file("notes.txt")
+        try Data("not an image".utf8).write(to: bogus)
+
+        let thumb = await ImageItem.loadThumbnail(from: bogus)
+        #expect(thumb == nil)
+    }
 }
 
 // MARK: - ColorQuantizer
