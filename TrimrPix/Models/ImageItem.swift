@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import ImageIO
 
 /// Represents an image item to be optimized
 /// Contains all information about the image including original size, optimized size, and status
@@ -28,10 +29,7 @@ struct ImageItem: Identifiable {
     
     /// Optimized file size in bytes (nil if not yet optimized)
     var optimizedSize: Int64?
-    
-    /// Thumbnail preview of the image (lazy loaded)
-    private var _thumbnail: NSImage?
-    
+
     /// Indicates whether optimization is currently in progress
     var isOptimizing: Bool = false
     
@@ -43,8 +41,8 @@ struct ImageItem: Identifiable {
     /// Initializes an image item from a URL
     /// - Parameter url: The URL of the image file
     /// - Throws: TrimrPixError if file cannot be read or is invalid
-    /// 
-    /// Loads file size. Thumbnail is loaded lazily when accessed.
+    ///
+    /// Loads file size only; thumbnails are generated separately via `loadThumbnail(from:)`.
     init(url: URL) throws {
         self.url = url
         self.filename = url.lastPathComponent
@@ -61,56 +59,29 @@ struct ImageItem: Identifiable {
         } catch {
             throw TrimrPixError.fileSizeReadError(url, underlyingError: error)
         }
-        
-        // Thumbnail will be loaded lazily
-        self._thumbnail = nil
     }
     
-    // MARK: - Thumbnail Management
-    
-    /// Lazy-loaded thumbnail property
-    /// Loads thumbnail on first access to optimize memory usage
-    var thumbnail: NSImage? {
-        mutating get {
-            if _thumbnail == nil {
-                _thumbnail = loadThumbnail()
-            }
-            return _thumbnail
-        }
-        set {
-            _thumbnail = newValue
-        }
-    }
-    
-    /// Loads thumbnail from file
-    /// - Returns: NSImage thumbnail or nil if loading fails
-    private func loadThumbnail() -> NSImage? {
-        guard let image = NSImage(contentsOf: url) else {
-            return nil
-        }
-        
-        // Create a smaller thumbnail to save memory
-        let maxDimension: CGFloat = 120
-        let size = image.size
-        let aspectRatio = size.width / size.height
-        
-        var thumbnailSize: NSSize
-        if size.width > size.height {
-            thumbnailSize = NSSize(width: maxDimension, height: maxDimension / aspectRatio)
-        } else {
-            thumbnailSize = NSSize(width: maxDimension * aspectRatio, height: maxDimension)
-        }
-        
-        // Resize image to thumbnail size
-        let thumbnail = NSImage(size: thumbnailSize)
-        thumbnail.lockFocus()
-        image.draw(in: NSRect(origin: .zero, size: thumbnailSize),
-                   from: NSRect(origin: .zero, size: size),
-                   operation: .sourceOver,
-                   fraction: 1.0)
-        thumbnail.unlockFocus()
-        
-        return thumbnail
+    // MARK: - Thumbnail Generation
+
+    /// Generates a small preview thumbnail for the image at `url`.
+    ///
+    /// Runs off the main actor (nonisolated async) and uses ImageIO's
+    /// `CGImageSourceCreateThumbnailAtIndex`, which decodes directly at thumbnail
+    /// size — a large photo never occupies full-resolution memory or blocks the UI
+    /// for a 60pt list preview. Same API family the compression pipeline uses for resize.
+    ///
+    /// - Parameters:
+    ///   - url: The image file to preview
+    ///   - maxPixelSize: Longest edge of the generated thumbnail (default 240 ≈ 120pt @2x)
+    /// - Returns: A thumbnail CGImage, or nil if the file can't be read as an image
+    static func loadThumbnail(from url: URL, maxPixelSize: Int = 240) async -> CGImage? {
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: maxPixelSize,
+        ]
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+        return CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
     }
     
     // MARK: - Computed Properties
