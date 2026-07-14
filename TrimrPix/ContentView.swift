@@ -87,6 +87,20 @@ struct ContentView: View {
 
                 Spacer()
 
+                if let progress = viewModel.batchProgress {
+                    HStack(spacing: DesignTokens.Spacing.sm) {
+                        ProgressView(value: Double(progress.completed), total: Double(max(progress.total, 1)))
+                            .progressViewStyle(.linear)
+                            .frame(width: 160)
+                        Text("\(progress.completed) of \(progress.total)")
+                            .font(.trimrPixCaption)
+                            .monospacedDigit()
+                            .foregroundStyle(DesignTokens.Common.Text.secondary(colorScheme))
+                    }
+
+                    Spacer()
+                }
+
                 Button(action: { viewModel.optimizeAllImages() }) {
                     Text("Optimize All")
                         .font(.trimrPixHeadline)
@@ -169,7 +183,7 @@ struct ImageListView: View {
 struct ImageItemView: View {
     let imageId: UUID
     @ObservedObject var viewModel: ImageOptimizationViewModel
-    @State private var thumbnail: NSImage?
+    @State private var thumbnail: CGImage?
     @Environment(\.colorScheme) private var colorScheme
 
     private var image: ImageItem? {
@@ -185,8 +199,8 @@ struct ImageItemView: View {
     var body: some View {
         if let image = image {
             HStack {
-                if let nsImage = thumbnail {
-                    Image(nsImage: nsImage)
+                if let cgImage = thumbnail {
+                    Image(decorative: cgImage, scale: 1)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 60, height: 60)
@@ -195,10 +209,6 @@ struct ImageItemView: View {
                     RoundedRectangle(cornerRadius: DesignTokens.Radius.sm)
                         .fill(DesignTokens.Common.Background.muted(colorScheme))
                         .frame(width: 60, height: 60)
-                        .onAppear {
-                            var mutableImage = image
-                            thumbnail = mutableImage.thumbnail
-                        }
                 }
 
                 VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
@@ -261,6 +271,13 @@ struct ImageItemView: View {
                 }
             }
             .padding(.vertical, DesignTokens.Spacing.xs)
+            .task(id: imageId) {
+                // Generate the thumbnail off the main actor, decoded at preview size,
+                // so large photos never block the UI or occupy full-resolution memory.
+                if thumbnail == nil {
+                    thumbnail = await ImageItem.loadThumbnail(from: image.url)
+                }
+            }
         }
     }
 }

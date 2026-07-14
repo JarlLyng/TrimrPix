@@ -22,6 +22,17 @@ final class ImageOptimizationViewModel: ObservableObject {
     
     /// Indicates whether optimization is in progress
     @Published var isOptimizing: Bool = false
+
+    /// Progress of the current "Optimize All" batch; nil when no batch is running
+    @Published private(set) var batchProgress: BatchProgress?
+
+    /// Progress snapshot for a running batch optimization
+    struct BatchProgress: Equatable, Sendable {
+        /// Number of images that have finished (successfully or not)
+        var completed: Int
+        /// Total number of images in the batch
+        let total: Int
+    }
     
     /// Error message to display to the user
     @Published var errorMessage: String?
@@ -208,7 +219,9 @@ final class ImageOptimizationViewModel: ObservableObject {
             
             // Capture a stable snapshot of the image IDs to process
             let idsToProcess: [UUID] = await MainActor.run { self.images.map { $0.id } }
-            
+
+            self.batchProgress = BatchProgress(completed: 0, total: idsToProcess.count)
+
             // Process with a bounded number of concurrent optimizations. Each running
             // optimization decodes a full image into memory, so an unbounded group
             // would load the entire batch at once — a memory spike on large drops.
@@ -221,8 +234,11 @@ final class ImageOptimizationViewModel: ObservableObject {
                     group.addTask { [weak self] in await self?.optimizeImage(withID: id) }
                     index += 1
                 }
-                // As each finishes, start the next one, keeping at most `maxConcurrent` in flight.
+                // As each finishes, count it and start the next one, keeping at most
+                // `maxConcurrent` in flight. Every child (primed or queued) passes
+                // through group.next() exactly once, so this counts each image once.
                 while await group.next() != nil {
+                    self.batchProgress?.completed += 1
                     if index < idsToProcess.count {
                         let id = idsToProcess[index]
                         group.addTask { [weak self] in await self?.optimizeImage(withID: id) }
@@ -230,10 +246,11 @@ final class ImageOptimizationViewModel: ObservableObject {
                     }
                 }
             }
-            
+
             // Update UI state on main actor
             await MainActor.run {
                 self.isOptimizing = false
+                self.batchProgress = nil
             }
 
             self.logger.info("Completed optimization for all images")
