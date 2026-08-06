@@ -38,7 +38,11 @@ final class StubSettings: SettingsProtocol {
     func validateWatchFolderPath() throws {}
     func setWatchFolder(url: URL) throws {}
     func getWatchFolderURL() -> URL? { nil }
-    func incrementOptimizationRuns() -> Int { 0 }
+
+    private(set) var registeredSessions = 0
+    var shouldRequestReviewResult = false
+    func registerOptimizationSession() { registeredSessions += 1 }
+    func shouldRequestReview() -> Bool { shouldRequestReviewResult }
 }
 
 // MARK: - Test Image Generation

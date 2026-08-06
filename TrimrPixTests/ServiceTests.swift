@@ -69,13 +69,22 @@ final class MockWatchFolderService: WatchFolderServiceProtocol {
 private func makeViewModel(
     compression: MockCompressionService = MockCompressionService(),
     watch: MockWatchFolderService = MockWatchFolderService(),
-    settings: StubSettings = StubSettings()
+    settings: StubSettings = StubSettings(),
+    onReview: (@MainActor () -> Void)? = nil
 ) -> ImageOptimizationViewModel {
     ImageOptimizationViewModel(
         compressionService: compression,
         watchFolderService: watch,
-        settings: settings
+        settings: settings,
+        requestReviewAction: onReview
     )
+}
+
+/// Mutable main-actor counter for asserting the review prompt fired.
+@MainActor
+final class ReviewSpy {
+    private(set) var count = 0
+    func fire() { count += 1 }
 }
 
 @MainActor
@@ -153,6 +162,34 @@ struct ImageOptimizationViewModelTests {
         // ...and clears when the batch completes.
         try await waitUntil { vm.batchProgress == nil && !vm.isOptimizing }
         #expect(vm.images.allSatisfy { $0.isOptimized })
+    }
+
+    @Test func optimizeRegistersSessionAndAsksForReviewWhenDue() async throws {
+        let tmp = TempDir()
+        let settings = StubSettings()
+        settings.shouldRequestReviewResult = true
+        let spy = ReviewSpy()
+        let vm = makeViewModel(settings: settings, onReview: { spy.fire() })
+        vm.images = [try makeImageItem(in: tmp)]
+
+        await vm.optimizeImage(at: 0)
+
+        #expect(settings.registeredSessions == 1)
+        #expect(spy.count == 1)
+    }
+
+    @Test func optimizeDoesNotAskForReviewWhenNotDue() async throws {
+        let tmp = TempDir()
+        let settings = StubSettings()
+        settings.shouldRequestReviewResult = false
+        let spy = ReviewSpy()
+        let vm = makeViewModel(settings: settings, onReview: { spy.fire() })
+        vm.images = [try makeImageItem(in: tmp)]
+
+        await vm.optimizeImage(at: 0)
+
+        #expect(settings.registeredSessions == 1) // session still counted
+        #expect(spy.count == 0)                    // but no prompt
     }
 
     @Test func removeImageRemovesById() async throws {

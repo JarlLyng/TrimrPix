@@ -71,6 +71,7 @@ final class Settings: SettingsProtocol {
         static let watchFolderDelay = "watchFolderDelay"
         static let watchFolderBookmarkData = "watchFolderBookmarkData"
         static let totalOptimizationRuns = "totalOptimizationRuns"
+        static let lastReviewRequestVersion = "lastReviewRequestVersion"
         static let resizeEnabled = "resizeEnabled"
         static let maxDimension = "maxDimension"
         static let pngQuantizationEnabled = "pngQuantizationEnabled"
@@ -308,11 +309,27 @@ final class Settings: SettingsProtocol {
         logger.info("Created security-scoped bookmark for watch folder: \(watchFolderPath)")
     }
     
-    /// Increments the total optimization runs counter and returns the new value
-    func incrementOptimizationRuns() -> Int {
+    /// Number of completed optimization sessions before we consider asking for a review.
+    private static let reviewSessionThreshold = 3
+
+    /// Records one completed optimization session (single image or batch).
+    func registerOptimizationSession() {
         let count = userDefaults.integer(forKey: UserDefaultsKeys.totalOptimizationRuns) + 1
         userDefaults.set(count, forKey: UserDefaultsKeys.totalOptimizationRuns)
-        return count
+    }
+
+    /// Whether to ask for an App Store review now: only after enough sessions, and at
+    /// most once per app version. Returns true at most once per version and records it.
+    func shouldRequestReview() -> Bool {
+        let count = userDefaults.integer(forKey: UserDefaultsKeys.totalOptimizationRuns)
+        guard count >= Settings.reviewSessionThreshold else { return false }
+
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
+        guard userDefaults.string(forKey: UserDefaultsKeys.lastReviewRequestVersion) != version else {
+            return false
+        }
+        userDefaults.set(version, forKey: UserDefaultsKeys.lastReviewRequestVersion)
+        return true
     }
 
     /// Gets the watch folder URL from bookmark if available

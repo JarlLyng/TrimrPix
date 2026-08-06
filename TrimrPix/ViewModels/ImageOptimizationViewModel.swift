@@ -46,6 +46,10 @@ final class ImageOptimizationViewModel: ObservableObject {
     private let watchFolderService: any WatchFolderServiceProtocol
     private let settings: any SettingsProtocol
     private let logger: any LoggerProtocol
+
+    /// Invoked on the main actor when the app decides to ask for an App Store review.
+    /// Injected so it can be stubbed in tests and swapped for the SwiftUI-native action.
+    private let requestReviewAction: @MainActor () -> Void
     
     // MARK: - Security-Scoped Resources
     
@@ -70,7 +74,8 @@ final class ImageOptimizationViewModel: ObservableObject {
         compressionService: (any CompressionServiceProtocol)? = nil,
         watchFolderService: (any WatchFolderServiceProtocol)? = nil,
         settings: any SettingsProtocol = Settings.shared,
-        logger: any LoggerProtocol = Logger.shared
+        logger: any LoggerProtocol = Logger.shared,
+        requestReviewAction: (@MainActor () -> Void)? = nil
     ) {
         self.compressionService = compressionService ?? CompressionService()
         // Use the injected compressionService for WatchFolderService to maintain dependency injection
@@ -81,6 +86,27 @@ final class ImageOptimizationViewModel: ObservableObject {
         )
         self.settings = settings
         self.logger = logger
+        self.requestReviewAction = requestReviewAction ?? ImageOptimizationViewModel.defaultRequestReview
+    }
+
+    /// Production review request: asks StoreKit using any available window's controller
+    /// (not just keyWindow, which is often nil at the moment we ask). StoreKit itself
+    /// decides whether to actually show the prompt and throttles it.
+    @MainActor
+    private static func defaultRequestReview() {
+        guard let controller = NSApplication.shared.mainWindow?.contentViewController
+            ?? NSApplication.shared.windows.first(where: { $0.contentViewController != nil })?.contentViewController
+        else { return }
+        AppStore.requestReview(in: controller)
+    }
+
+    /// Records a completed optimization session and asks for a review if it's a good moment.
+    private func registerOptimizationSessionAndMaybeAskForReview() {
+        settings.registerOptimizationSession()
+        if settings.shouldRequestReview() {
+            logger.info("Requesting App Store review")
+            requestReviewAction()
+        }
     }
     
     // MARK: - Public Methods
@@ -255,15 +281,8 @@ final class ImageOptimizationViewModel: ObservableObject {
 
             self.logger.info("Completed optimization for all images")
 
-            // Request App Store review after 5 successful optimization runs
-            let runs = self.settings.incrementOptimizationRuns()
-            if runs == 5 {
-                await MainActor.run {
-                    if let controller = NSApplication.shared.keyWindow?.contentViewController {
-                        AppStore.requestReview(in: controller)
-                    }
-                }
-            }
+            // One completed batch counts as one optimization session.
+            self.registerOptimizationSessionAndMaybeAskForReview()
         }
     }
     
@@ -277,6 +296,9 @@ final class ImageOptimizationViewModel: ObservableObject {
         // Delegate to the ID-based implementation so the operation stays correct
         // even if the list is mutated while compression is running.
         await optimizeImage(withID: images[index].id)
+
+        // A single-image optimize is also one session (the batch path counts separately).
+        registerOptimizationSessionAndMaybeAskForReview()
     }
 
     /// Optimizes a single image identified by its ID.
