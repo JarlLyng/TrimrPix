@@ -109,7 +109,13 @@ protocol SettingsProtocol: ObservableObject {
     func validateWatchFolderPath() throws
     func setWatchFolder(url: URL) throws
     func getWatchFolderURL() -> URL?
-    func incrementOptimizationRuns() -> Int
+    /// Records one completed optimization session (a single image or a whole batch).
+    func registerOptimizationSession()
+
+    /// Whether now is an appropriate moment to ask for an App Store review.
+    /// Returns true at most once per app version, and only after enough successful
+    /// sessions. Calling it marks the current version as asked.
+    func shouldRequestReview() -> Bool
 }
 
 extension SettingsProtocol {
