@@ -592,8 +592,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jarllyng/iamjarl-design.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = exactVersion;
+				version = 1.2.1;
 			};
 		};
 		2F958D222F66B94100DAC8BA /* XCRemoteSwiftPackageReference "swift" */ = {
