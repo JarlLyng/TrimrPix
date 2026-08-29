@@ -2,6 +2,12 @@
 
 All notable changes to TrimrPix are documented here.
 
+## [1.6.1] - 2026-08-30
+
+### Changed
+- Refreshed the app's colours to the current IAMJARL design system (the dependency was pinned to a pre-1.0 snapshot)
+- The App Store review prompt now appears at a sensible moment, counts single optimizations as well as batches, and asks at most once per version
+
 ## [1.6.0] - 2026-07-15
 
 ### Added
