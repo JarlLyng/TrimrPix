@@ -74,11 +74,11 @@
     --color-border-hover: rgba(255, 255, 255, 0.25);
 
     /* Site-specific: gradients, glows, shadows */
-    --gradient-primary: linear-gradient(135deg, #D0FF00, #CE63FF);
+    --gradient-primary: linear-gradient(135deg, #D0FF00, #A435D2);
     --gradient-hero: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(208, 255, 0, 0.12) 0%, transparent 60%),
-                     radial-gradient(ellipse 60% 50% at 80% 50%, rgba(206, 99, 255, 0.06) 0%, transparent 50%);
-    --gradient-cta: linear-gradient(135deg, #D0FF00 0%, #CE63FF 100%);
-    --gradient-card-border: linear-gradient(135deg, rgba(208, 255, 0, 0.3), rgba(206, 99, 255, 0.3));
+                     radial-gradient(ellipse 60% 50% at 80% 50%, rgba(164, 53, 210, 0.06) 0%, transparent 50%);
+    --gradient-cta: linear-gradient(135deg, #D0FF00 0%, #A435D2 100%);
+    --gradient-card-border: linear-gradient(135deg, rgba(208, 255, 0, 0.3), rgba(164, 53, 210, 0.3));
 
     --glow-primary: 0 0 60px rgba(208, 255, 0, 0.15);
     --glow-primary-strong: 0 0 80px rgba(208, 255, 0, 0.25);
@@ -89,9 +89,9 @@
 
 /* Light mode override (IAMJARL Design System) */
 [data-theme="light"] {
-    --color-primary: #CE63FF;
-    --color-primary-dim: rgba(206, 99, 255, 0.06);
-    --color-primary-mid: rgba(206, 99, 255, 0.12);
+    --color-primary: #A435D2;
+    --color-primary-dim: rgba(164, 53, 210, 0.06);
+    --color-primary-mid: rgba(164, 53, 210, 0.12);
 
     --color-text-primary: #000000;
     --color-text-secondary: rgba(0, 0, 0, 0.70);
@@ -110,24 +110,24 @@
     --color-border-default: rgba(0, 0, 0, 0.16);
     --color-border-hover: rgba(0, 0, 0, 0.25);
 
-    --gradient-primary: linear-gradient(135deg, #CE63FF, #D0FF00);
-    --gradient-hero: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(206, 99, 255, 0.08) 0%, transparent 60%),
+    --gradient-primary: linear-gradient(135deg, #A435D2, #D0FF00);
+    --gradient-hero: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(164, 53, 210, 0.08) 0%, transparent 60%),
                      radial-gradient(ellipse 60% 50% at 80% 50%, rgba(208, 255, 0, 0.04) 0%, transparent 50%);
-    --gradient-cta: linear-gradient(135deg, #CE63FF 0%, #D0FF00 100%);
-    --gradient-card-border: linear-gradient(135deg, rgba(206, 99, 255, 0.3), rgba(208, 255, 0, 0.3));
+    --gradient-cta: linear-gradient(135deg, #A435D2 0%, #D0FF00 100%);
+    --gradient-card-border: linear-gradient(135deg, rgba(164, 53, 210, 0.3), rgba(208, 255, 0, 0.3));
 
-    --glow-primary: 0 0 60px rgba(206, 99, 255, 0.1);
-    --glow-primary-strong: 0 0 80px rgba(206, 99, 255, 0.15);
+    --glow-primary: 0 0 60px rgba(164, 53, 210, 0.1);
+    --glow-primary-strong: 0 0 80px rgba(164, 53, 210, 0.15);
     --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06);
     --shadow-screenshot: 0 32px 80px rgba(0, 0, 0, 0.08), 0 8px 32px rgba(0, 0, 0, 0.12);
-    --shadow-btn: 0 4px 20px rgba(206, 99, 255, 0.15);
+    --shadow-btn: 0 4px 20px rgba(164, 53, 210, 0.15);
 }
 
 @media (prefers-color-scheme: light) {
     :root:not([data-theme="dark"]) {
-        --color-primary: #CE63FF;
-        --color-primary-dim: rgba(206, 99, 255, 0.06);
-        --color-primary-mid: rgba(206, 99, 255, 0.12);
+        --color-primary: #A435D2;
+        --color-primary-dim: rgba(164, 53, 210, 0.06);
+        --color-primary-mid: rgba(164, 53, 210, 0.12);
 
         --color-text-primary: #000000;
         --color-text-secondary: rgba(0, 0, 0, 0.70);
@@ -146,17 +146,17 @@
         --color-border-default: rgba(0, 0, 0, 0.16);
         --color-border-hover: rgba(0, 0, 0, 0.25);
 
-        --gradient-primary: linear-gradient(135deg, #CE63FF, #D0FF00);
-        --gradient-hero: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(206, 99, 255, 0.08) 0%, transparent 60%),
+        --gradient-primary: linear-gradient(135deg, #A435D2, #D0FF00);
+        --gradient-hero: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(164, 53, 210, 0.08) 0%, transparent 60%),
                          radial-gradient(ellipse 60% 50% at 80% 50%, rgba(208, 255, 0, 0.04) 0%, transparent 50%);
-        --gradient-cta: linear-gradient(135deg, #CE63FF 0%, #D0FF00 100%);
-        --gradient-card-border: linear-gradient(135deg, rgba(206, 99, 255, 0.3), rgba(208, 255, 0, 0.3));
+        --gradient-cta: linear-gradient(135deg, #A435D2 0%, #D0FF00 100%);
+        --gradient-card-border: linear-gradient(135deg, rgba(164, 53, 210, 0.3), rgba(208, 255, 0, 0.3));
 
-        --glow-primary: 0 0 60px rgba(206, 99, 255, 0.1);
-        --glow-primary-strong: 0 0 80px rgba(206, 99, 255, 0.15);
+        --glow-primary: 0 0 60px rgba(164, 53, 210, 0.1);
+        --glow-primary-strong: 0 0 80px rgba(164, 53, 210, 0.15);
         --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06);
         --shadow-screenshot: 0 32px 80px rgba(0, 0, 0, 0.08), 0 8px 32px rgba(0, 0, 0, 0.12);
-        --shadow-btn: 0 4px 20px rgba(206, 99, 255, 0.15);
+        --shadow-btn: 0 4px 20px rgba(164, 53, 210, 0.15);
     }
 }
 
@@ -869,7 +869,7 @@ body {
     top: 0;
     bottom: 0;
     width: 3px;
-    background: linear-gradient(to bottom, var(--color-primary), #CE63FF);
+    background: linear-gradient(to bottom, var(--color-primary), #A435D2);
 }
 
 .answer-box p {
