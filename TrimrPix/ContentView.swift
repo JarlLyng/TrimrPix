@@ -63,7 +63,7 @@ struct ContentView: View {
                     Text("Drag images here to optimize")
                         .font(.trimrPixHeadline)
                         .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
-                    Text("Supported formats: JPEG, PNG, GIF, WebP, AVIF, HEIC")
+                    Text("Supported formats: JPEG, PNG, GIF, WebP, AVIF, HEIC, and scanned PDF")
                         .font(.trimrPixSubheadline)
                         .foregroundStyle(DesignTokens.Common.Text.secondary(colorScheme))
                 }
@@ -160,7 +160,7 @@ struct DropZoneView: View {
             }
         }
         .frame(height: 120)
-        .onDrop(of: [UTType.image.identifier], isTargeted: $isHighlighted) { providers in
+        .onDrop(of: [UTType.image.identifier, UTType.pdf.identifier], isTargeted: $isHighlighted) { providers in
             Task { await viewModel.handleDrop(providers: providers) }
             return true
         }

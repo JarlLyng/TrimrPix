@@ -34,7 +34,7 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
     private let compressionService: any CompressionServiceProtocol
     private let settings: any SettingsProtocol
     private let logger: any LoggerProtocol
-    private let supportedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "avif", "heic", "heif"]
+    private let supportedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "avif", "heic", "heif", "pdf"]
     private var debounceTask: Task<Void, Never>?
     private var scanTask: Task<Void, Never>?
     private var processedFiles: Set<String> = [] // Track processed files to avoid re-processing

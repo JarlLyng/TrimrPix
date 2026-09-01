@@ -13,6 +13,7 @@ import Foundation
 import AppKit
 import CoreGraphics
 import UniformTypeIdentifiers
+import PDFKit
 
 // MARK: - Test doubles
 
@@ -339,5 +340,107 @@ private func waitUntil(timeout: Double = 5.0, _ condition: () -> Bool) async thr
             return
         }
         try await Task.sleep(nanoseconds: 20_000_000) // 20ms
+    }
+}
+
+// MARK: - PDF compression
+
+/// Builds test PDFs: `withText` controls whether a real text layer is present.
+private enum TestPDF {
+    static func write(to url: URL, pages: Int = 2, withText: Bool, imgW: Int = 900, imgH: Int = 1200) {
+        var pageRect = CGRect(x: 0, y: 0, width: 612, height: 792)
+        guard let ctx = CGContext(url as CFURL, mediaBox: &pageRect, nil) else { return }
+        for p in 0..<pages {
+            ctx.beginPDFPage(nil)
+            if let bmp = CGContext(data: nil, width: imgW, height: imgH, bitsPerComponent: 8,
+                                   bytesPerRow: imgW * 4, space: CGColorSpaceCreateDeviceRGB(),
+                                   bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) {
+                bmp.setFillColor(CGColor(red: 0.9, green: 0.9, blue: 0.85, alpha: 1))
+                bmp.fill(CGRect(x: 0, y: 0, width: imgW, height: imgH))
+                bmp.setFillColor(CGColor(red: 0.2, green: 0.3, blue: 0.6, alpha: 1))
+                bmp.fill(CGRect(x: 60, y: 60 + p * 20, width: imgW - 120, height: 300))
+                if let img = bmp.makeImage() { ctx.draw(img, in: pageRect) }
+            }
+            if withText {
+                ctx.setFillColor(CGColor(red: 0, green: 0, blue: 0, alpha: 1))
+                let attr = NSAttributedString(
+                    string: "This page carries a genuine selectable text layer for testing purposes.",
+                    attributes: [.font: NSFont.systemFont(ofSize: 14)])
+                let line = CTLineCreateWithAttributedString(attr)
+                ctx.textPosition = CGPoint(x: 40, y: 80)
+                CTLineDraw(line, ctx)
+            }
+            ctx.endPDFPage()
+        }
+        ctx.closePDF()
+    }
+}
+
+@Suite("PDF compression", .serialized)
+@MainActor
+struct PDFCompressionTests {
+
+    /// A scanned PDF (no text layer) is compressed and stays a readable PDF.
+    @Test func compressesScannedPDF() async throws {
+        let tmp = TempDir()
+        let input = tmp.file("scan.pdf")
+        TestPDF.write(to: input, withText: false)
+
+        let settings = StubSettings()
+        settings.compressionQuality = 0.6
+        let service = CompressionService()
+
+        let output = try await service.optimizeImage(at: input, settings: settings.compressionSnapshot)
+
+        #expect(FileManager.default.fileExists(atPath: output.path))
+        #expect(output.pathExtension.lowercased() == "pdf")
+        let doc = try #require(PDFDocument(url: output))
+        #expect(doc.pageCount == 2)
+    }
+
+    /// A PDF with a real text layer is refused rather than silently rasterised.
+    @Test func refusesPDFWithTextLayer() async throws {
+        let tmp = TempDir()
+        let input = tmp.file("document.pdf")
+        TestPDF.write(to: input, withText: true)
+
+        let service = CompressionService()
+
+        do {
+            _ = try await service.optimizeImage(at: input, settings: StubSettings().compressionSnapshot)
+            Issue.record("Expected a text PDF to be refused")
+        } catch let error as TrimrPixError {
+            guard case .pdfHasTextLayer = error else {
+                Issue.record("Expected .pdfHasTextLayer, got \(error)")
+                return
+            }
+        }
+    }
+
+    /// Refusing a text PDF must leave the original file untouched.
+    @Test func refusedPDFIsLeftUnchanged() async throws {
+        let tmp = TempDir()
+        let input = tmp.file("document.pdf")
+        TestPDF.write(to: input, withText: true)
+        let before = try Data(contentsOf: input)
+
+        let service = CompressionService()
+        _ = try? await service.optimizeImage(at: input, settings: StubSettings().compressionSnapshot)
+
+        #expect(try Data(contentsOf: input) == before)
+        // and no sibling output was written
+        let siblings = try FileManager.default.contentsOfDirectory(atPath: tmp.url.path)
+        #expect(siblings.count == 1)
+    }
+
+    /// PDF previews come from the first page, since ImageIO cannot read PDFs.
+    @Test func generatesThumbnailForPDF() async throws {
+        let tmp = TempDir()
+        let input = tmp.file("scan.pdf")
+        TestPDF.write(to: input, withText: false)
+
+        let thumb = await ImageItem.loadThumbnail(from: input)
+        let unwrapped = try #require(thumb)
+        #expect(max(unwrapped.width, unwrapped.height) <= 240)
     }
 }

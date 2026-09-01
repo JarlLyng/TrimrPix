@@ -8,6 +8,7 @@
 import Foundation
 import AppKit
 import ImageIO
+import PDFKit
 
 /// Represents an image item to be optimized
 /// Contains all information about the image including original size, optimized size, and status
@@ -75,6 +76,11 @@ struct ImageItem: Identifiable {
     ///   - maxPixelSize: Longest edge of the generated thumbnail (default 240 ≈ 120pt @2x)
     /// - Returns: A thumbnail CGImage, or nil if the file can't be read as an image
     static func loadThumbnail(from url: URL, maxPixelSize: Int = 240) async -> CGImage? {
+        // PDFs are not readable by ImageIO, so render their first page instead.
+        if url.pathExtension.lowercased() == "pdf" {
+            return pdfThumbnail(from: url, maxPixelSize: maxPixelSize)
+        }
+
         let options: [CFString: Any] = [
             kCGImageSourceCreateThumbnailFromImageAlways: true,
             kCGImageSourceCreateThumbnailWithTransform: true,
@@ -82,6 +88,33 @@ struct ImageItem: Identifiable {
         ]
         guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
         return CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
+    }
+
+    /// Renders the first page of a PDF as a preview thumbnail.
+    private static func pdfThumbnail(from url: URL, maxPixelSize: Int) -> CGImage? {
+        guard let document = CGPDFDocument(url as CFURL),
+              let page = document.page(at: 1) else { return nil }
+
+        let bounds = page.getBoxRect(.mediaBox)
+        guard bounds.width > 0, bounds.height > 0 else { return nil }
+
+        let scale = CGFloat(maxPixelSize) / max(bounds.width, bounds.height)
+        let width = max(1, Int(bounds.width * scale))
+        let height = max(1, Int(bounds.height * scale))
+
+        guard let context = CGContext(
+            data: nil, width: width, height: height,
+            bitsPerComponent: 8, bytesPerRow: 0,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue
+        ) else { return nil }
+
+        // PDF pages have no background of their own; paper is white.
+        context.setFillColor(CGColor(red: 1, green: 1, blue: 1, alpha: 1))
+        context.fill(CGRect(x: 0, y: 0, width: width, height: height))
+        context.scaleBy(x: scale, y: scale)
+        context.drawPDFPage(page)
+        return context.makeImage()
     }
     
     // MARK: - Computed Properties
