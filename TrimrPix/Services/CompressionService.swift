@@ -10,6 +10,7 @@ import AppKit
 import CoreImage
 import ImageIO
 import UniformTypeIdentifiers
+import PDFKit
 
 /// Service responsible for image compression and optimization
 /// Implements CompressionServiceProtocol for dependency injection and testing.
@@ -150,6 +151,8 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
             return try await optimizeAVIFData(at: url, settings: settings)
         case "heic", "heif":
             return try await optimizeHEICData(at: url, settings: settings)
+        case "pdf":
+            return try await optimizePDFData(at: url, settings: settings)
         default:
             let error = TrimrPixError.unsupportedImageFormat(fileExtension)
             logger.warning("Unsupported format: \(error.technicalDescription)")
@@ -504,7 +507,7 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
         savePanel.showsTagField = false
         savePanel.nameFieldStringValue = suggestedFilename
         savePanel.directoryURL = originalURL.deletingLastPathComponent()
-        savePanel.allowedContentTypes = [UTType.image]
+        savePanel.allowedContentTypes = [UTType.image, UTType.pdf]
         
         let response: NSApplication.ModalResponse
         
@@ -764,5 +767,105 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
             throw trimmedError
         }
     }
+
+    // MARK: - PDF
+
+    /// Minimum number of characters before we treat a PDF as carrying a real text layer.
+    /// Scans sometimes yield a stray character or two from artefacts; a genuine text
+    /// document yields far more. Deliberately low, because the safe failure is to skip.
+    private static let pdfTextLayerThreshold = 20
+
+    /// Compresses a **scanned** PDF by re-encoding its pages as JPEG.
+    ///
+    /// Only scanned PDFs are touched. A PDF with a real text layer is left alone and
+    /// reported via `.pdfHasTextLayer`, because rasterising it would destroy the
+    /// selectable text and, measurably, tends to make the file larger rather than smaller.
+    /// - Parameters:
+    ///   - url: The PDF to compress
+    ///   - settings: Snapshot providing the quality to encode pages at
+    /// - Returns: The compressed PDF data
+    /// - Throws: `.pdfHasTextLayer` if the PDF has text; `.invalidImageData` if unreadable
+    private func optimizePDFData(at url: URL, settings: CompressionSettings) async throws -> Data {
+        logger.debug("Optimizing PDF: \(url.lastPathComponent)")
+
+        guard let document = PDFDocument(url: url) else {
+            logger.error("Could not read PDF: \(url.lastPathComponent)")
+            throw TrimrPixError.invalidImageData(url)
+        }
+
+        if pdfHasTextLayer(document) {
+            logger.info("PDF has a text layer, leaving it untouched: \(url.lastPathComponent)")
+            throw TrimrPixError.pdfHasTextLayer(url)
+        }
+
+        guard let source = CGPDFDocument(url as CFURL), source.numberOfPages > 0 else {
+            logger.error("PDF has no readable pages: \(url.lastPathComponent)")
+            throw TrimrPixError.invalidImageData(url)
+        }
+
+        let output = PDFDocument()
+        for index in 1...source.numberOfPages {
+            guard let page = source.page(at: index) else {
+                logger.warning("Skipping unreadable PDF page \(index) in \(url.lastPathComponent)")
+                continue
+            }
+            guard let rendered = Self.renderPageAsJPEG(page, quality: settings.compressionQuality) else {
+                logger.warning("Could not re-encode PDF page \(index) in \(url.lastPathComponent)")
+                continue
+            }
+            output.insert(rendered, at: output.pageCount)
+        }
+
+        guard output.pageCount > 0, let data = output.dataRepresentation() else {
+            logger.error("PDF re-encoding produced no output: \(url.lastPathComponent)")
+            throw TrimrPixError.compressionFailed(url: url, underlyingError: nil)
+        }
+
+        logger.debug("PDF re-encoded: \(output.pageCount) page(s)")
+        return data
+    }
+
+    /// Whether the PDF carries a meaningful text layer.
+    private func pdfHasTextLayer(_ document: PDFDocument) -> Bool {
+        guard let text = document.string else { return false }
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.count >= Self.pdfTextLayerThreshold
+    }
+
+    /// Renders one PDF page and re-encodes it as a JPEG-backed page.
+    ///
+    /// Resolution scales with the quality setting so the control means the same thing
+    /// here as it does for images: lower quality gives a smaller file.
+    nonisolated private static func renderPageAsJPEG(_ page: CGPDFPage, quality: Double) -> PDFPage? {
+        let bounds = page.getBoxRect(.mediaBox)
+        guard bounds.width > 0, bounds.height > 0 else { return nil }
+
+        // 0.6 quality -> ~120 dpi, 0.95 -> ~200 dpi.
+        let dpi = 120.0 + (max(0.0, min(1.0, quality)) - 0.6) * 228.0
+        let scale = max(1.0, dpi) / 72.0
+        let width = Int(bounds.width * scale)
+        let height = Int(bounds.height * scale)
+        guard width > 0, height > 0, width <= 20_000, height <= 20_000 else { return nil }
+
+        guard let context = CGContext(
+            data: nil, width: width, height: height,
+            bitsPerComponent: 8, bytesPerRow: 0,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue
+        ) else { return nil }
+
+        // Scanned pages have no alpha; fill white so nothing shows through.
+        context.setFillColor(CGColor(red: 1, green: 1, blue: 1, alpha: 1))
+        context.fill(CGRect(x: 0, y: 0, width: width, height: height))
+        context.scaleBy(x: scale, y: scale)
+        context.drawPDFPage(page)
+
+        guard let cgImage = context.makeImage() else { return nil }
+        let rep = NSBitmapImageRep(cgImage: cgImage)
+        guard let jpegData = rep.representation(using: .jpeg, properties: [.compressionFactor: quality]),
+              let image = NSImage(data: jpegData) else { return nil }
+        return PDFPage(image: image)
+    }
+
 }
 

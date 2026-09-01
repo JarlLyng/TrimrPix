@@ -120,14 +120,19 @@ final class ImageOptimizationViewModel: ObservableObject {
         var failedCount = 0
         
         for provider in providers {
-            guard provider.hasItemConformingToTypeIdentifier(UTType.image.identifier) else {
-                logger.debug("Item does not conform to image type, skipping")
+            let typeIdentifier: String
+            if provider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
+                typeIdentifier = UTType.image.identifier
+            } else if provider.hasItemConformingToTypeIdentifier(UTType.pdf.identifier) {
+                typeIdentifier = UTType.pdf.identifier
+            } else {
+                logger.debug("Item is neither an image nor a PDF, skipping")
                 continue
             }
             
             var attemptedURL: URL?
             do {
-                let url = try await loadItemFromProvider(provider: provider)
+                let url = try await loadItemFromProvider(provider: provider, typeIdentifier: typeIdentifier)
                 attemptedURL = url
                 
                 guard let url = url else {
@@ -446,9 +451,9 @@ final class ImageOptimizationViewModel: ObservableObject {
     /// - Parameter provider: The item provider to load from
     /// - Returns: The URL of the loaded item, or nil if loading fails
     /// - Throws: Error if loading fails
-    private func loadItemFromProvider(provider: NSItemProvider) async throws -> URL? {
+    private func loadItemFromProvider(provider: NSItemProvider, typeIdentifier: String) async throws -> URL? {
         return try await withCheckedThrowingContinuation { continuation in
-            provider.loadItem(forTypeIdentifier: UTType.image.identifier, options: nil) { (item, error) in
+            provider.loadItem(forTypeIdentifier: typeIdentifier, options: nil) { (item, error) in
                 if let error = error {
                     continuation.resume(throwing: error)
                     return

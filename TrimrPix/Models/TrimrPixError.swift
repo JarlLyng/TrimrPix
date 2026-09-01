@@ -25,6 +25,11 @@ enum TrimrPixError: LocalizedError {
     case avifCompressionFailed(URL)
     case heicCompressionFailed(URL)
     case formatNotSupported(String)
+
+    // MARK: - PDF
+    /// The PDF carries a real text layer, so re-encoding it would destroy the
+    /// selectable text and (in practice) make the file bigger. Left untouched by design.
+    case pdfHasTextLayer(URL)
     
     // MARK: - File System Errors
     case fileNotFound(URL)
@@ -80,6 +85,8 @@ enum TrimrPixError: LocalizedError {
             return "HEIC compression failed: \(url.lastPathComponent)"
         case .formatNotSupported(let format):
             return "Format not supported: \(format)"
+        case .pdfHasTextLayer(let url):
+            return "Skipped \(url.lastPathComponent): this PDF contains selectable text, and compressing it would remove the text without making the file smaller. TrimrPix only compresses scanned PDFs."
 
         case .fileNotFound(let url):
             return "File not found: \(url.lastPathComponent)"
@@ -166,6 +173,8 @@ enum TrimrPixError: LocalizedError {
             return "HEICCompressionFailed(url: \(url.path))"
         case .formatNotSupported(let format):
             return "FormatNotSupported(format: \(format))"
+        case .pdfHasTextLayer(let url):
+            return "PDFHasTextLayer(url: \(url.path))"
         case .fileNotFound(let url):
             return "FileNotFound(url: \(url.path))"
         case .fileReadError(let url, let error):
@@ -206,6 +215,8 @@ enum TrimrPixError: LocalizedError {
             return "Make sure the image isn't corrupted and try again"
         case .unsupportedImageFormat:
             return "Convert the image to a supported format first"
+        case .pdfHasTextLayer:
+            return "Text PDFs are already efficient. Only scanned PDFs, which are really pages of images, can be made smaller"
         case .imageTooLarge:
             return "Reduce the image's resolution or size first"
         case .compressionFailed, .jpegCompressionFailed, .pngCompressionFailed,
