@@ -19,7 +19,8 @@ Target audience, positioning, pricing reasoning, SEO/ASO playbooks, and competit
 
 ## App features (be precise — do not invent features that don't exist)
 
-- **6 formats:** JPEG, PNG, GIF, WebP, AVIF, HEIC.
+- **6 image formats:** JPEG, PNG, GIF, WebP, AVIF, HEIC.
+- **Scanned PDFs** — pages re-encoded at the chosen quality. PDFs *with a text layer are refused on purpose* (rasterising them destroys the text and usually grows the file).
 - **Quality control:** configurable 60–95% for JPEG/WebP/AVIF/HEIC; presets Low/Medium/High/Custom.
 - **PNG lossy quantization** (median-cut, 256 colors) + alpha stripping for opaque images.
 - **Progressive JPEG** (optimized Huffman); **GIF** LZW re-encode preserving animation.
@@ -33,6 +34,7 @@ Target audience, positioning, pricing reasoning, SEO/ASO playbooks, and competit
 - No cloud upload, account, or internet processing — fully local.
 - Not the iOS "in-place Photos library" model — this is a file/folder tool with auto-save.
 - No subscription / IAP.
+- **Not a general PDF compressor** — only scanned (text-free) PDFs. No merging, splitting, page editing, OCR, or encryption.
 
 ## Requirements & build
 - Runtime: **macOS 15.2+** (deployment target). Language: **Swift 6** mode, SwiftUI, async/await.

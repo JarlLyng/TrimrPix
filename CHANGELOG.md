@@ -2,6 +2,12 @@
 
 All notable changes to TrimrPix are documented here.
 
+## [1.7.0] - 2026-09-01
+
+### Added
+- Scanned PDFs can now be compressed, typically by around 60%. Drag them in like any image, or let a Watch Folder handle them
+- PDFs that contain selectable text are deliberately left untouched, with an explanation, because re-encoding them would remove the text and usually make the file larger
+
 ## [1.6.1] - 2026-08-30
 
 ### Changed
