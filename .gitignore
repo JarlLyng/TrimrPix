@@ -42,3 +42,14 @@ Pods/
 
 # macOS
 .DS_Store
+
+# Scratch artefacts from local prototyping (never belong in the repo)
+*.o
+psnr
+psnr.swift
+V2-*.pdf
+OUT-q*.pdf
+BEFORE.pdf
+AFTER-*.pdf
+crop-*.png
+full-*.png

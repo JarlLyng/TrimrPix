@@ -347,18 +347,36 @@ private func waitUntil(timeout: Double = 5.0, _ condition: () -> Bool) async thr
 
 /// Builds test PDFs: `withText` controls whether a real text layer is present.
 private enum TestPDF {
-    static func write(to url: URL, pages: Int = 2, withText: Bool, imgW: Int = 900, imgH: Int = 1200) {
-        var pageRect = CGRect(x: 0, y: 0, width: 612, height: 792)
+    /// Writes a PDF that behaves like a real scan.
+    ///
+    /// The page carries a high-resolution, photographic-looking image. That matters:
+    /// an earlier fixture drew flat colour blocks, which a PDF stores very compactly,
+    /// so re-encoding made the file *larger*, the size guard returned the original
+    /// untouched, and every assertion below silently described the input rather than
+    /// the compressed output. A noisy image compresses the way a scan does.
+    static func write(to url: URL, pages: Int = 2, withText: Bool, imgW: Int = 1400, imgH: Int = 2100) {
+        // Deliberately NOT 612x792: that is Core Graphics' default page size, so a
+        // fixture using it passes even when the media box is dropped entirely.
+        var pageRect = CGRect(x: 0, y: 0, width: 594, height: 911)
         guard let ctx = CGContext(url as CFURL, mediaBox: &pageRect, nil) else { return }
         for p in 0..<pages {
             ctx.beginPDFPage(nil)
             if let bmp = CGContext(data: nil, width: imgW, height: imgH, bitsPerComponent: 8,
                                    bytesPerRow: imgW * 4, space: CGColorSpaceCreateDeviceRGB(),
-                                   bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) {
-                bmp.setFillColor(CGColor(red: 0.9, green: 0.9, blue: 0.85, alpha: 1))
-                bmp.fill(CGRect(x: 0, y: 0, width: imgW, height: imgH))
-                bmp.setFillColor(CGColor(red: 0.2, green: 0.3, blue: 0.6, alpha: 1))
-                bmp.fill(CGRect(x: 60, y: 60 + p * 20, width: imgW - 120, height: 300))
+                                   bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue),
+               let pixels = bmp.data {
+                // Paper-coloured grain plus darker marks, deterministic per page.
+                var seed = UInt64(p &+ 1) &* 0x9E3779B97F4A7C15
+                for index in stride(from: 0, to: imgW * imgH * 4, by: 4) {
+                    seed ^= seed << 13; seed ^= seed >> 7; seed ^= seed << 17
+                    let noise = UInt8(truncatingIfNeeded: seed >> 24)
+                    let ink: UInt8 = (index / 4) % imgW < imgW / 3 ? 90 : 215
+                    let value = UInt8(clamping: Int(ink) &+ Int(noise % 60) &- 30)
+                    pixels.storeBytes(of: value, toByteOffset: index, as: UInt8.self)
+                    pixels.storeBytes(of: value, toByteOffset: index + 1, as: UInt8.self)
+                    pixels.storeBytes(of: value, toByteOffset: index + 2, as: UInt8.self)
+                    pixels.storeBytes(of: UInt8(255), toByteOffset: index + 3, as: UInt8.self)
+                }
                 if let img = bmp.makeImage() { ctx.draw(img, in: pageRect) }
             }
             if withText {
@@ -396,6 +414,74 @@ struct PDFCompressionTests {
         #expect(output.pathExtension.lowercased() == "pdf")
         let doc = try #require(PDFDocument(url: output))
         #expect(doc.pageCount == 2)
+
+        // Without this the size guard could be returning the original file, which would
+        // make every other assertion in this suite describe the input instead.
+        let originalSize = try #require(try Data(contentsOf: input).count)
+        let compressedSize = try #require(try Data(contentsOf: output).count)
+        #expect(compressedSize < originalSize, "the fixture did not actually compress")
+    }
+
+    /// The compressed page keeps the original's physical size.
+    ///
+    /// `PDFPage(image:)` sizes a page from the bitmap's pixel count at 72 dpi, so a
+    /// 150 dpi render silently came out about twice as large on paper. Printing a
+    /// compressed A4 scan then produced an oversized page.
+    @Test func preservesPageDimensions() async throws {
+        let tmp = TempDir()
+        let input = tmp.file("scan.pdf")
+        TestPDF.write(to: input, withText: false)
+
+        let before = try #require(PDFDocument(url: input)?.page(at: 0)?.bounds(for: .mediaBox))
+
+        let settings = StubSettings()
+        settings.compressionQuality = 0.95   // highest dpi, so the worst case for inflation
+        let service = CompressionService()
+        let output = try await service.optimizeImage(at: input, settings: settings.compressionSnapshot)
+
+        let after = try #require(PDFDocument(url: output)?.page(at: 0)?.bounds(for: .mediaBox))
+        #expect(abs(after.width - before.width) < 1.0)
+        #expect(abs(after.height - before.height) < 1.0)
+    }
+
+    /// The whole page survives, not just its top-left corner.
+    ///
+    /// Correcting the page size with `setBounds` crops a bitmap-backed page rather than
+    /// scaling it, which produced right-sized pages that had quietly lost most of their
+    /// content. Checking dimensions alone does not catch that, so this samples the ink.
+    @Test func preservesFullPageContent() async throws {
+        let tmp = TempDir()
+        let input = tmp.file("scan.pdf")
+        TestPDF.write(to: input, withText: false)
+
+        let settings = StubSettings()
+        settings.compressionQuality = 0.8
+        let service = CompressionService()
+        let output = try await service.optimizeImage(at: input, settings: settings.compressionSnapshot)
+
+        let page = try #require(PDFDocument(url: output)?.page(at: 0))
+        let box = page.bounds(for: .mediaBox)
+
+        // TestPDF paints an image across the entire page, so every corner carries ink.
+        // A cropped page leaves the far corner blank white.
+        let width = 200, height = 200
+        let context = try #require(CGContext(
+            data: nil, width: width, height: height, bitsPerComponent: 8,
+            bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue))
+        context.setFillColor(CGColor(red: 1, green: 1, blue: 1, alpha: 1))
+        context.fill(CGRect(x: 0, y: 0, width: width, height: height))
+        // Sample the bottom-right corner of the page.
+        context.translateBy(x: CGFloat(width) - box.width, y: 0)
+        page.draw(with: .mediaBox, to: context)
+
+        let pixels = try #require(context.data)
+        var inked = 0
+        for index in stride(from: 0, to: width * height * 4, by: 4) {
+            let byte = pixels.load(fromByteOffset: index, as: UInt8.self)
+            if byte < 250 { inked += 1 }
+        }
+        #expect(inked > width * height / 10, "far corner of the page is blank; content was cropped")
     }
 
     /// A PDF with a real text layer is refused rather than silently rasterised.

@@ -803,7 +803,17 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
             throw TrimrPixError.invalidImageData(url)
         }
 
-        let output = PDFDocument()
+        // Written through a real PDF context rather than PDFPage(image:), which sizes a
+        // page from the bitmap's pixel count and cannot be corrected afterwards:
+        // setBounds crops such a page instead of scaling it, silently losing content.
+        let buffer = NSMutableData()
+        guard let consumer = CGDataConsumer(data: buffer),
+              let pdfContext = CGContext(consumer: consumer, mediaBox: nil, nil) else {
+            logger.error("Could not open a PDF context for \(url.lastPathComponent)")
+            throw TrimrPixError.compressionFailed(url: url, underlyingError: nil)
+        }
+
+        var written = 0
         for index in 1...source.numberOfPages {
             guard let page = source.page(at: index) else {
                 logger.warning("Skipping unreadable PDF page \(index) in \(url.lastPathComponent)")
@@ -813,16 +823,25 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
                 logger.warning("Could not re-encode PDF page \(index) in \(url.lastPathComponent)")
                 continue
             }
-            output.insert(rendered, at: output.pageCount)
-        }
 
-        guard output.pageCount > 0, let data = output.dataRepresentation() else {
+            // kCGPDFContextMediaBox takes the raw bytes of a CGRect. Anything else is
+            // ignored without error and the page silently falls back to US Letter.
+            let box = rendered.bounds
+            let boxData = withUnsafeBytes(of: box) { Data($0) } as CFData
+            pdfContext.beginPDFPage([kCGPDFContextMediaBox as String: boxData] as CFDictionary)
+            pdfContext.draw(rendered.image, in: box)
+            pdfContext.endPDFPage()
+            written += 1
+        }
+        pdfContext.closePDF()
+
+        guard written > 0, buffer.length > 0 else {
             logger.error("PDF re-encoding produced no output: \(url.lastPathComponent)")
             throw TrimrPixError.compressionFailed(url: url, underlyingError: nil)
         }
 
-        logger.debug("PDF re-encoded: \(output.pageCount) page(s)")
-        return data
+        logger.debug("PDF re-encoded: \(written) page(s)")
+        return buffer as Data
     }
 
     /// Whether the PDF carries a meaningful text layer.
@@ -836,9 +855,18 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
     ///
     /// Resolution scales with the quality setting so the control means the same thing
     /// here as it does for images: lower quality gives a smaller file.
-    nonisolated private static func renderPageAsJPEG(_ page: CGPDFPage, quality: Double) -> PDFPage? {
-        let bounds = page.getBoxRect(.mediaBox)
-        guard bounds.width > 0, bounds.height > 0 else { return nil }
+    nonisolated private static func renderPageAsJPEG(
+        _ page: CGPDFPage, quality: Double
+    ) -> (image: CGImage, bounds: CGRect)? {
+        let mediaBox = page.getBoxRect(.mediaBox)
+        guard mediaBox.width > 0, mediaBox.height > 0 else { return nil }
+
+        // A page carrying /Rotate 90 or 270 displays with its sides swapped. Render at
+        // the displayed size so a rotated scan does not come out sideways.
+        let quarterTurned = abs(page.rotationAngle) % 180 == 90
+        let bounds = quarterTurned
+            ? CGRect(x: 0, y: 0, width: mediaBox.height, height: mediaBox.width)
+            : CGRect(x: 0, y: 0, width: mediaBox.width, height: mediaBox.height)
 
         // 0.6 quality -> ~120 dpi, 0.95 -> ~200 dpi.
         let dpi = 120.0 + (max(0.0, min(1.0, quality)) - 0.6) * 228.0
@@ -858,13 +886,21 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
         context.setFillColor(CGColor(red: 1, green: 1, blue: 1, alpha: 1))
         context.fill(CGRect(x: 0, y: 0, width: width, height: height))
         context.scaleBy(x: scale, y: scale)
+        // Applies the page's own /Rotate and maps the media box onto the target rect.
+        context.concatenate(page.getDrawingTransform(
+            .mediaBox, rect: bounds, rotate: 0, preserveAspectRatio: true
+        ))
         context.drawPDFPage(page)
 
         guard let cgImage = context.makeImage() else { return nil }
         let rep = NSBitmapImageRep(cgImage: cgImage)
         guard let jpegData = rep.representation(using: .jpeg, properties: [.compressionFactor: quality]),
-              let image = NSImage(data: jpegData) else { return nil }
-        return PDFPage(image: image)
+              let jpegSource = CGImageSourceCreateWithData(jpegData as CFData, nil),
+              let jpegImage = CGImageSourceCreateImageAtIndex(jpegSource, 0, nil) else { return nil }
+
+        // The bitmap is returned at the page's real point size, so the caller can write a
+        // page of the original dimensions with the full render drawn into it.
+        return (jpegImage, bounds)
     }
 
 }
