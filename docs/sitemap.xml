@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  lastmod is maintained by hand. Update a page's date only when that page's
+  content meaningfully changes. A deploy is not a content change: the workflow
+  used to rewrite every date on every deploy, which told search engines all nine
+  pages had changed when none had, and made the signal worthless.
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>https://trimrpix.iamjarl.com/</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-09-08</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <image:image>
@@ -24,49 +30,49 @@
     </url>
     <url>
         <loc>https://trimrpix.iamjarl.com/support.html</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-09-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://trimrpix.iamjarl.com/privacy.html</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-09-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://trimrpix.iamjarl.com/imageoptim-alternative.html</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-09-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://trimrpix.iamjarl.com/image-formats-guide.html</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-09-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://trimrpix.iamjarl.com/compress-images-for-web.html</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-09-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://trimrpix.iamjarl.com/batch-image-compression.html</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-09-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://trimrpix.iamjarl.com/optimize-images-app-store.html</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-09-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://trimrpix.iamjarl.com/remove-exif-data-on-mac.html</loc>
-        <lastmod>2026-06-04</lastmod>
+        <lastmod>2026-09-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
