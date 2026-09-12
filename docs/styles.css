@@ -7,6 +7,9 @@
 :root {
     /* Spacing */
     --spacing-section: 120px;
+    /* Sticky-header height plus breathing room, used by the skip link and
+       by scroll-margin-top so anchor targets are not hidden underneath it. */
+    --header-clearance: 96px;
 
     /* Radius */
     --radius-pill: 999px;
@@ -106,6 +109,34 @@
     }
 }
 
+/* Skip link: hidden until focused, then pinned above the sticky header so
+   keyboard users can jump past the navigation on every page. */
+.skip-link {
+    position: absolute;
+    left: var(--ij-spacing-lg);
+    top: calc(-1 * var(--header-clearance));
+    z-index: calc(var(--ij-z-sticky) + 1);
+    padding: var(--ij-spacing-sm) var(--ij-spacing-lg);
+    border-radius: var(--ij-radius-sm);
+    background: var(--ij-color-surface-default);
+    border: 1px solid var(--ij-color-border-default);
+    color: var(--ij-color-text-primary);
+    font-size: var(--ij-font-size-sm);
+    font-weight: var(--ij-font-weight-semibold);
+    text-decoration: none;
+    transition: top var(--ij-duration-fast) var(--ij-easing-standard);
+}
+
+.skip-link:focus {
+    top: var(--ij-spacing-sm);
+}
+
+/* The header is sticky, so an anchor target scrolled to the very top lands
+   underneath it. Reserve its height plus a little breathing room. */
+[id] {
+    scroll-margin-top: var(--header-clearance);
+}
+
 /* Reset & Base */
 * {
     margin: 0;
@@ -147,6 +178,18 @@ body {
 }
 
 @media (prefers-color-scheme: light) {
+    /* The hero headline is the gradient, via background-clip: text. In light mode
+       --gradient-primary ends at #D0FF00, which is 1.17:1 on white: unreadable,
+       and the largest text on the site. The design system ships a gradient meant
+       for light backgrounds, worst point 3.59:1, so use that here. Dark mode is
+       untouched: its worst point is 4.02:1 and already clears the bar. */
+    :root:not([data-theme="dark"]) .hero-title {
+        /* background-image, not the background shorthand: the shorthand resets
+           background-clip, which undoes the clip-to-text on the base rule and
+           paints the headline as a solid gradient block with no visible text. */
+        background-image: var(--ij-gradient-primary);
+    }
+
     :root:not([data-theme="dark"]) .site-header {
         background: rgba(255, 255, 255, 0.8);
     }
@@ -1125,6 +1168,10 @@ body {
         order: 3;
         width: 100%;
         justify-content: flex-start;
+    }
+
+    :root {
+        --header-clearance: 144px;
     }
 
     .hero .container {
