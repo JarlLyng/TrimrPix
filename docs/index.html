@@ -129,7 +129,7 @@
                     <article class="feature-card reveal">
                         <span class="feature-icon" aria-hidden="true">📐</span>
                         <h3>Reduce size by up to 80%</h3>
-                        <p>Smaller files in many cases with the quality you see preserved.</p>
+                        <p>Smaller files in many cases with the quality you see preserved. <a href="compress-images-for-web.html">Compressing for the web</a></p>
                     </article>
                     <article class="feature-card reveal">
                         <span class="feature-icon" aria-hidden="true">🔒</span>
@@ -144,17 +144,17 @@
                     <article class="feature-card reveal">
                         <span class="feature-icon" aria-hidden="true">🖼️</span>
                         <h3>All major formats</h3>
-                        <p>Optimize JPEG, PNG, GIF, WebP, AVIF, and HEIC in one app.</p>
+                        <p>Optimize JPEG, PNG, GIF, WebP, AVIF and HEIC in one app, plus scanned PDFs. <a href="image-formats-guide.html">Which format should you use?</a></p>
                     </article>
                     <article class="feature-card reveal">
                         <span class="feature-icon" aria-hidden="true">⚡</span>
                         <h3>Drag & drop + batch</h3>
-                        <p>Drop hundreds of images, hit optimize, save time.</p>
+                        <p>Drop hundreds of images, hit optimize, save time. <a href="batch-image-compression.html">How batch compression works</a></p>
                     </article>
                     <article class="feature-card reveal">
                         <span class="feature-icon" aria-hidden="true">👁️</span>
                         <h3>Watch Folder</h3>
-                        <p>Auto-optimize new images added to a folder.</p>
+                        <p>Point it at the folder your screenshots land in. Every new capture gets a smaller copy beside it a couple of seconds later, without you opening the app.</p>
                     </article>
                 </div>
             </div>
@@ -187,6 +187,10 @@
                         <p>Scanned PDFs, yes. Drop one in and each page is re-encoded at your chosen quality, which typically takes about two thirds off the file size. PDFs that contain selectable text are left untouched on purpose: rasterising them would remove the text and usually make the file larger, so TrimrPix tells you rather than damaging the document.</p>
                     </article>
                     <article class="faq-item reveal">
+                        <h3>How does Watch Folder work?</h3>
+                        <p>You pick a folder and TrimrPix watches it. When a new file lands there it waits a couple of seconds for the file to finish writing, optimizes it, and saves the smaller version beside it. It watches for JPEG, PNG, GIF, WebP, AVIF, HEIC and scanned PDFs, and it ignores its own output, so a folder never optimizes itself in circles. It is off until you turn it on and choose a folder.</p>
+                    </article>
+                    <article class="faq-item reveal">
                         <h3>What happens to my original files?</h3>
                         <p>They are kept. TrimrPix writes the smaller version alongside the original as <code>yourphoto-optimized.jpg</code>, in the same folder, so you can compare the two before deciding what to keep. If you would rather it replaced the originals in place, there is an "Overwrite original files" setting, off by default.</p>
                     </article>
@@ -216,6 +220,41 @@
 
         <!-- Closing CTA: the page previously ended on the FAQ, so the last thing a
              reader saw after their questions were answered was the footer. -->
+        <!-- Guides overview: the guides were reachable only from the footer, so a
+             reader who was not ready to buy had nowhere obvious to go next. -->
+        <section class="guides" aria-labelledby="guides-title">
+            <div class="container">
+                <h2 class="section-title" id="guides-title">Guides</h2>
+                <p class="section-subtitle">Longer answers to the questions that come up around compressing images.</p>
+                <ul class="guides-list">
+                    <li class="reveal">
+                        <a href="image-formats-guide.html"><strong>JPEG, PNG, WebP, AVIF or HEIC?</strong></a>
+                        <p>Which format to reach for, and what each one is good at.</p>
+                    </li>
+                    <li class="reveal">
+                        <a href="compress-images-for-web.html"><strong>Compressing images for the web</strong></a>
+                        <p>Formats, sizes and a workflow for a faster site.</p>
+                    </li>
+                    <li class="reveal">
+                        <a href="batch-image-compression.html"><strong>Batch compression on Mac</strong></a>
+                        <p>Hundreds of images at once, and how to automate the repeat work.</p>
+                    </li>
+                    <li class="reveal">
+                        <a href="optimize-images-app-store.html"><strong>App Store screenshots</strong></a>
+                        <p>Getting screenshot sizes down without visible quality loss.</p>
+                    </li>
+                    <li class="reveal">
+                        <a href="remove-exif-data-on-mac.html"><strong>Removing EXIF and GPS data</strong></a>
+                        <p>What metadata your photos carry, and how to strip it.</p>
+                    </li>
+                    <li class="reveal">
+                        <a href="imageoptim-alternative.html"><strong>Coming from ImageOptim</strong></a>
+                        <p>How TrimrPix compares, and where ImageOptim is still the better fit.</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
         <section class="closing-cta">
             <div class="container">
                 <h2>Ready to trim your images?</h2>
@@ -330,6 +369,7 @@
         "@type": "FAQPage",
         "mainEntity": [
             { "@type": "Question", "name": "What image formats does TrimrPix support?", "acceptedAnswer": { "@type": "Answer", "text": "TrimrPix supports JPEG, PNG, GIF, WebP, AVIF, and HEIC." } },
+            { "@type": "Question", "name": "How does Watch Folder work?", "acceptedAnswer": { "@type": "Answer", "text": "You pick a folder and TrimrPix watches it. When a new file lands there it waits a couple of seconds for the file to finish writing, optimizes it, and saves the smaller version beside it. It watches for JPEG, PNG, GIF, WebP, AVIF, HEIC and scanned PDFs, and ignores its own output so a folder never optimizes itself in circles. It is off until you turn it on and choose a folder." } },
             { "@type": "Question", "name": "What happens to my original files?", "acceptedAnswer": { "@type": "Answer", "text": "Originals are kept. TrimrPix writes the smaller version alongside the original as yourphoto-optimized.jpg in the same folder. An \"Overwrite original files\" setting replaces them in place instead, and is off by default." } },
             { "@type": "Question", "name": "Can TrimrPix compress PDFs?", "acceptedAnswer": { "@type": "Answer", "text": "TrimrPix compresses scanned PDFs by re-encoding each page at your chosen quality, typically taking about two thirds off the file size. PDFs containing selectable text are left untouched on purpose, because rasterising them would remove the text and usually make the file larger." } },
             { "@type": "Question", "name": "How much can I reduce file sizes?", "acceptedAnswer": { "@type": "Answer", "text": "Many images can be reduced by 30–80% while keeping visual quality high." } },

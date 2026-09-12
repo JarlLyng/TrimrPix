@@ -1087,6 +1087,54 @@ body {
     color: var(--ij-color-primary);
 }
 
+/* Guides overview. Sits between the FAQ and the closing CTA so a reader who is
+   not ready to buy has somewhere to go that is not the footer. */
+.guides {
+    padding: var(--spacing-section) 0;
+    border-top: 1px solid var(--ij-color-border-subtle);
+}
+
+.guides-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--ij-spacing-xxl);
+    margin-top: var(--ij-spacing-xxxl);
+}
+
+.guides-list li {
+    padding: var(--ij-spacing-xl);
+    background: var(--ij-color-bg-card);
+    border: 1px solid var(--ij-color-border-subtle);
+    border-radius: var(--ij-radius-lg);
+}
+
+.guides-list a {
+    color: var(--ij-color-text-primary);
+    text-decoration: none;
+}
+
+.guides-list a:hover {
+    color: var(--ij-color-primary);
+}
+
+.guides-list p {
+    margin-top: var(--ij-spacing-sm);
+    font-size: var(--ij-font-size-sm);
+    color: var(--ij-color-text-secondary);
+}
+
+/* Inline guide links inside the feature cards. */
+.feature-card p a {
+    color: var(--ij-color-primary);
+    text-decoration: none;
+    font-weight: var(--ij-font-weight-semibold);
+}
+
+.feature-card p a:hover {
+    text-decoration: underline;
+}
+
 /* Closing CTA. Deliberately plain rather than a second gradient block: the
    gradient .cta already appears higher up, and repeating it would compete with
    itself rather than close the page. */
