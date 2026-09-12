@@ -875,6 +875,14 @@ body {
 }
 
 /* Comparison table */
+/* Wide tables scroll inside their own box; the page itself must never scroll
+   sideways. A wrapper is used rather than display:block on the table, which can
+   remove table semantics from the accessibility tree. */
+.table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 .comparison-table {
     width: 100%;
     border-collapse: collapse;
@@ -1185,7 +1193,8 @@ body {
         flex-direction: column;
     }
 
-    .btn {
+    .hero-cta .btn,
+    .cta .btn {
         width: 100%;
         justify-content: center;
     }
@@ -1249,6 +1258,47 @@ body {
     outline: 2px solid var(--ij-color-primary);
     outline-offset: 2px;
     border-radius: 2px;
+}
+
+/* ---- Narrow viewports (<=400px) ----
+   Grid and flex items default to min-width:auto, so their min-content size becomes
+   a floor the track cannot shrink below. A button label set to nowrap therefore
+   pushed the whole page wider than the screen: at a real 320px viewport the
+   document measured 345px. Both halves need fixing, the floor and the label. */
+@media (max-width: 400px) {
+    .hero .container,
+    .hero-content,
+    .hero-cta,
+    .site-header .container,
+    .nav {
+        min-width: 0;
+    }
+
+    /* Long labels wrap instead of widening the page. */
+    .btn {
+        white-space: normal;
+    }
+
+    /* Logo on its own row, navigation centred beneath it. */
+    .site-header .container {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--ij-spacing-sm);
+    }
+
+    .nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--ij-spacing-sm);
+    }
+
+    /* The nav's own content is 261px against 272px of room, so it fits on one
+       row; it was the gaps and the button's padding that pushed it onto a
+       second, making the sticky header 155px tall on a 320px screen. */
+    .nav .btn {
+        padding-left: var(--ij-spacing-md);
+        padding-right: var(--ij-spacing-md);
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
