@@ -20,11 +20,8 @@
     /* Static colors */
 
     /* Shared state colors */
-    --color-on-success: #FFFFFF;
-    --color-error: #FF3B30;
 
     /* Mode colors — dark default (marketing site) */
-    --color-on-primary: #000000;
     --color-primary-dim: rgba(208, 255, 0, 0.08);
 
 
@@ -32,6 +29,14 @@
 
 
     --color-border-hover: rgba(255, 255, 255, 0.25);
+
+    /* Text sitting on a brand gradient. NOT --ij-color-on-primary: that token means
+       "text on the solid primary colour", and none of these surfaces are that. They
+       run purple to lime, and no single foreground clears AA along the whole ramp
+       (black: 4.02:1 on the purple end, 17.99:1 on the lime end; white inverts it at
+       5.23:1 and 1.17:1). Black is the lesser failure, and is what the site has
+       always shipped. Tracked separately rather than silently changed here. */
+    --color-on-brand-gradient: #000000;
 
     /* Site-specific: gradients, glows, shadows */
     --gradient-primary: linear-gradient(135deg, #D0FF00, #A435D2);
@@ -187,11 +192,11 @@ body {
 }
 
 .nav .btn-primary {
-    color: var(--color-on-primary);
+    color: var(--color-on-brand-gradient);
 }
 
 .nav .btn-primary:hover {
-    color: var(--color-on-primary);
+    color: var(--color-on-brand-gradient);
 }
 
 .btn-sm {
@@ -412,7 +417,7 @@ body {
 
 .btn-primary {
     background: var(--gradient-primary);
-    color: var(--color-on-primary);
+    color: var(--color-on-brand-gradient);
     box-shadow: var(--shadow-btn);
 }
 
@@ -629,7 +634,7 @@ body {
 .cta {
     padding: var(--spacing-section) 0;
     background: var(--gradient-cta);
-    color: var(--color-on-primary);
+    color: var(--color-on-brand-gradient);
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -649,7 +654,7 @@ body {
     font-size: clamp(32px, 5vw, 48px);
     font-weight: var(--ij-font-weight-bold);
     margin-bottom: var(--ij-spacing-lg);
-    color: var(--color-on-primary);
+    color: var(--color-on-brand-gradient);
     letter-spacing: -0.02em;
     position: relative;
 }
@@ -657,7 +662,7 @@ body {
 .cta-subtitle {
     font-size: var(--ij-font-size-lg);
     margin-bottom: var(--ij-spacing-xxl);
-    color: var(--color-on-primary);
+    color: var(--color-on-brand-gradient);
     opacity: 0.85;
     position: relative;
 }
@@ -666,7 +671,7 @@ body {
     font-size: var(--ij-font-size-sm);
     margin-top: var(--ij-spacing-lg);
     opacity: 0.75;
-    color: var(--color-on-primary);
+    color: var(--color-on-brand-gradient);
     position: relative;
 }
 
@@ -691,7 +696,7 @@ body {
 
 .cta .btn-secondary {
     background: rgba(0, 0, 0, 0.15);
-    color: var(--color-on-primary);
+    color: var(--color-on-brand-gradient);
     border-color: rgba(0, 0, 0, 0.25);
 }
 
@@ -938,7 +943,7 @@ body {
     width: 28px;
     height: 28px;
     background: var(--gradient-primary);
-    color: var(--color-on-primary);
+    color: var(--color-on-brand-gradient);
     border-radius: 50%;
     display: flex;
     align-items: center;

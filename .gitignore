@@ -56,3 +56,4 @@ full-*.png
 
 # Temporary A/B baseline for CSS migration verification
 docs/_base.css
+docs/_ab_*.html
