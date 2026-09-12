@@ -365,48 +365,6 @@ body {
     box-shadow: var(--glow-primary-strong), 0 40px 100px rgba(0, 0, 0, 0.4);
 }
 
-.hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--ij-spacing-sm);
-    padding: var(--ij-spacing-sm) var(--ij-spacing-lg);
-    background: var(--ij-color-bg-card);
-    border: 1px solid var(--ij-color-border-subtle);
-    border-radius: var(--radius-pill);
-    font-size: var(--ij-font-size-sm);
-    font-weight: var(--ij-font-weight-semibold);
-    color: var(--ij-color-text-primary);
-    margin-bottom: var(--ij-spacing-xxl);
-}
-
-.badge-icon {
-    font-size: var(--ij-font-size-base);
-}
-
-.hero-subtitle {
-    font-size: var(--ij-font-size-lg);
-    color: var(--ij-color-text-secondary);
-    margin-bottom: var(--ij-spacing-xxxl);
-    line-height: var(--line-height-relaxed);
-}
-
-.tech-badge {
-    padding: var(--ij-spacing-xs) var(--ij-spacing-md);
-    background: var(--ij-color-bg-muted);
-    border-radius: var(--radius-pill);
-    font-size: var(--ij-font-size-sm);
-    font-weight: var(--ij-font-weight-semibold);
-    color: var(--ij-color-text-primary);
-}
-
-.screenshot {
-    width: 100%;
-    height: auto;
-    border-radius: var(--ij-radius-lg);
-    border: 1px solid var(--ij-color-border-subtle);
-    box-shadow: var(--shadow-screenshot);
-}
-
 /* ---- Buttons ---- */
 .btn {
     display: inline-flex;
@@ -565,41 +523,6 @@ body {
     line-height: var(--line-height-relaxed);
 }
 
-/* ---- Tech Stack ---- */
-.tech-stack {
-    padding: var(--spacing-section) 0;
-    background: var(--ij-color-bg-muted);
-}
-
-.tech-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--ij-spacing-xxxl);
-    margin-top: 48px;
-}
-
-.tech-item {
-    text-align: center;
-    padding: var(--ij-spacing-xxxl);
-}
-
-.tech-icon {
-    font-size: 48px;
-    margin-bottom: var(--ij-spacing-lg);
-}
-
-.tech-item h4 {
-    font-size: var(--ij-font-size-xl);
-    font-weight: var(--ij-font-weight-semibold);
-    margin-bottom: var(--ij-spacing-sm);
-    color: var(--ij-color-text-primary);
-}
-
-.tech-item p {
-    color: var(--ij-color-text-secondary);
-    font-size: var(--ij-font-size-sm);
-}
-
 /* ---- FAQ ---- */
 .faq {
     padding: var(--spacing-section) 0;
@@ -681,14 +604,6 @@ body {
     margin-top: var(--ij-spacing-lg);
     opacity: 0.75;
     color: var(--color-on-brand-gradient);
-    position: relative;
-}
-
-.cta-buttons {
-    display: flex;
-    gap: var(--ij-spacing-xl);
-    justify-content: center;
-    flex-wrap: wrap;
     position: relative;
 }
 
@@ -1213,10 +1128,6 @@ body {
 
     .cta-title {
         font-size: 28px;
-    }
-
-    .cta-buttons {
-        flex-direction: column;
     }
 
     .cta .btn {
