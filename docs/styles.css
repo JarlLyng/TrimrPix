@@ -296,6 +296,12 @@ body {
     margin-top: var(--ij-spacing-md);
 }
 
+/* Each item stays whole, so when the line does wrap on a narrow screen it breaks
+   between items rather than orphaning a word like "later" on its own line. */
+.hero-price span {
+    white-space: nowrap;
+}
+
 .hero-ios {
     font-size: var(--ij-font-size-sm);
     margin-top: var(--ij-spacing-sm);
