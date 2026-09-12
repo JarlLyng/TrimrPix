@@ -358,13 +358,17 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
         return result
     }
     
-    /// Optimizes WebP image data using CGImageDestination
+    /// Refuses a WebP file, because macOS provides no encoder for the format.
     /// - Parameter url: The URL of the WebP image
-    /// - Returns: The optimized WebP data
+    /// - Throws: `TrimrPixError.webPEncodingUnavailable`, always
     /// - Throws: TrimrPixError if optimization fails
     private func optimizeWebPData(at url: URL, settings: CompressionSettings) async throws -> Data {
-        logger.debug("Optimizing WebP: \(url.lastPathComponent)")
-        return try await compressWithCGImageDestination(at: url, type: .webP, settings: settings, errorFactory: TrimrPixError.webpCompressionFailed)
+        // macOS reads WebP but cannot write it: the identifier is absent from
+        // CGImageDestinationCopyTypeIdentifiers, so creating a destination always
+        // fails. Attempting it returned the original bytes, which reached the user
+        // as a zero-byte saving and looked like "already well compressed".
+        logger.info("WebP cannot be re-encoded on macOS, skipping: \(url.lastPathComponent)")
+        throw TrimrPixError.webPEncodingUnavailable(url)
     }
     
     /// Optimizes AVIF image data using CGImageDestination
@@ -393,7 +397,7 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
     // MARK: - CGImageDestination Compression
 
     /// Compresses an image using CGImageDestination for a given UTType
-    /// Shared logic for JPEG, WebP, AVIF, and HEIC compression
+    /// Shared logic for JPEG, AVIF and HEIC compression
     /// - Parameters:
     ///   - url: The URL of the image to compress
     ///   - type: The UTType to write (e.g. .jpeg, .webP, .avif, .heic)

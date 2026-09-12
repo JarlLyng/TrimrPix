@@ -394,6 +394,48 @@ private enum TestPDF {
     }
 }
 
+@Suite("WebP", .serialized) @MainActor
+struct WebPTests {
+
+    /// A WebP is refused with an explanation rather than returned unchanged.
+    ///
+    /// macOS reads WebP but cannot write it, so the old code created no
+    /// destination and handed back the original bytes. That reached the user as a
+    /// zero-byte saving, indistinguishable from "this file was already small".
+    @Test func refusesWebPWithAnExplanation() async throws {
+        let tmp = TempDir()
+        let input = tmp.file("photo.webp")
+        // Contents do not matter: the format is refused before anything is read.
+        try Data("RIFF....WEBPVP8 ".utf8).write(to: input)
+
+        let service = CompressionService()
+        let settings = StubSettings()
+
+        await #expect(throws: TrimrPixError.self) {
+            _ = try await service.optimizeImage(at: input, settings: settings.compressionSnapshot)
+        }
+    }
+
+    /// The refusal says what happened and what to do instead.
+    @Test func webPRefusalExplainsItself() throws {
+        let url = URL(fileURLWithPath: "/tmp/photo.webp")
+        let error = TrimrPixError.webPEncodingUnavailable(url)
+        let message = try #require(error.errorDescription)
+        #expect(message.contains("photo.webp"))
+        #expect(message.lowercased().contains("webp"))
+        // The user needs to know the file is intact, not that something failed.
+        #expect(message.contains("left exactly as it was"))
+        let suggestion = try #require(error.recoverySuggestion)
+        #expect(!suggestion.isEmpty)
+    }
+
+    /// A watched folder does not pick up files it can only skip.
+    @Test func watchFolderIgnoresWebP() {
+        let watched = ["jpg", "jpeg", "png", "gif", "avif", "heic", "heif", "pdf"]
+        #expect(!watched.contains("webp"))
+    }
+}
+
 @Suite("PDF compression", .serialized)
 @MainActor
 struct PDFCompressionTests {

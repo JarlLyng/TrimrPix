@@ -20,7 +20,7 @@ Target audience, positioning, pricing reasoning, SEO/ASO playbooks, and competit
 ## App features (be precise — do not invent features that don't exist)
 
 - **5 image formats:** JPEG, PNG, GIF, AVIF, HEIC.
-- **WebP is read-only.** macOS has no WebP encoder, so `CGImageDestinationCreateWithData` returns nil and `CompressionService` hands back the original bytes unchanged. Do not list WebP as a supported output format.
+- **WebP is refused.** macOS has no WebP encoder, so `optimizeWebPData` throws `webPEncodingUnavailable` and tells the user the file was left alone. Watch Folder does not pick up `.webp` at all. Do not list WebP as a supported format.
 - **Scanned PDFs** — pages re-encoded at the chosen quality. PDFs *with a text layer are refused on purpose* (rasterising them destroys the text and usually grows the file).
 - **Quality control:** slider from 10% to 100% in steps of 10 for JPEG/AVIF/HEIC (`SettingsView.swift:46`); presets Low/Medium/High/Custom.
 - **PNG lossy quantization** (median-cut, 256 colors) + alpha stripping for opaque images.

@@ -21,7 +21,6 @@ enum TrimrPixError: LocalizedError {
     case jpegCompressionFailed(URL)
     case pngCompressionFailed(URL)
     case gifCompressionFailed(URL)
-    case webpCompressionFailed(URL)
     case avifCompressionFailed(URL)
     case heicCompressionFailed(URL)
     case formatNotSupported(String)
@@ -30,6 +29,11 @@ enum TrimrPixError: LocalizedError {
     /// The PDF carries a real text layer, so re-encoding it would destroy the
     /// selectable text and (in practice) make the file bigger. Left untouched by design.
     case pdfHasTextLayer(URL)
+
+    /// macOS has no WebP encoder, so a WebP file cannot be re-saved. Refused up
+    /// front rather than attempted, because the attempt silently returned the
+    /// original file and looked like a zero-byte saving.
+    case webPEncodingUnavailable(URL)
     
     // MARK: - File System Errors
     case fileNotFound(URL)
@@ -63,7 +67,7 @@ enum TrimrPixError: LocalizedError {
         case .imageLoadFailed(let url, _):
             return "Could not load image: \(url.lastPathComponent)"
         case .unsupportedImageFormat(let format):
-            return "Unsupported image format: \(format). Supported formats: JPEG, PNG, GIF, WebP, AVIF, HEIC"
+            return "Unsupported image format: \(format). Supported formats: JPEG, PNG, GIF, AVIF, HEIC"
         case .invalidImageData(let url):
             return "Invalid image data: \(url.lastPathComponent)"
         case .imageTooLarge(let url, let maxSize):
@@ -77,14 +81,15 @@ enum TrimrPixError: LocalizedError {
             return "PNG compression failed: \(url.lastPathComponent)"
         case .gifCompressionFailed(let url):
             return "GIF compression failed: \(url.lastPathComponent)"
-        case .webpCompressionFailed(let url):
-            return "WebP compression failed: \(url.lastPathComponent)"
         case .avifCompressionFailed(let url):
             return "AVIF compression failed: \(url.lastPathComponent)"
         case .heicCompressionFailed(let url):
             return "HEIC compression failed: \(url.lastPathComponent)"
         case .formatNotSupported(let format):
             return "Format not supported: \(format)"
+        case .webPEncodingUnavailable(let url):
+            return "Skipped \(url.lastPathComponent): macOS cannot write WebP files, so TrimrPix has no way to make this one smaller. It was left exactly as it was."
+
         case .pdfHasTextLayer(let url):
             return "Skipped \(url.lastPathComponent): this PDF contains selectable text, and compressing it would remove the text without making the file smaller. TrimrPix only compresses scanned PDFs."
 
@@ -165,14 +170,14 @@ enum TrimrPixError: LocalizedError {
             return "PNGCompressionFailed(url: \(url.path))"
         case .gifCompressionFailed(let url):
             return "GIFCompressionFailed(url: \(url.path))"
-        case .webpCompressionFailed(let url):
-            return "WebPCompressionFailed(url: \(url.path))"
         case .avifCompressionFailed(let url):
             return "AVIFCompressionFailed(url: \(url.path))"
         case .heicCompressionFailed(let url):
             return "HEICCompressionFailed(url: \(url.path))"
         case .formatNotSupported(let format):
             return "FormatNotSupported(format: \(format))"
+        case .webPEncodingUnavailable(let url):
+            return "WebPEncodingUnavailable(url: \(url.path))"
         case .pdfHasTextLayer(let url):
             return "PDFHasTextLayer(url: \(url.path))"
         case .fileNotFound(let url):
@@ -215,12 +220,14 @@ enum TrimrPixError: LocalizedError {
             return "Make sure the image isn't corrupted and try again"
         case .unsupportedImageFormat:
             return "Convert the image to a supported format first"
+        case .webPEncodingUnavailable:
+            return "Convert it to JPEG, PNG or AVIF first, or use a WebP tool such as cwebp"
         case .pdfHasTextLayer:
             return "Text PDFs are already efficient. Only scanned PDFs, which are really pages of images, can be made smaller"
         case .imageTooLarge:
             return "Reduce the image's resolution or size first"
         case .compressionFailed, .jpegCompressionFailed, .pngCompressionFailed,
-             .gifCompressionFailed, .webpCompressionFailed, .avifCompressionFailed, .heicCompressionFailed:
+             .gifCompressionFailed, .avifCompressionFailed, .heicCompressionFailed:
             return "Try reopening the file or convert it to a different format"
         case .fileNotFound:
             return "Make sure the file exists and try again"
