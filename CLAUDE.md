@@ -44,6 +44,17 @@ The shared header and footer live in `tools/partials/` and are written into ever
 `tools/sync_partials.py`. **Edit the partial, not the ten pages**, then run the script and commit
 the result. CI runs it with `--check` and fails the deploy if any page has drifted.
 
+### Outbound click tracking
+
+Every App Store link carries `data-umami-event="appstore-mac"` or `"appstore-ios"` plus
+`data-umami-event-placement`, one of `header`, `hero`, `hero-ios`, `article`, `cta`, `closing`,
+`footer`. Umami adds the page URL and screen size itself, so clicks can be split by page, by
+placement and by device without any extra attributes.
+
+**Do not rename these without a reason.** Renaming breaks the comparison with everything recorded
+before, and the point of them is to make site changes judgeable over time. New App Store links
+need the attributes too, or they are invisible.
+
 ## Requirements & build
 - Runtime: **macOS 15.2+** (deployment target). Language: **Swift 6** mode, SwiftUI, async/await.
 - **Builds with Xcode 26 / macOS 26 SDK** — older Xcodes (e.g. 16.2) fail to compile because MetricsService uses MetricKit payload APIs absent from the macOS 15.x SDK. CI runs on `macos-26`.
