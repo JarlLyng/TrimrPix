@@ -1158,10 +1158,12 @@ body {
         gap: 48px;
     }
 
-    .hero-visual,
-    .hero-image {
-        order: -1;
-    }
+    /* The DOM already runs message, price, CTA, then screenshot. This used to
+       flip it, so a phone met a shrunken app window before it was told what the
+       product was or what it cost, and the buy button fell below the fold on a
+       320x640 screen. Visual order now matches DOM order, which is also what
+       keyboard and screen-reader users get. (.hero-image was in this selector
+       and exists in no markup.) */
 
     .section-title {
         font-size: 36px;
