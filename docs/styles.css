@@ -815,7 +815,7 @@ body {
     top: 0;
     bottom: 0;
     width: 3px;
-    background: linear-gradient(to bottom, var(--ij-color-primary), #A435D2);
+    background: linear-gradient(to bottom, var(--ij-color-primary), var(--color-brand-alt));
 }
 
 .answer-box p {
