@@ -393,10 +393,6 @@ body {
     color: var(--ij-color-text-primary);
 }
 
-.hero-image {
-    animation: fadeInUp 0.8s ease-out 0.15s both;
-}
-
 .screenshot {
     width: 100%;
     height: auto;
