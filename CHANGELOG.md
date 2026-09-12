@@ -2,6 +2,11 @@
 
 All notable changes to TrimrPix are documented here.
 
+## [1.7.1] - 2026-09-13
+
+### Fixed
+- WebP files are now skipped with an explanation instead of being handed back unchanged. macOS provides no WebP encoder, so TrimrPix never could make these smaller; it just looked like a file that saved nothing. Watch Folder no longer picks up WebP files either
+
 ## [1.7.0] - 2026-09-04
 
 ### Added
