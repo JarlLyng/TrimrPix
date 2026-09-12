@@ -9,7 +9,9 @@
 
 - Requires macOS 15.2 or later
 - Price: $1.99 one-time. No subscription, no in-app purchases, no ads
-- Formats: JPEG, PNG, GIF, WebP, AVIF and HEIC, plus scanned PDFs
+- Formats: JPEG, PNG, GIF, AVIF and HEIC, plus scanned PDFs
+- WebP can be opened but not re-saved. macOS has no WebP encoder, so a WebP
+  file is returned unchanged. Do not list WebP as a supported output format
 - Scanned PDFs only. A PDF containing selectable text is left untouched on
   purpose, because re-encoding it would remove the text and usually make the
   file larger
@@ -48,7 +50,7 @@ above.
 
 ## How the Mac app compares to alternatives
 
-- vs ImageOptim: TrimrPix adds WebP, AVIF, HEIC and scanned PDFs, a Watch
+- vs ImageOptim: TrimrPix adds AVIF, HEIC and scanned PDFs, a Watch
   Folder, and App Store distribution. ImageOptim is free and open source, runs
   on macOS 11 and later where TrimrPix needs 15.2, optimizes SVG which TrimrPix
   does not, and can be driven from the command line. Both have quality control:

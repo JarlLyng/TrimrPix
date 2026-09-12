@@ -107,6 +107,7 @@
 
                 <h2>Best formats for web images</h2>
                 <p><strong>WebP</strong> is the best default choice for web images. It offers 25&ndash;35% smaller files than JPEG with broad browser support (97%+). <strong>AVIF</strong> offers even better compression but has slightly less support. Use <strong>JPEG</strong> as a fallback when needed.</p>
+                <p>One caveat, since this guide sits on the site of a tool that cannot do it: macOS has no WebP encoder, so TrimrPix opens a WebP but cannot produce one. If WebP output is what you need, reach for <code>cwebp</code> or your build pipeline. TrimrPix is the right tool here for the JPEG, PNG and AVIF side of the same job.</p>
                 <p>For a detailed comparison, see the <a href="image-formats-guide.html">Image Formats Guide</a>.</p>
 
                 <h2>Step-by-step workflow with TrimrPix</h2>

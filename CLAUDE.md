@@ -19,9 +19,10 @@ Target audience, positioning, pricing reasoning, SEO/ASO playbooks, and competit
 
 ## App features (be precise — do not invent features that don't exist)
 
-- **6 image formats:** JPEG, PNG, GIF, WebP, AVIF, HEIC.
+- **5 image formats:** JPEG, PNG, GIF, AVIF, HEIC.
+- **WebP is read-only.** macOS has no WebP encoder, so `CGImageDestinationCreateWithData` returns nil and `CompressionService` hands back the original bytes unchanged. Do not list WebP as a supported output format.
 - **Scanned PDFs** — pages re-encoded at the chosen quality. PDFs *with a text layer are refused on purpose* (rasterising them destroys the text and usually grows the file).
-- **Quality control:** slider from 10% to 100% in steps of 10 for JPEG/WebP/AVIF/HEIC (`SettingsView.swift:46`); presets Low/Medium/High/Custom.
+- **Quality control:** slider from 10% to 100% in steps of 10 for JPEG/AVIF/HEIC (`SettingsView.swift:46`); presets Low/Medium/High/Custom.
 - **PNG lossy quantization** (median-cut, 256 colors) + alpha stripping for opaque images.
 - **Progressive JPEG** (optimized Huffman); **GIF** LZW re-encode preserving animation.
 - **Metadata stripping** — EXIF / GPS / IPTC across formats.
