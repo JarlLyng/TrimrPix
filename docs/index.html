@@ -97,9 +97,24 @@
             <div class="container">
                 <h2 class="visually-hidden">TrimrPix in action</h2>
                 <div class="gallery-grid">
-                    <img src="screenshot-1.png" alt="TrimrPix main window – add images and optimize" width="1800" height="900" loading="lazy" class="gallery-img reveal">
-                    <img src="screenshot-2.png" alt="TrimrPix – compression settings and batch processing" width="1000" height="1040" loading="lazy" class="gallery-img reveal">
-                    <img src="screenshot-3.png" alt="TrimrPix – before and after file sizes" width="1892" height="1084" loading="lazy" class="gallery-img reveal">
+                    <figure class="gallery-item reveal">
+                        <a href="screenshot-1.png" target="_blank" rel="noopener noreferrer" aria-label="Open the full-size screenshot: Drag images in, or drop a whole folder">
+                            <img src="screenshot-1.png" alt="TrimrPix with two images added to the list, each showing its original size" width="1800" height="900" loading="lazy" class="gallery-img">
+                        </a>
+                        <figcaption>Drag images in, or drop a whole folder.</figcaption>
+                    </figure>
+                    <figure class="gallery-item reveal">
+                        <a href="screenshot-2.png" target="_blank" rel="noopener noreferrer" aria-label="Open the full-size screenshot: Pick a preset, or set the quality yourself">
+                            <img src="screenshot-2.png" alt="TrimrPix settings: compression preset, a quality slider at 80 percent, save options and Watch Folder" width="1000" height="1040" loading="lazy" class="gallery-img">
+                        </a>
+                        <figcaption>Pick a preset, or set the quality yourself.</figcaption>
+                    </figure>
+                    <figure class="gallery-item reveal">
+                        <a href="screenshot-3.png" target="_blank" rel="noopener noreferrer" aria-label="Open the full-size screenshot: Optimize one file, or the whole batch at once">
+                            <img src="screenshot-3.png" alt="TrimrPix with three images queued, each with its own Optimize button and Optimize All below" width="1892" height="1084" loading="lazy" class="gallery-img">
+                        </a>
+                        <figcaption>Optimize one file, or the whole batch at once.</figcaption>
+                    </figure>
                 </div>
             </div>
         </section>
@@ -171,6 +186,10 @@
                         <p>Scanned PDFs, yes. Drop one in and each page is re-encoded at your chosen quality, which typically takes about two thirds off the file size. PDFs that contain selectable text are left untouched on purpose: rasterising them would remove the text and usually make the file larger, so TrimrPix tells you rather than damaging the document.</p>
                     </article>
                     <article class="faq-item reveal">
+                        <h3>What happens to my original files?</h3>
+                        <p>They are kept. TrimrPix writes the smaller version alongside the original as <code>yourphoto-optimized.jpg</code>, in the same folder, so you can compare the two before deciding what to keep. If you would rather it replaced the originals in place, there is an "Overwrite original files" setting, off by default.</p>
+                    </article>
+                    <article class="faq-item reveal">
                         <h3>How much can I reduce file sizes?</h3>
                         <p>It depends on the image and settings. Many images can be reduced by 30–80% while keeping visual quality high.</p>
                     </article>
@@ -191,6 +210,20 @@
                         <p>Yes. Add as many images as you like and use batch optimization. Watch Folder can also auto-optimize new images in a folder.</p>
                     </article>
                 </div>
+            </div>
+        </section>
+
+        <!-- Closing CTA: the page previously ended on the FAQ, so the last thing a
+             reader saw after their questions were answered was the footer. -->
+        <section class="closing-cta">
+            <div class="container">
+                <h2>Ready to trim your images?</h2>
+                <p>One purchase, no subscription, and nothing leaves your Mac.</p>
+                <a href="https://apps.apple.com/app/trimrpix/id6758639590" class="btn btn-primary btn-large" target="_blank" rel="noopener noreferrer">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                    Download on the App Store
+                </a>
+                <p class="closing-cta-note"><span>$1.99 one-time</span> &middot; <span>No subscription</span> &middot; <span>macOS 15.2+</span></p>
             </div>
         </section>
     </main>
@@ -296,6 +329,7 @@
         "@type": "FAQPage",
         "mainEntity": [
             { "@type": "Question", "name": "What image formats does TrimrPix support?", "acceptedAnswer": { "@type": "Answer", "text": "TrimrPix supports JPEG, PNG, GIF, WebP, AVIF, and HEIC." } },
+            { "@type": "Question", "name": "What happens to my original files?", "acceptedAnswer": { "@type": "Answer", "text": "Originals are kept. TrimrPix writes the smaller version alongside the original as yourphoto-optimized.jpg in the same folder. An \"Overwrite original files\" setting replaces them in place instead, and is off by default." } },
             { "@type": "Question", "name": "Can TrimrPix compress PDFs?", "acceptedAnswer": { "@type": "Answer", "text": "TrimrPix compresses scanned PDFs by re-encoding each page at your chosen quality, typically taking about two thirds off the file size. PDFs containing selectable text are left untouched on purpose, because rasterising them would remove the text and usually make the file larger." } },
             { "@type": "Question", "name": "How much can I reduce file sizes?", "acceptedAnswer": { "@type": "Answer", "text": "Many images can be reduced by 30–80% while keeping visual quality high." } },
             { "@type": "Question", "name": "How much does TrimrPix cost?", "acceptedAnswer": { "@type": "Answer", "text": "TrimrPix is a one-time purchase of $1.99 on the App Store. No subscription." } },

@@ -426,9 +426,32 @@ body {
     margin-top: var(--ij-spacing-xxl);
 }
 
+/* The three screenshots have very different proportions (2.00, 0.96 and 1.75),
+   so a plain grid left them wildly different heights. A fixed aspect box with
+   object-fit keeps the row even without cropping any of them badly. */
+.gallery-item {
+    margin: 0;
+}
+
+.gallery-item a {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--ij-radius-lg);
+}
+
+.gallery-item figcaption {
+    margin-top: var(--ij-spacing-md);
+    font-size: var(--ij-font-size-sm);
+    color: var(--ij-color-text-secondary);
+    text-align: center;
+}
+
 .gallery-img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: contain;
+    background: var(--ij-color-bg-muted);
     border-radius: var(--ij-radius-lg);
     border: 1px solid var(--ij-color-border-subtle);
     box-shadow: var(--shadow-card);
@@ -1019,6 +1042,40 @@ body {
 
 .footer-bottom a:hover {
     color: var(--ij-color-primary);
+}
+
+/* Closing CTA. Deliberately plain rather than a second gradient block: the
+   gradient .cta already appears higher up, and repeating it would compete with
+   itself rather than close the page. */
+.closing-cta {
+    padding: var(--spacing-section) 0;
+    border-top: 1px solid var(--ij-color-border-subtle);
+    text-align: center;
+}
+
+.closing-cta h2 {
+    font-size: var(--ij-font-size-xxl);
+    font-weight: var(--ij-font-weight-bold);
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--ij-spacing-md);
+}
+
+.closing-cta p {
+    color: var(--ij-color-text-secondary);
+    margin-bottom: var(--ij-spacing-xxl);
+}
+
+/* Scoped past `.closing-cta p`, which is more specific and would otherwise keep
+   this at the secondary colour and make the rule below do nothing. */
+.closing-cta .closing-cta-note {
+    margin-top: var(--ij-spacing-lg);
+    margin-bottom: 0;
+    font-size: var(--ij-font-size-sm);
+    color: var(--ij-color-text-tertiary);
+}
+
+.closing-cta .closing-cta-note span {
+    white-space: nowrap;
 }
 
 /* ---- Scroll reveal animations ---- */
