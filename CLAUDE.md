@@ -36,6 +36,14 @@ Target audience, positioning, pricing reasoning, SEO/ASO playbooks, and competit
 - No subscription / IAP.
 - **Not a general PDF compressor** — only scanned (text-free) PDFs. No merging, splitting, page editing, OCR, or encryption.
 
+## Marketing site (`docs/`)
+
+Deployed as plain static files, no build step: what is in `docs/` is exactly what is served.
+
+The shared header and footer live in `tools/partials/` and are written into every page by
+`tools/sync_partials.py`. **Edit the partial, not the ten pages**, then run the script and commit
+the result. CI runs it with `--check` and fails the deploy if any page has drifted.
+
 ## Requirements & build
 - Runtime: **macOS 15.2+** (deployment target). Language: **Swift 6** mode, SwiftUI, async/await.
 - **Builds with Xcode 26 / macOS 26 SDK** — older Xcodes (e.g. 16.2) fail to compile because MetricsService uses MetricKit payload APIs absent from the macOS 15.x SDK. CI runs on `macos-26`.

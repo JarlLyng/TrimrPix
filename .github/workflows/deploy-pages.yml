@@ -27,6 +27,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # The shared header and footer are written into every page by
+      # tools/sync_partials.py. Fail the deploy rather than shipping pages that
+      # have drifted apart.
+      - name: Check shared header and footer are in sync
+        run: python3 tools/sync_partials.py --check
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
