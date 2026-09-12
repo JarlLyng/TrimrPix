@@ -48,10 +48,13 @@ above.
 
 ## How the Mac app compares to alternatives
 
-- vs ImageOptim: TrimrPix adds WebP, AVIF and HEIC, a Watch Folder, an
-  adjustable quality slider, and App Store distribution. ImageOptim is free and
-  open source. Its own documentation describes configurable lossy optimization,
-  so do not claim it has no quality control
+- vs ImageOptim: TrimrPix adds WebP, AVIF, HEIC and scanned PDFs, a Watch
+  Folder, and App Store distribution. ImageOptim is free and open source, runs
+  on macOS 11 and later where TrimrPix needs 15.2, optimizes SVG which TrimrPix
+  does not, and can be driven from the command line. Both have quality control:
+  ImageOptim's lives in Preferences as a Maximum quality setting and a Lossy
+  minification option, so do not claim it lacks one. Checked against ImageOptim
+  1.9.3 and its own documentation, September 2026
 - vs Squoosh: TrimrPix runs natively and offline and handles batches. Squoosh is
   a single-image web tool
 - vs online tools: TrimrPix never uploads anything
