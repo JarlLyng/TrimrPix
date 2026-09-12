@@ -21,7 +21,7 @@ Target audience, positioning, pricing reasoning, SEO/ASO playbooks, and competit
 
 - **6 image formats:** JPEG, PNG, GIF, WebP, AVIF, HEIC.
 - **Scanned PDFs** — pages re-encoded at the chosen quality. PDFs *with a text layer are refused on purpose* (rasterising them destroys the text and usually grows the file).
-- **Quality control:** configurable 60–95% for JPEG/WebP/AVIF/HEIC; presets Low/Medium/High/Custom.
+- **Quality control:** slider from 10% to 100% in steps of 10 for JPEG/WebP/AVIF/HEIC (`SettingsView.swift:46`); presets Low/Medium/High/Custom.
 - **PNG lossy quantization** (median-cut, 256 colors) + alpha stripping for opaque images.
 - **Progressive JPEG** (optimized Huffman); **GIF** LZW re-encode preserving animation.
 - **Metadata stripping** — EXIF / GPS / IPTC across formats.
