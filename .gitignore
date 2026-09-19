@@ -59,3 +59,20 @@ docs/_base.css
 docs/_ab_*.html
 docs/_probe.html
 docs/_old*
+
+# AI tooling. The repo is indifferent to which agent is used and should not smell of
+# tooling: AGENTS.md is the one agent-context file, and whatever a specific editor or
+# agent writes stays local. See iamjarl-strategy PROJECT_STANDARDS.md section 8.
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+.cursor/
+.cursorrules
+.windsurfrules
+.clinerules
+.aider*
+.continue/
+.codex/
+.mcp.json
+GEMINI.md
+.github/copilot-instructions.md
