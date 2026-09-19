@@ -1,4 +1,4 @@
-# CLAUDE.md — TrimrPix (macOS)
+# AGENTS.md — TrimrPix (macOS)
 
 Quick-start context for developers and AI assistants. Detailed specs in `docs/` and `ARCHITECTURE.md`.
 
