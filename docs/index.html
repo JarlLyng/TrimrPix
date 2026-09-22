@@ -41,7 +41,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
     <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="screenshot-1.png" as="image">
+    <link rel="preload" href="screenshot-1.avif" as="image" type="image/avif">
     <link rel="dns-prefetch" href="https://apps.apple.com">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -88,7 +88,11 @@
                     </ul>
                 </div>
                 <div class="hero-visual">
-                    <img src="screenshot-1.png" alt="TrimrPix app window showing image optimization with drag and drop and file size savings" width="1800" height="900" loading="eager" fetchpriority="high" class="hero-screenshot">
+                    <picture>
+                        <source srcset="screenshot-1.avif" type="image/avif">
+                        <source srcset="screenshot-1.webp" type="image/webp">
+                        <img src="screenshot-1.png" alt="TrimrPix app window showing image optimization with drag and drop and file size savings" width="1800" height="900" loading="eager" fetchpriority="high" class="hero-screenshot">
+                    </picture>
                 </div>
             </div>
         </section>
@@ -100,19 +104,31 @@
                 <div class="gallery-grid">
                     <figure class="gallery-item reveal">
                         <a href="screenshot-1.png" target="_blank" rel="noopener noreferrer" aria-label="Open the full-size screenshot: Drag images in, or drop a whole folder">
-                            <img src="screenshot-1.png" alt="TrimrPix with two images added to the list, each showing its original size" width="1800" height="900" loading="lazy" class="gallery-img">
+                            <picture>
+                                <source srcset="screenshot-1.avif" type="image/avif">
+                                <source srcset="screenshot-1.webp" type="image/webp">
+                                <img src="screenshot-1.png" alt="TrimrPix with two images added to the list, each showing its original size" width="1800" height="900" loading="lazy" class="gallery-img">
+                            </picture>
                         </a>
                         <figcaption>Drag images in, or drop a whole folder.</figcaption>
                     </figure>
                     <figure class="gallery-item reveal">
                         <a href="screenshot-2.png" target="_blank" rel="noopener noreferrer" aria-label="Open the full-size screenshot: Pick a preset, or set the quality yourself">
-                            <img src="screenshot-2.png" alt="TrimrPix settings: compression preset, a quality slider at 80 percent, save options and Watch Folder" width="1000" height="1040" loading="lazy" class="gallery-img">
+                            <picture>
+                                <source srcset="screenshot-2.avif" type="image/avif">
+                                <source srcset="screenshot-2.webp" type="image/webp">
+                                <img src="screenshot-2.png" alt="TrimrPix settings: compression preset, a quality slider at 80 percent, save options and Watch Folder" width="1000" height="1040" loading="lazy" class="gallery-img">
+                            </picture>
                         </a>
                         <figcaption>Pick a preset, or set the quality yourself.</figcaption>
                     </figure>
                     <figure class="gallery-item reveal">
                         <a href="screenshot-3.png" target="_blank" rel="noopener noreferrer" aria-label="Open the full-size screenshot: Optimize one file, or the whole batch at once">
-                            <img src="screenshot-3.png" alt="TrimrPix with three images queued, each with its own Optimize button and Optimize All below" width="1892" height="1084" loading="lazy" class="gallery-img">
+                            <picture>
+                                <source srcset="screenshot-3.avif" type="image/avif">
+                                <source srcset="screenshot-3.webp" type="image/webp">
+                                <img src="screenshot-3.png" alt="TrimrPix with three images queued, each with its own Optimize button and Optimize All below" width="1892" height="1084" loading="lazy" class="gallery-img">
+                            </picture>
                         </a>
                         <figcaption>Optimize one file, or the whole batch at once.</figcaption>
                     </figure>
