@@ -159,6 +159,14 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Every link gets the brand colour. The per-context rules below still set their
+   own; this only catches links in a container none of them covers, which
+   otherwise fall through to the browser's #0000ee (2.06:1 on the dark
+   background, found on privacy.html and 404.html). */
+a {
+    color: var(--ij-color-primary);
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -748,12 +756,8 @@ body {
 
 .support-footer-note a {
     color: var(--ij-color-primary);
-    text-decoration: none;
 }
 
-.support-footer-note a:hover {
-    text-decoration: underline;
-}
 
 /* ---- Article / prose pages ---- */
 .article-page {
@@ -849,13 +853,9 @@ body {
 
 .prose a {
     color: var(--ij-color-primary);
-    text-decoration: none;
     transition: opacity 0.2s;
 }
 
-.prose a:hover {
-    text-decoration: underline;
-}
 
 /* Comparison table */
 /* Wide tables scroll inside their own box; the page itself must never scroll
@@ -1127,12 +1127,30 @@ body {
 /* Inline guide links inside the feature cards. */
 .feature-card p a {
     color: var(--ij-color-primary);
-    text-decoration: none;
     font-weight: var(--ij-font-weight-semibold);
 }
 
-.feature-card p a:hover {
-    text-decoration: underline;
+
+/* Links inside running text need a cue besides colour (WCAG 1.4.1). The primary
+   sits at 1.6-2.4:1 against the body greys, under the 3:1 that would let colour
+   carry it alone. The underline is kept quiet at half strength and firms up on
+   hover. Lists of links (footer, guides, related articles) are navigation, not
+   text, and are left as they are. */
+.prose a,
+.feature-card p a,
+.support-footer-note a,
+.faq-item a {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
+}
+
+.prose a:hover,
+.feature-card p a:hover,
+.support-footer-note a:hover,
+.faq-item a:hover {
+    text-decoration-color: currentColor;
 }
 
 /* Closing CTA. Deliberately plain rather than a second gradient block: the
