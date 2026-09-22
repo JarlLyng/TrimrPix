@@ -1037,7 +1037,7 @@ body {
     margin-bottom: 48px;
 }
 
-.footer-section h4 {
+.footer-section h3 {
     font-size: var(--ij-font-size-base);
     font-weight: var(--ij-font-weight-semibold);
     margin-bottom: var(--ij-spacing-lg);
