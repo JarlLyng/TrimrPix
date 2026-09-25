@@ -6,12 +6,24 @@ Quick-start context for developers and AI assistants. Detailed specs in `docs/` 
 
 A macOS SwiftUI app for high-quality image compression with a simple UI — the same core idea as [ImageOptim](https://github.com/ImageOptim/ImageOptim) but with modern formats and Apple-Silicon performance. Everything runs locally; no cloud, no accounts, no internet required.
 
-- **Developer:** Jarl Lyng / [IAMJARL](https://iamjarl.com)
+- **Developer:** [IAMJARL](https://iamjarl.com) (Jarl)
 - **Website:** [trimrpix.iamjarl.com](https://trimrpix.iamjarl.com)
 - **App Store:** [apps.apple.com/app/trimrpix/id6758639590](https://apps.apple.com/app/trimrpix/id6758639590)
 - **License:** [MIT](LICENSE) — open source.
 - **Price:** $1.99 USD one-time (no in-app purchases, no subscription, no ads)
 - **Sister app:** [TrimrPix for iOS](https://trimrpixforios.iamjarl.com) — separate app; iOS does in-place replacement, macOS has drag-and-drop, Watch Folder, and extra formats (AVIF/GIF).
+
+## Boundaries: work only in this repo
+
+- Commit, push and open pull requests **only in this repo**. Never edit, commit to, push to or
+  open a pull request in another IAMJARL repo, and that includes `iamjarl-design`.
+- To ask another repo for something, **open an issue there**. Public repos get findings, never
+  measured numbers. If it is strategic, or not safe in public, it goes to the hub instead.
+- The one place outside this repo you write is this app's own folder in the private hub
+  (`TrimrPix/`). Shared hub files (`PORTFOLIO.md`, the standards, `tools/`) are changed from inside
+  the hub; if one needs changing, open an issue there.
+- If a task seems to need a change in another repo, stop, open the issue, and carry on with what
+  this repo can do.
 
 ## Strategy lives in the private hub
 
