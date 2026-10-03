@@ -40,9 +40,28 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
     private var debounceTask: Task<Void, Never>?
     private var scanTask: Task<Void, Never>?
     private var processedFiles: Set<String> = [] // Track processed files to avoid re-processing
+    /// A change arrived while a scan was running; scan again once it finishes.
+    private var rescanRequested = false
+    /// Identifies the current scan, so a scan cancelled by stop/start cannot clear its successor.
+    private var scanGeneration = 0
+    /// How many scans in a row found a file empty. See `maxEmptyChecks`.
+    private var emptyChecks: [String: Int] = [:]
 
     private static let debounceNanoseconds: UInt64 = 1_000_000_000 // 1s
     private static let maxProcessedFiles = 1000
+    /// An empty file is looked at this many times before it is given up on, so a file that
+    /// stays at zero bytes cannot keep the folder scanning forever.
+    private static let maxEmptyChecks = 10
+
+    /// What one look at a file came to.
+    enum FileOutcome: Sendable {
+        /// Optimized, or failed for a reason that waiting will not change. Not looked at again.
+        case handled
+        /// Its size changed while we waited, so it is still being written. Looked at again.
+        case stillWriting
+        /// Zero bytes, and still zero after the wait. Looked at again, a limited number of times.
+        case empty
+    }
 
     // MARK: - Initialization
 
@@ -151,6 +170,8 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
 
         // Clear processed files tracking
         processedFiles.removeAll()
+        emptyChecks.removeAll()
+        rescanRequested = false
 
         logger.info("Stopped watching folder")
     }
@@ -199,6 +220,14 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
             return
         }
 
+        // One scan at a time. A second scan alongside the first picks up files the first
+        // has not reached or marked yet, and optimizes them twice. The optimized output
+        // landing in the folder is itself a change, so this happened on ordinary batches.
+        guard scanTask == nil else {
+            rescanRequested = true
+            return
+        }
+
         // Snapshot Sendable values on the main actor before doing background work.
         let path = watchedPath
         let delaySeconds = settings.watchFolderDelay
@@ -206,17 +235,21 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
         let compressionSettings = settings.compressionSnapshot
         let compressionService = self.compressionService
         let logger = self.logger
+        scanGeneration += 1
+        let generation = scanGeneration
 
         logger.debug("Processing new files in watched folder: \(path)")
 
         scanTask = Task.detached { [weak self] in
+            var lookAgain = false
+
             let contents: [String]
             do {
                 contents = try FileManager.default.contentsOfDirectory(atPath: path)
             } catch {
                 let trimmedError = TrimrPixError.watchFolderSetupFailed(path, underlyingError: error)
                 logger.error("Error reading watch folder contents: \(trimmedError.technicalDescription)")
-                return
+                contents = []
             }
 
             let imageFiles = contents.filter { file in
@@ -230,7 +263,7 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
             logger.debug("Found \(imageFiles.count) image file(s) in watched folder (excluding output files)")
 
             for imageFile in imageFiles {
-                if Task.isCancelled { return }
+                if Task.isCancelled { break }
 
                 let fullPath = URL(fileURLWithPath: path).appendingPathComponent(imageFile)
                 let fileKey = fullPath.path
@@ -241,15 +274,60 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
                     continue
                 }
 
-                await WatchFolderService.processImageFile(
+                let outcome = await WatchFolderService.processImageFile(
                     at: fullPath,
                     delaySeconds: delaySeconds,
                     settings: compressionSettings,
                     compressionService: compressionService,
                     logger: logger
                 )
-                await self?.markFileAsProcessed(fileKey)
+                if await self?.record(outcome, for: fileKey) == true {
+                    lookAgain = true
+                }
             }
+
+            await self?.scanFinished(generation: generation, lookAgain: lookAgain && !Task.isCancelled)
+        }
+    }
+
+    /// Records what a look at a file came to. Returns true if it should be looked at again.
+    ///
+    /// Only a file that was actually dealt with is marked processed. Marking a file that was
+    /// skipped because it was still being written lost it for good: finishing a copy changes
+    /// the file, not the folder, so no further event came to pick it up.
+    private func record(_ outcome: FileOutcome, for fileKey: String) -> Bool {
+        switch outcome {
+        case .handled:
+            emptyChecks[fileKey] = nil
+            markFileAsProcessed(fileKey)
+            return false
+        case .stillWriting:
+            emptyChecks[fileKey] = nil
+            return true
+        case .empty:
+            let checks = (emptyChecks[fileKey] ?? 0) + 1
+            guard checks < Self.maxEmptyChecks else {
+                logger.debug("Giving up on empty file: \((fileKey as NSString).lastPathComponent)")
+                emptyChecks[fileKey] = nil
+                markFileAsProcessed(fileKey)
+                return false
+            }
+            emptyChecks[fileKey] = checks
+            return true
+        }
+    }
+
+    /// Ends a scan, and starts the next one if a change arrived meanwhile or a file was not
+    /// ready. The second matters on its own: a file still being copied produces no folder
+    /// event when the copy finishes, so nothing else would bring the scan back to it.
+    private func scanFinished(generation: Int, lookAgain: Bool) {
+        // A scan cancelled by stopWatching (and perhaps a new start) must not touch its successor.
+        guard generation == scanGeneration else { return }
+        scanTask = nil
+        guard isWatching else { return }
+        if rescanRequested || lookAgain {
+            rescanRequested = false
+            handleFileSystemEvent()
         }
     }
 
@@ -268,7 +346,7 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
         settings: CompressionSettings,
         compressionService: any CompressionServiceProtocol,
         logger: any LoggerProtocol
-    ) async {
+    ) async -> FileOutcome {
         logger.debug("Processing image file: \(url.lastPathComponent)")
 
         // Check if the file is still being written to (size changes).
@@ -279,7 +357,7 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
         } catch {
             let error = TrimrPixError.fileSizeReadError(url, underlyingError: error)
             logger.warning("Could not read initial file size: \(error.technicalDescription)")
-            return
+            return .handled // gone, most likely; nothing to wait for
         }
 
         // Wait for the file to stabilize.
@@ -288,7 +366,7 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
             try await Task.sleep(nanoseconds: delayNanoseconds)
         } catch {
             logger.warning("Task sleep interrupted")
-            return
+            return .stillWriting // cancelled; the scan that asked is ending anyway
         }
 
         // Check final size.
@@ -299,13 +377,17 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
         } catch {
             let error = TrimrPixError.fileSizeReadError(url, underlyingError: error)
             logger.warning("Could not read final file size: \(error.technicalDescription)")
-            return
+            return .handled
         }
 
         // Only process if the file size is stable.
-        guard initialSize == finalSize, initialSize > 0 else {
-            logger.debug("File size not stable for: \(url.lastPathComponent), skipping")
-            return
+        guard initialSize == finalSize else {
+            logger.debug("File size not stable for: \(url.lastPathComponent), looking again later")
+            return .stillWriting
+        }
+        guard finalSize > 0 else {
+            logger.debug("File is empty: \(url.lastPathComponent), looking again later")
+            return .empty
         }
 
         logger.info("Processing new image from watch folder: \(url.lastPathComponent)")
@@ -320,6 +402,9 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
             let trimmedError = TrimrPixError.compressionFailed(url: url, underlyingError: error)
             logger.error("Failed to optimize image from watch folder: \(trimmedError.technicalDescription)")
         }
+        // Failures included: a WebP or a PDF with text is refused every time, so trying again
+        // would only repeat the same message.
+        return .handled
     }
 
     // MARK: - Deinitialization
