@@ -5,6 +5,7 @@
 //  Created by Jarl Lyng on 26/02/2025.
 //
 
+import AppKit
 import SwiftUI
 
 /// Main application entry point
@@ -22,5 +23,17 @@ struct TrimrPixApp: App {
         }
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unified)
+        .commands {
+            // Replaces the system's "TrimrPix Help", which with no help book only says
+            // that help isn't available.
+            CommandGroup(replacing: .help) {
+                Button("TrimrPix Support") {
+                    NSWorkspace.shared.open(URL(string: "https://trimrpix.iamjarl.com/support.html")!)
+                }
+                Button("Send Feedback…") {
+                    NSWorkspace.shared.open(FeedbackMail.current)
+                }
+            }
+        }
     }
 }
