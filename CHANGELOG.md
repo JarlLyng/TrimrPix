@@ -2,7 +2,12 @@
 
 All notable changes to TrimrPix are documented here.
 
-## [1.7.2] - 2026-10-03
+## [1.7.2] - 2026-10-04
+
+### Fixed
+- Watch Folder no longer makes the app quit. Since 1.5.2, the first file added to a watched folder crashed TrimrPix, and so did switching Watch Folder off or to another folder
+- A file still being copied into a watched folder is now optimized once the copy finishes. Before, it was skipped and never looked at again
+- Several files dropped into a watched folder at once are each optimized once. Some were optimized twice
 
 ### Added
 - Help > Send Feedback… opens an email to support@iamjarl.com with the app and macOS versions filled in. It goes to your mail app, where you see all of it before anything is sent
