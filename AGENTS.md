@@ -42,6 +42,7 @@ Target audience, positioning, pricing reasoning, SEO/ASO playbooks, and competit
 - **Drag & drop**, **batch** (concurrent) + per-image controls; real-time size/percentage feedback.
 - **Watch Folder** — auto-processes new images (configurable 0.5–10s delay).
 - **Auto-save** in the originals' folder (default) or manual save dialog; overwrite-or-new with conflict-safe naming.
+- **Help menu:** "TrimrPix Support" opens the support page; "Send Feedback…" opens a `mailto:support@iamjarl.com` draft with the app and macOS versions filled in (`FeedbackMail.swift`). The user sees it all before sending; the app sends nothing itself.
 
 ### Features that do NOT exist (common hallucination targets)
 - No cloud upload, account, or internet processing — fully local.
