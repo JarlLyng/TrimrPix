@@ -2,6 +2,12 @@
 
 All notable changes to TrimrPix are documented here.
 
+## [1.7.2] - 2026-10-03
+
+### Added
+- Help > Send Feedback… opens an email to support@iamjarl.com with the app and macOS versions filled in. It goes to your mail app, where you see all of it before anything is sent
+- Help > TrimrPix Support opens the support page. Both replace the system Help item, which only said that help wasn't available
+
 ## [1.7.1] - 2026-09-13
 
 ### Fixed
