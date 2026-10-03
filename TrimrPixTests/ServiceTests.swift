@@ -295,6 +295,49 @@ struct WatchFolderServiceTests {
         await pause(2.5) // long enough for a second scan to have run, had there been one
         #expect(rec.calls.map(\.name) == ["one.jpg"])
     }
+
+    @Test func aFileStillBeingCopiedIsOptimizedOnceItIsComplete() async throws {
+        let tmp = TempDir()
+        let rec = RecordingCompression()
+        let service = try watching(tmp, rec)
+        defer { service.stopWatching() }
+
+        // A slow copy: the file appears (one folder event), then keeps growing for longer than
+        // the first scan's wait. Growing changes the file, not the folder, so no more events.
+        let file = tmp.file("slow.jpg")
+        try Data(repeating: 7, count: 500).write(to: file)
+        let handle = try FileHandle(forWritingTo: file)
+        for _ in 0..<15 {
+            await pause(0.2)
+            try handle.seekToEnd()
+            try handle.write(contentsOf: Data(repeating: 7, count: 500))
+        }
+        try handle.close()
+        let finalSize = 500 * 16
+
+        #expect(await waitUntil(seconds: 15) { rec.calls.count >= 1 })
+        await pause(2.5)
+        #expect(rec.calls.map(\.name) == ["slow.jpg"])
+        #expect(rec.calls.first?.size == finalSize) // optimized complete, not half-copied
+    }
+
+    @Test func severalFilesAtOnceAreEachOptimizedOnce() async throws {
+        let tmp = TempDir()
+        let rec = RecordingCompression()
+        // The app's default wait. Each file then waits longer than the 1s debounce, so the
+        // event from one file's output starts a new scan while the first is still going.
+        // With a shorter wait the first scan always finished first and nothing doubled.
+        let service = try watching(tmp, rec, delay: 2.0)
+        defer { service.stopWatching() }
+
+        for name in ["a.jpg", "b.jpg", "c.jpg"] {
+            try Data(repeating: 3, count: 2_000).write(to: tmp.file(name))
+        }
+        #expect(await waitUntil(seconds: 20) { Set(rec.calls.map(\.name)).count >= 3 })
+        await pause(5.0) // the outputs landing in the folder are changes too; let them settle
+        let counts = Dictionary(rec.calls.map { ($0.name, 1) }, uniquingKeysWith: +)
+        #expect(counts == ["a.jpg": 1, "b.jpg": 1, "c.jpg": 1])
+    }
 }
 
 /// Records each file it is asked to optimize and its size at that moment, then writes
