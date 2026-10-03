@@ -170,7 +170,8 @@ Have an idea for a new feature? Open an issue and let's discuss it!
 
 ## 📞 Support
 
-- **Website & support:** [trimrpix.iamjarl.com](https://trimrpix.iamjarl.com/)
+- **Email:** [support@iamjarl.com](mailto:support@iamjarl.com), for bug reports, questions and ideas
+- **Website:** [trimrpix.iamjarl.com](https://trimrpix.iamjarl.com/)
 - **App Store:** [TrimrPix on the App Store](https://apps.apple.com/app/trimrpix/id6758639590)
 - **Source & issues:** [GitHub](https://github.com/JarlLyng/TrimrPix) (for developers)
 
