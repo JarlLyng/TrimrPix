@@ -41,4 +41,4 @@ permanently. No data is sent to any server.
 
 ## Contact
 
-Questions about this policy? Contact us at https://iamjarl.com/
+Questions about this policy? Email support@iamjarl.com.
