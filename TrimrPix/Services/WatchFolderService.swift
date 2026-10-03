@@ -106,14 +106,18 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
             queue: DispatchQueue.global(qos: .background)
         )
 
-        // The handler fires on a background queue; hop to the main actor to touch state.
-        source.setEventHandler { [weak self] in
+        // Both handlers run on the source's background queue. They must be @Sendable:
+        // written inside this @MainActor class, a plain closure is inferred to be
+        // main-actor isolated, and Swift 6 checks that at runtime and traps when the
+        // background queue calls it. That crashed the app on the first change in the
+        // watched folder, and again when watching stopped.
+        source.setEventHandler { @Sendable [weak self] in
             Task { @MainActor in
                 self?.handleFileSystemEvent()
             }
         }
 
-        source.setCancelHandler {
+        source.setCancelHandler { @Sendable in
             close(fileDescriptor)
         }
 

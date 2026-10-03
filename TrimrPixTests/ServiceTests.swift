@@ -263,10 +263,72 @@ struct WatchFolderServiceTests {
         }
     }
 
-    // Note: starting the real DispatchSource file-system watcher is integration-level
-    // (opens an fd, spins a background source) and is environment-sensitive on CI, so
-    // it isn't unit-tested here. Start/stop semantics are covered at the view-model
-    // layer via MockWatchFolderService (see watchFolderActiveReflectsService).
+    // The tests below run the real file-system watcher on a temporary folder. Until they
+    // did, nothing started it, and its handlers trapped under Swift 6's runtime isolation
+    // check: the app crashed on the first change in a watched folder, and on stopping.
+
+    private func watching(_ tmp: TempDir, _ rec: RecordingCompression, delay: Double = 0.5) throws -> WatchFolderService {
+        let settings = StubSettings()
+        settings.watchFolderDelay = delay
+        let service = WatchFolderService(compressionService: rec, settings: settings)
+        try service.startWatching(path: tmp.url.path)
+        return service
+    }
+
+    @Test func stoppingDoesNotCrash() async throws {
+        let tmp = TempDir()
+        let service = try watching(tmp, RecordingCompression())
+        await pause(0.3)
+        service.stopWatching()
+        await pause(0.5) // the source's cancel handler runs after stop returns
+        #expect(!service.isWatching)
+    }
+
+    @Test func aNewFileIsOptimizedOnce() async throws {
+        let tmp = TempDir()
+        let rec = RecordingCompression()
+        let service = try watching(tmp, rec)
+        defer { service.stopWatching() }
+
+        try Data(repeating: 7, count: 2_000).write(to: tmp.file("one.jpg"))
+        #expect(await waitUntil(seconds: 10) { rec.calls.count >= 1 })
+        await pause(2.5) // long enough for a second scan to have run, had there been one
+        #expect(rec.calls.map(\.name) == ["one.jpg"])
+    }
+}
+
+/// Records each file it is asked to optimize and its size at that moment, then writes
+/// "<name>-optimized.<ext>" next to it the way auto-save does, so its output is a change
+/// in the watched folder just as the real service's is.
+final class RecordingCompression: CompressionServiceProtocol, @unchecked Sendable {
+    struct Call: Sendable { let name: String; let size: Int }
+    private let lock = NSLock()
+    private var recorded: [Call] = []
+    var calls: [Call] { lock.withLock { recorded } }
+
+    func optimizeImage(at url: URL, settings: CompressionSettings) async throws -> URL {
+        let size = (try? FileManager.default.attributesOfItem(atPath: url.path)[.size] as? Int) ?? -1
+        lock.withLock { recorded.append(Call(name: url.lastPathComponent, size: size)) }
+        let base = url.deletingPathExtension().lastPathComponent
+        let out = url.deletingLastPathComponent().appendingPathComponent("\(base)-optimized.\(url.pathExtension)")
+        try Data(repeating: 1, count: 16).write(to: out)
+        return out
+    }
+}
+
+private func pause(_ seconds: Double) async {
+    try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
+}
+
+/// Polls until the condition holds or the time runs out. Returns whether it held.
+@MainActor
+private func waitUntil(seconds: Double, _ condition: () -> Bool) async -> Bool {
+    let deadline = Date().addingTimeInterval(seconds)
+    while Date() < deadline {
+        if condition() { return true }
+        await pause(0.1)
+    }
+    return condition()
 }
 
 // MARK: - ImageItem thumbnails
