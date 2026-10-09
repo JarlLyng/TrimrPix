@@ -1,0 +1,12 @@
+# Keeps the pinned GitHub Actions current. The app's Swift packages are not covered:
+# Dependabot reads Package.swift, and this is an Xcode project without one.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # A new release waits a week before Dependabot proposes it, so a compromised release
+    # has time to be caught first. Security updates are not held back by this.
+    cooldown:
+      default-days: 7

@@ -159,6 +159,13 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Outfit, the display face of the design system's "images" family, which TrimrPix
+   belongs to (iamjarl-design 1.17.0). Headings and the wordmark only: that is the voice.
+   Body text stays in the UI face. The stack falls back to system-ui. */
+h1, h2, h3, .logo {
+    font-family: var(--ij-font-display, var(--ij-font-ui));
+}
+
 /* Every link gets the brand colour. The per-context rules below still set their
    own; this only catches links in a container none of them covers, which
    otherwise fall through to the browser's #0000ee (2.06:1 on the dark
@@ -578,8 +585,13 @@ a {
     opacity: 1;
 }
 
+/* Phosphor icons, inline SVG, as the design system has websites use (native apps use
+   SF Symbols). They were emoji, which VOICE.md keeps out of the copy. Decorative, so
+   aria-hidden; they take the brand colour from currentColor. */
 .feature-icon {
-    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: var(--ij-color-primary);
     margin-bottom: var(--ij-spacing-xl);
     display: block;
 }
