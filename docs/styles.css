@@ -159,6 +159,13 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Outfit, the display face of the design system's "images" family, which TrimrPix
+   belongs to (iamjarl-design 1.17.0). Headings and the wordmark only: that is the voice.
+   Body text stays in the UI face. The stack falls back to system-ui. */
+h1, h2, h3, .logo {
+    font-family: var(--ij-font-display, var(--ij-font-ui));
+}
+
 /* Every link gets the brand colour. The per-context rules below still set their
    own; this only catches links in a container none of them covers, which
    otherwise fall through to the browser's #0000ee (2.06:1 on the dark
