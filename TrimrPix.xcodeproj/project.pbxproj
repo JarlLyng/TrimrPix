@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2F5AD0C22F65C81A000DEA3D /* IAMJARLDesignTokens in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5AD0C12F65C81A000DEA3D /* IAMJARLDesignTokens */; };
-		2F958D242F66B94100DAC8BA /* PhosphorSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2F958D232F66B94100DAC8BA /* PhosphorSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,7 +57,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F5AD0C22F65C81A000DEA3D /* IAMJARLDesignTokens in Frameworks */,
-				2F958D242F66B94100DAC8BA /* PhosphorSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,7 +118,6 @@
 			name = TrimrPix;
 			packageProductDependencies = (
 				2F5AD0C12F65C81A000DEA3D /* IAMJARLDesignTokens */,
-				2F958D232F66B94100DAC8BA /* PhosphorSwift */,
 			);
 			productName = TrimrPix;
 			productReference = 3B5228362D6E843500CF16B0 /* TrimrPix.app */;
@@ -206,7 +203,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				2F5AD0C02F65C81A000DEA3D /* XCRemoteSwiftPackageReference "iamjarl-design" */,
-				2F958D222F66B94100DAC8BA /* XCRemoteSwiftPackageReference "swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3B5228372D6E843500CF16B0 /* Products */;
@@ -596,14 +592,6 @@
 				version = 1.2.1;
 			};
 		};
-		2F958D222F66B94100DAC8BA /* XCRemoteSwiftPackageReference "swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/phosphor-icons/swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -611,11 +599,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2F5AD0C02F65C81A000DEA3D /* XCRemoteSwiftPackageReference "iamjarl-design" */;
 			productName = IAMJARLDesignTokens;
-		};
-		2F958D232F66B94100DAC8BA /* PhosphorSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2F958D222F66B94100DAC8BA /* XCRemoteSwiftPackageReference "swift" */;
-			productName = PhosphorSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
