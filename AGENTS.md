@@ -85,6 +85,10 @@ The shared header and footer live in `tools/partials/` and are written into ever
 `tools/sync_partials.py`. **Edit the partial, not the ten pages**, then run the script and commit
 the result. CI runs it with `--check` and fails the deploy if any page has drifted.
 
+`docs/social-card.png` (the `og:image`, and the repo's GitHub social preview) is rendered from
+`tools/social-card/card.html`; the render command is at the top of that file. Change the source
+and render again rather than editing the PNG. The GitHub preview is a manual upload by the owner.
+
 ### Outbound click tracking
 
 Every App Store link carries `data-umami-event="appstore-mac"` or `"appstore-ios"` plus

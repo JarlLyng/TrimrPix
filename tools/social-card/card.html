@@ -1,0 +1,80 @@
+<!doctype html>
+<!--
+  Source of docs/social-card.png, the site's og:image and the repo's GitHub social preview.
+
+  Render it (from the repo root):
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+      --hide-scrollbars --force-device-scale-factor=1 --window-size=1200,630 \
+      --virtual-time-budget=4000 --screenshot=docs/social-card.png \
+      "file://$PWD/tools/social-card/card.html"
+
+  The rules it follows are the hub's (DESIGN.md, "Social cards"): the name, one line of
+  outcome, a real product screen, the site's own ground and accent, 1200x630, under 1 MB,
+  text away from the edges. When there is a screenshot of a finished run (issue #60),
+  swap it in below and render again.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.17.0/dist/fonts/outfit.css">
+<style>
+  :root {
+    --ground: #0a0a0a;
+    --lime: #D0FF00;
+    --purple: #A435D2;
+    --text: #ffffff;
+    --muted: #b8b8b8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    position: relative;
+    background:
+      radial-gradient(600px 420px at 8% 0%, color-mix(in srgb, var(--purple) 38%, transparent), transparent 70%),
+      radial-gradient(560px 420px at 100% 100%, color-mix(in srgb, var(--lime) 16%, transparent), transparent 70%),
+      var(--ground);
+    color: var(--text);
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  .brand { position: absolute; left: 72px; top: 60px; display: flex; align-items: center; gap: 16px; }
+  .brand img { width: 52px; height: 52px; border-radius: 12px; }
+  .brand span { font: 600 32px/1 'Outfit', system-ui, sans-serif; letter-spacing: -0.01em; }
+  .eyebrow {
+    position: absolute; left: 72px; top: 160px;
+    font: 500 17px/1 ui-monospace, Menlo, monospace; letter-spacing: 0.08em; color: var(--lime);
+  }
+  h1 {
+    position: absolute; left: 72px; top: 196px; width: 560px;
+    font: 700 76px/1.0 'Outfit', system-ui, sans-serif; letter-spacing: -0.025em;
+  }
+  h1 em { font-style: normal; color: var(--lime); display: block; }
+  .line {
+    position: absolute; left: 72px; top: 388px; width: 500px;
+    font-size: 22px; line-height: 1.45; color: var(--muted);
+  }
+  .url {
+    position: absolute; left: 72px; bottom: 60px;
+    font: 500 21px/1 ui-monospace, Menlo, monospace; color: var(--lime);
+  }
+  .facts {
+    position: absolute; right: 72px; bottom: 50px;
+    padding: 12px 22px; border: 1px solid rgba(255,255,255,0.18); border-radius: 999px;
+    font: 500 16px/1 ui-monospace, Menlo, monospace; color: #e6e6e6;
+  }
+  .window {
+    position: absolute; left: 608px; top: 136px; width: 520px;
+    border-radius: 14px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.10);
+  }
+</style>
+</head>
+<body>
+  <div class="brand"><img src="../../docs/app-icon.png" alt=""><span>TrimrPix</span></div>
+  <div class="eyebrow">MACOS · JPEG · PNG · GIF · AVIF · HEIC</div>
+  <h1>Trim file size.<em>Keep quality.</em></h1>
+  <p class="line">Drop images in, get them back smaller. Everything stays on your Mac.</p>
+  <img class="window" src="../../docs/screenshot-3.png" alt="">
+  <div class="url">trimrpix.iamjarl.com</div>
+  <div class="facts">Offline · One-time purchase</div>
+</body>
+</html>
