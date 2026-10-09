@@ -8,7 +8,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
 import IAMJARLDesignTokens
-import PhosphorSwift
 
 /// Main content view for the TrimrPix application
 /// Uses IAMJARL Design System: DesignTokens.Common, Spacing, Radius, ColorToken.State
@@ -27,6 +26,7 @@ struct ContentView: View {
                     .scaledToFit()
                     .frame(width: 24, height: 24)
                     .foregroundStyle(DesignTokens.Common.primary(colorScheme))
+                    .accessibilityHidden(true) // VoiceOver read "CowIcon"; the title beside it says TrimrPix
                 Text("TrimrPix")
                     .font(.trimrPixTitle)
                     .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
@@ -36,10 +36,11 @@ struct ContentView: View {
                 HStack(spacing: DesignTokens.Spacing.md) {
                     if viewModel.isWatchFolderActive {
                         HStack(spacing: DesignTokens.Spacing.xs) {
-                            Ph.eye.fill
-                                .color(DesignTokens.ColorToken.State.success)
-                                .frame(width: 20, height: 20)
-                                .aspectRatio(contentMode: .fit)
+                            Image(systemName: "eye.fill")
+                                .font(.trimrPixCaption)
+                                .imageScale(.large)
+                                .foregroundStyle(DesignTokens.ColorToken.State.success)
+                                .accessibilityHidden(true) // the text beside it says it
                             Text("Watch Folder")
                                 .font(.trimrPixCaption)
                                 .foregroundStyle(DesignTokens.ColorToken.State.success)
@@ -47,11 +48,13 @@ struct ContentView: View {
                     }
 
                     Button(action: { showSettings = true }) {
-                        Ph.gear.regular
-                            .color(DesignTokens.Common.Text.primary(colorScheme))
-                            .frame(width: 24, height: 24)
-                            .aspectRatio(contentMode: .fit)
+                        Image(systemName: "gearshape")
+                            .font(.trimrPixTitle2)
+                            .fontWeight(.regular) // the title face is semibold; the old icon was regular
+                            .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
                     }
+                    .accessibilityLabel("Settings")
+                    .help("Settings")
                     .buttonStyle(.borderless)
                 }
             }
@@ -150,10 +153,11 @@ struct DropZoneView: View {
                 .clipShape(RoundedRectangle(cornerRadius: DesignTokens.Radius.md))
 
             VStack {
-                Ph.downloadSimple.regular
-                    .color(DesignTokens.Common.Text.primary(colorScheme))
-                    .frame(width: 24, height: 24)
-                    .aspectRatio(contentMode: .fit)
+                Image(systemName: "arrow.down.to.line")
+                    .font(.trimrPixHeadline)
+                    .imageScale(.large)
+                    .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
+                    .accessibilityHidden(true) // the text beside it says it
                 Text("Drop images here")
                     .font(.trimrPixHeadline)
                     .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
@@ -237,11 +241,12 @@ struct ImageItemView: View {
 
                 HStack(spacing: DesignTokens.Spacing.sm) {
                     Button(action: { viewModel.removeImage(id: image.id) }) {
-                        Ph.xCircle.fill
-                            .color(DesignTokens.Common.Text.secondary(colorScheme))
-                            .frame(width: 20, height: 20)
-                            .aspectRatio(contentMode: .fit)
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.trimrPixBody)
+                            .imageScale(.large)
+                            .foregroundStyle(DesignTokens.Common.Text.secondary(colorScheme))
                     }
+                    .accessibilityLabel("Remove")
                     .buttonStyle(.borderless)
                     .help("Remove image from list")
                     .disabled(image.isOptimizing)
@@ -250,10 +255,11 @@ struct ImageItemView: View {
                         ProgressView()
                             .scaleEffect(0.8)
                     } else if image.isOptimized {
-                        Ph.checkCircle.fill
-                            .color(DesignTokens.ColorToken.State.success)
-                            .frame(width: 24, height: 24)
-                            .aspectRatio(contentMode: .fit)
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.trimrPixBody)
+                            .imageScale(.large)
+                            .foregroundStyle(DesignTokens.ColorToken.State.success)
+                            .accessibilityLabel("Optimized")
                     } else {
                         Button("Optimize") {
                             if let index = viewModel.images.firstIndex(where: { $0.id == image.id }) {
