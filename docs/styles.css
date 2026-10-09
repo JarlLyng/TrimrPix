@@ -578,8 +578,13 @@ a {
     opacity: 1;
 }
 
+/* Phosphor icons, inline SVG, as the design system has websites use (native apps use
+   SF Symbols). They were emoji, which VOICE.md keeps out of the copy. Decorative, so
+   aria-hidden; they take the brand colour from currentColor. */
 .feature-icon {
-    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: var(--ij-color-primary);
     margin-bottom: var(--ij-spacing-xl);
     display: block;
 }
