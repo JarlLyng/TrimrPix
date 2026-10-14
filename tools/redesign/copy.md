@@ -105,8 +105,8 @@ wait is 2 seconds by default and can be set from 0.5 to 10. It ignores its own o
 until you turn it on.
 
 **What happens to my originals?**
-They are kept. The smaller version is saved next to the original as yourphoto-optimized.jpg, so you
-can compare them. If you would rather replace the originals, turn on "Overwrite original files" in
+They are kept. The smaller version is saved next to the original with "-optimized" added to its
+name, so you can compare them. If you would rather replace the originals, turn on "Overwrite original files" in
 Settings; it is off by default. If compressing would make a file bigger, TrimrPix keeps the
 original bytes.
 

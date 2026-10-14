@@ -33,15 +33,21 @@ struct SampleSavingsMeasurement {
     static let environment = ProcessInfo.processInfo.environment
 
     /// The app's defaults: the Medium preset, PNG quantization on, no resize, saved beside the
-    /// original. Metadata is always stripped; it has no setting.
+    /// original. Metadata is always stripped; it has no setting. TEST_RUNNER_SAMPLE_MAX_DIMENSION
+    /// turns on the app's optional downscale to that many pixels on the long side, for measuring
+    /// the web workflow; leave it unset for the defaults.
+    static let maxDimension = environment["SAMPLE_MAX_DIMENSION"].flatMap(Int.init)
     static let settings = CompressionSettings(
         compressionQuality: CompressionPreset.medium.quality,
         pngQuantizationEnabled: true,
-        resizeEnabled: false,
-        maxDimension: 2048,
+        resizeEnabled: maxDimension != nil,
+        maxDimension: maxDimension ?? 2048,
         overwriteOriginal: false,
         autoSave: true
     )
+    static let settingsDescription = "Medium (80%), PNG quantization on, "
+        + (maxDimension.map { "resized to \($0) px on the long side" } ?? "no resize")
+        + ", metadata stripped"
 
     struct Row: Codable {
         let file: String
@@ -97,7 +103,7 @@ struct SampleSavingsMeasurement {
         let summary: [String: Any] = [
             "measured": ISO8601DateFormatter().string(from: Date()),
             "app": "\(version) (\(build))",
-            "settings": "Medium (80%), PNG quantization on, no resize, metadata stripped",
+            "settings": Self.settingsDescription,
             "files": rows.count,
             "bytesBefore": before,
             "bytesAfter": after,
