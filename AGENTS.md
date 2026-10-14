@@ -110,8 +110,9 @@ Every App Store link carries the design system's store event: `data-umami-event=
 placement and device with no extra attributes.
 
 These replaced `appstore-mac` / `appstore-ios` on 2026-10-14 (#86), when the store buttons became
-the design system's generated fragments. **Umami data before that date uses the old names**, so a
-comparison across the switch has to map one to the other. Do not rename them again without a reason:
+the design system's generated fragments. **Umami data before that date uses the old names.** The hub's
+`store_clicks.py` maps `appstore-mac`, `appstore-ios` and `store-click` to the same site, so the
+series continues across the switch. Do not rename them again without a reason:
 the point is to make site changes judgeable over time. A new App Store link needs the attributes too,
 or it is invisible, and should come from a fragment where one exists.
 

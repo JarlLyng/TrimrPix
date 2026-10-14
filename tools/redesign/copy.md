@@ -17,8 +17,9 @@ space. Fast, private, and fully offline.
 
 *[store fragment, `.black`, with its facts line]*
 
-*[the loop]* Alt: "Images dragged into TrimrPix, each one's size and saving appearing as it is
-optimized."
+*[a still of the window after a batch, from the app after #81]* Alt: "TrimrPix after a batch: each
+image with its size before and after, and how much it saved." A still, not a loop (owner,
+2026-10-14), so the window that stays is the only thing on the page that moves.
 
 Looking for iPhone or iPad? →
 
