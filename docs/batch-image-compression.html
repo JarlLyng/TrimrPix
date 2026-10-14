@@ -30,28 +30,34 @@
     <link rel="apple-touch-icon" href="favicon.png">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://umami-iamjarl.vercel.app" crossorigin>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.8.0/dist/css/tokens.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.17.0/dist/fonts/outfit.css"
-      integrity="sha384-AqEDOyf/wBJnKtYuo0ov7MLW4+Cb7FzUelJIjZ/OiccywdE/3Fo4LbBKBp4g5nzJ" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.17.0/dist/identity/trimrpix.css"
-      integrity="sha384-BW6DTyFeU+5VvNh2vemS0vR23LCd+OcJb0jGijAZiW8NWzsSBMhbHTEOFSPKl5jB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/css/tokens.css"
+      integrity="sha384-vWseEKoRMUSqVab/ovOaeMhPJF+7kDZcwFCyWMoanTRzCpH876bYzZMHWqSS8GxL" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/identity/trimrpix.css"
+      integrity="sha384-RHE+iH6mfwGsiBrhxkinwFrYuhsSe7JJVeexHxEwLfYkm4nII630/7puS+zj8xKa" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/fonts/bricolage-grotesque.css"
+      integrity="sha384-7MBtap/qFmXuINKrASGw50uRMVbtyt7imTCzi3NHsXMUqvO0F2VaN3FenSbbkpCd" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/fonts/jetbrains-mono.css"
+      integrity="sha384-5WosBywGRyaWR+M8ltsKlurUWDv/hk1trfHEC5O/x5Rok9DaWSjRs/JQBo55mhel" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/kit/kit.css"
+      integrity="sha384-G0ZOEpQ1VxN96i0i53Qc2L2arp75zhH/Fmh7X/Qhtf0wlMuXpKE9TqiHVzgcviRA" crossorigin="anonymous">
+    <script type="module" src="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/components/ij-nav.js"
+      integrity="sha384-5nNQ6Swgqm5IgGD4fQaz3xkHCnLnSUFP4nUOW0zFoI6dZbPQp+aBPKUNiSG+efVe" crossorigin="anonymous"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/components/ij-footer.js"
+      integrity="sha384-bXdqXbKUC05AtEGtJTC2ZHbft8ymGbiBcVV67AaGEKhHVD9hqiuAza1VnFqrc8aE" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles.css">
     <script defer src="https://umami-iamjarl.vercel.app/script.js" data-website-id="29beb01b-51b6-4992-a500-841c0b87a62b"></script>
 </head>
-<body>
+<body class="ij-page">
     <!-- partial:header -->
-    <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header">
-        <div class="container">
-            <a href="index.html" class="logo"><img src="app-icon.png" alt="" width="32" height="32" class="logo-icon">TrimrPix</a>
-            <nav class="nav" aria-label="Main navigation">
-                <a href="index.html#features">Features</a>
-                <a href="index.html#faq">FAQ</a>
-                <a href="support.html">Support</a>
-                <a href="https://apps.apple.com/app/trimrpix/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="appstore-mac" data-umami-event-placement="header" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">Get on Mac</a>
-            </nav>
-        </div>
-    </header>
+<a class="ij-skip" href="#main">Skip to content</a>
+    <ij-nav>
+      <a slot="brand" href="./">TrimrPix</a>
+      <a slot="links" href="./#compare">Before and after</a>
+      <a slot="links" href="./#guides">Guides</a>
+      <a slot="links" href="./#faq">FAQ</a>
+      <a slot="secondary" href="support.html">Support</a>
+      <a slot="cta" href="https://apps.apple.com/app/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="store-click" data-umami-event-store="mac-app-store" data-umami-event-placement="nav" data-umami-event-locale="en">Download</a>
+    </ij-nav>
     <!-- /partial:header -->
 
     <main id="main" class="article-page">
@@ -103,8 +109,15 @@
 
             <div class="article-cta reveal">
                 <h2>Try TrimrPix</h2>
-                <p>Batch compress images in seconds. $1.99 on the Mac App Store.</p>
-                <a href="https://apps.apple.com/app/trimrpix/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="appstore-mac" data-umami-event-placement="article" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Download on the App Store</a>
+                <p>Batch compress images in seconds.</p>
+                <!-- dist/store/trimrpix.en.footer.black.html, v1.32.0, verbatim -->
+                <!-- IAMJARL store button for TrimrPix (en, footer, black). Generated from apps.json, v1.32.0. Do not edit. -->
+                <div class="ij-store" data-ij-store="trimrpix" data-ij-store-locale="en">
+                  <a class="ij-store-badge" href="https://apps.apple.com/app/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="store-click" data-umami-event-store="mac-app-store" data-umami-event-placement="footer" data-umami-event-locale="en">
+                    <img src="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/badges/mac-app-store-black-en-us.svg" alt="Download on the Mac App Store" width="156" height="40">
+                  </a>
+                  <p class="ij-store-facts">$1.99 once · macOS 15.2 or later</p>
+                </div>
             </div>
 
             <nav class="related-articles" aria-label="Related guides">
@@ -118,16 +131,20 @@
     </main>
 
     <!-- partial:footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p><a href="index.html">TrimrPix</a> &middot; <a href="https://apps.apple.com/app/trimrpix/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="appstore-mac" data-umami-event-placement="footer" target="_blank" rel="noopener noreferrer">Mac App Store</a> &middot; <a href="https://apps.apple.com/us/app/trimrpix/id6761081919?pt=128512007&amp;ct=site&amp;mt=8" data-umami-event="appstore-ios" data-umami-event-placement="footer" target="_blank" rel="noopener noreferrer">iOS App Store</a> &middot; <a href="support.html">Support</a> &middot; <a href="privacy.html">Privacy</a></p>
-                <p><a href="imageoptim-alternative.html">ImageOptim Alternative</a> &middot; <a href="image-formats-guide.html">Formats Guide</a> &middot; <a href="compress-images-for-web.html">Compress for Web</a> &middot; <a href="batch-image-compression.html">Batch Compression</a> &middot; <a href="optimize-images-app-store.html">App Store Images</a> &middot; <a href="remove-exif-data-on-mac.html">Remove EXIF Data</a></p>
-                <p>More from IAMJARL: <a href="https://trimrpixforios.iamjarl.com/" target="_blank" rel="noopener noreferrer">TrimrPix for iOS</a> &middot; <a href="https://madebyhuman.iamjarl.com/" target="_blank" rel="noopener noreferrer">Made by Human</a> &middot; <a href="https://iamjarl.com/" target="_blank" rel="noopener noreferrer">All projects</a></p>
-                <p>&copy; 2026 IAMJARL. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+<ij-footer app="trimrpix">
+      <a slot="links" href="support.html">Support</a>
+      <a slot="links" href="privacy.html">Privacy</a>
+      <!-- dist/footers/trimrpix.html, v1.32.0: the cross-links in the served HTML, for crawlers that do not run JavaScript -->
+      <!-- IAMJARL cross-links for TrimrPix: generated, do not edit -->
+      <!-- design system v1.32.0, registry updated 2026-10-13 -->
+      <!-- Paste inside <ij-footer app="trimrpix">. Rebuild to refresh. -->
+      <a slot="cross-links" href="https://trimrpixforios.iamjarl.com">TrimrPix for iOS</a>
+      <a slot="cross-links" href="https://botlens.iamjarl.com">BotLens</a>
+      <a slot="cross-links" href="https://pagelens.iamjarl.com">PageLens</a>
+      <a slot="cross-links" href="https://madebyhuman.iamjarl.com">Made by Human</a>
+      <a slot="cross-links" href="https://iamjarl.com">All projects</a>
+      <span slot="fineprint">© 2026 IAMJARL</span>
+    </ij-footer>
     <!-- /partial:footer -->
 
     <script type="application/ld+json">

@@ -170,7 +170,9 @@ h1, h2, h3, .logo {
    own; this only catches links in a container none of them covers, which
    otherwise fall through to the browser's #0000ee (2.06:1 on the dark
    background, found on privacy.html and 404.html). */
-a {
+/* Not the links slotted into <ij-nav> and <ij-footer>: those take the components'
+   own colours, and the kit's .ij-page link rule leaves them alone for that reason. */
+a:not([slot]) {
     color: var(--ij-color-primary);
 }
 
@@ -462,6 +464,28 @@ a {
     border-color: var(--color-border-hover);
     background: var(--color-bg-card-hover);
     transform: translateY(-2px);
+}
+
+/* On the identity's light pages (.ij-page, #86) two things change. The brand gradient
+   carries no text colour accessibly (#58), and the kit's link rule (.ij-page a) would
+   otherwise turn a button's label olive. So the primary button is solid dark with a light
+   label, and both buttons keep their own label colour. */
+.ij-page a.btn-primary {
+    background: var(--ij-color-text-primary);
+    color: var(--ij-color-bg-card);
+    box-shadow: none;
+}
+
+.ij-page a.btn-primary:hover {
+    background: color-mix(in srgb, var(--ij-color-text-primary) 85%, var(--ij-color-bg-card));
+    color: var(--ij-color-bg-card);
+    box-shadow: none;
+    filter: none;
+}
+
+.ij-page a.btn-secondary,
+.ij-page a.btn-secondary:hover {
+    color: var(--ij-color-text-primary);
 }
 
 .btn-large {
@@ -952,8 +976,10 @@ a {
     top: var(--ij-spacing-xl);
     width: 28px;
     height: 28px;
-    background: var(--gradient-primary);
-    color: var(--color-on-brand-gradient);
+    /* The icon's lime as a highlighter behind black text, the identity's one use of it
+       (#86). It was the brand gradient, which carries no text colour accessibly (#58). */
+    background: var(--ij-color-accent);
+    color: var(--ij-color-on-accent);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -963,6 +989,12 @@ a {
 }
 
 /* Article CTA */
+.article-cta .ij-store {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
 .article-cta {
     padding: var(--ij-spacing-xxxl);
     background: var(--ij-color-bg-card);
