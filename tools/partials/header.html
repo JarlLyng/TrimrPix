@@ -1,12 +1,9 @@
-    <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header">
-        <div class="container">
-            <a href="index.html" class="logo"><img src="app-icon.png" alt="" width="32" height="32" class="logo-icon">TrimrPix</a>
-            <nav class="nav" aria-label="Main navigation">
-                <a href="{{HOME}}#features">Features</a>
-                <a href="{{HOME}}#faq">FAQ</a>
-                <a href="support.html">Support</a>
-                <a href="https://apps.apple.com/app/trimrpix/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="appstore-mac" data-umami-event-placement="header" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">Get on Mac</a>
-            </nav>
-        </div>
-    </header>
+<a class="ij-skip" href="#main">Skip to content</a>
+    <ij-nav>
+      <a slot="brand" href="{{HOME}}">TrimrPix</a>
+      <a slot="links" href="{{HOME}}#compare">Before and after</a>
+      <a slot="links" href="{{HOME}}#guides">Guides</a>
+      <a slot="links" href="{{HOME}}#faq">FAQ</a>
+      <a slot="secondary" href="support.html">Support</a>
+      <a slot="cta" href="https://apps.apple.com/app/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="store-click" data-umami-event-store="mac-app-store" data-umami-event-placement="nav" data-umami-event-locale="en">Download</a>
+    </ij-nav>

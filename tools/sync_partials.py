@@ -22,7 +22,7 @@ PARTIALS = ROOT / "tools" / "partials"
 # index.html is served at / so it links to same-page anchors; every other page
 # has to name the file. That is the only way the header legitimately differs.
 HOME = {"index.html": ""}
-DEFAULT_HOME = "index.html"
+DEFAULT_HOME = "./"
 
 FOOTER: dict[str, str] = {}
 DEFAULT_FOOTER = "footer-compact.html"
