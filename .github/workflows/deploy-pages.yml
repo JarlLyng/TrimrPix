@@ -33,6 +33,16 @@ jobs:
       - name: Check shared header and footer are in sync
         run: python3 tools/sync_partials.py --check
 
+      # A page under construction marks what it still waits on with data-draft-slot
+      # (the owner's photo, a measurement, new captures) or a {{placeholder}}. Never
+      # publish one: fail here instead.
+      - name: Refuse to deploy draft slots or placeholders
+        run: |
+          if grep -l -E 'data-draft-slot|\{\{[A-Z_]+\}\}' docs/*.html; then
+            echo "These pages still have draft slots or {{placeholders}}; not deploying." >&2
+            exit 1
+          fi
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
         with:

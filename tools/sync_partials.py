@@ -24,11 +24,16 @@ PARTIALS = ROOT / "tools" / "partials"
 HOME = {"index.html": ""}
 DEFAULT_HOME = "index.html"
 
-# index.html carries the full five-column footer; the rest carry the compact one.
-FOOTER = {"index.html": "footer-full.html"}
+FOOTER: dict[str, str] = {}
 DEFAULT_FOOTER = "footer-compact.html"
 
-SKIP = {"google25b9a18021b6d68d.html"}          # Search Console verification file
+SKIP = {
+    "google25b9a18021b6d68d.html",   # Search Console verification file
+    # The homepage is built on the design system's marketing kit (#86). Its nav and
+    # footer are the kit's <ij-nav> and <ij-footer>, written in the page with its own
+    # anchors, so it carries no partials.
+    "index.html",
+}
 
 
 def block(name: str, body: str) -> str:
