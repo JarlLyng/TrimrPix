@@ -1,416 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <script>document.documentElement.classList.add('js');</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="apple-itunes-app" content="app-id=6761081919">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-itunes-app" content="app-id=6761081919">
 
-    <!-- Primary SEO -->
-    <title>TrimrPix – Image Optimizer for Mac | Trim file size, keep quality</title>
-    <meta name="description" content="TrimrPix shrinks image file sizes on your Mac without visible quality loss. Drag, drop, optimize, and save space. Fast, private, and fully offline. Reduce size by up to 80%. Available on the App Store.">
-    <meta name="keywords" content="TrimrPix, image optimizer Mac, compress images macOS, reduce image file size, JPEG PNG optimizer, batch image compression, image compression app, Mac image tool, offline image optimizer, WebP AVIF HEIC Mac, trim file size keep quality">
-    <meta name="author" content="IAMJARL">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta name="theme-color" content="#00FF7B" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="canonical" href="https://trimrpix.iamjarl.com/">
+  <title>TrimrPix – Image Optimizer for Mac | Trim file size, keep quality</title>
+  <meta name="description" content="TrimrPix makes image files smaller on your Mac without making them look worse. JPEG, PNG, GIF, AVIF and HEIC, plus PDFs that are images. Offline, and paid for once.">
+  <meta name="author" content="IAMJARL">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="theme-color" content="#F1F0F6">
+  <link rel="canonical" href="https://trimrpix.iamjarl.com/">
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://trimrpix.iamjarl.com/">
-    <meta property="og:title" content="TrimrPix – Image Optimizer for Mac">
-    <meta property="og:description" content="Shrink image file sizes on your Mac without visible quality loss. Drag, drop, optimize. Fast, private, fully offline. Up to 80% smaller files.">
-    <meta property="og:image" content="https://trimrpix.iamjarl.com/social-card.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="TrimrPix: Trim file size. Keep quality. The app window on a Mac, with three images ready to optimize.">
-    <meta property="og:site_name" content="TrimrPix">
-    <meta property="og:locale" content="en_US">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://trimrpix.iamjarl.com/">
+  <meta property="og:title" content="TrimrPix – Image Optimizer for Mac">
+  <meta property="og:description" content="Smaller image files on your Mac, without making them look worse. Offline, and paid for once.">
+  <meta property="og:image" content="https://trimrpix.iamjarl.com/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="TrimrPix: Trim file size. Keep quality. The app window on a Mac, with three images ready to optimize.">
+  <meta property="og:site_name" content="TrimrPix">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TrimrPix – Trim file size. Keep quality.">
+  <meta name="twitter:description" content="Smaller image files on your Mac, without making them look worse. Offline, and paid for once.">
+  <meta name="twitter:image" content="https://trimrpix.iamjarl.com/social-card.png">
+  <meta name="twitter:image:alt" content="TrimrPix: Trim file size. Keep quality. The app window on a Mac, with three images ready to optimize.">
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="TrimrPix – Trim File Size. Keep Quality.">
-    <meta name="twitter:description" content="Image optimizer for Mac. Reduce file sizes up to 80%. Fast, private, offline.">
-    <meta name="twitter:image" content="https://trimrpix.iamjarl.com/social-card.png">
-    <meta name="twitter:image:alt" content="TrimrPix: Trim file size. Keep quality. The app window on a Mac, with three images ready to optimize.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://umami-iamjarl.vercel.app" crossorigin>
+  <link rel="dns-prefetch" href="https://apps.apple.com">
 
-    <!-- Favicon & preload -->
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="screenshot-1.avif" as="image" type="image/avif">
-    <link rel="dns-prefetch" href="https://apps.apple.com">
-
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link rel="preconnect" href="https://umami-iamjarl.vercel.app" crossorigin>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.8.0/dist/css/tokens.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.17.0/dist/fonts/outfit.css"
-      integrity="sha384-AqEDOyf/wBJnKtYuo0ov7MLW4+Cb7FzUelJIjZ/OiccywdE/3Fo4LbBKBp4g5nzJ" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.17.0/dist/identity/trimrpix.css"
-      integrity="sha384-BW6DTyFeU+5VvNh2vemS0vR23LCd+OcJb0jGijAZiW8NWzsSBMhbHTEOFSPKl5jB" crossorigin="anonymous">
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="https://umami-iamjarl.vercel.app/script.js" data-website-id="29beb01b-51b6-4992-a500-841c0b87a62b"></script>
+  <!-- The design system's marketing kit with TrimrPix's identity (iamjarl-design v1.32.0, #86).
+       Light whatever the visitor's setting; Bricolage Grotesque for headlines, JetBrains Mono for
+       every size and percentage; the icon's lime only as a highlighter, never as text. -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/css/tokens.css"
+    integrity="sha384-vWseEKoRMUSqVab/ovOaeMhPJF+7kDZcwFCyWMoanTRzCpH876bYzZMHWqSS8GxL" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/identity/trimrpix.css"
+    integrity="sha384-RHE+iH6mfwGsiBrhxkinwFrYuhsSe7JJVeexHxEwLfYkm4nII630/7puS+zj8xKa" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/fonts/bricolage-grotesque.css"
+    integrity="sha384-7MBtap/qFmXuINKrASGw50uRMVbtyt7imTCzi3NHsXMUqvO0F2VaN3FenSbbkpCd" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/fonts/jetbrains-mono.css"
+    integrity="sha384-5WosBywGRyaWR+M8ltsKlurUWDv/hk1trfHEC5O/x5Rok9DaWSjRs/JQBo55mhel" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/kit/kit.css"
+    integrity="sha384-G0ZOEpQ1VxN96i0i53Qc2L2arp75zhH/Fmh7X/Qhtf0wlMuXpKE9TqiHVzgcviRA" crossorigin="anonymous">
+  <link rel="stylesheet" href="home.css">
+  <script type="module" src="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/components/ij-nav.js"
+    integrity="sha384-5nNQ6Swgqm5IgGD4fQaz3xkHCnLnSUFP4nUOW0zFoI6dZbPQp+aBPKUNiSG+efVe" crossorigin="anonymous"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/components/ij-footer.js"
+    integrity="sha384-bXdqXbKUC05AtEGtJTC2ZHbft8ymGbiBcVV67AaGEKhHVD9hqiuAza1VnFqrc8aE" crossorigin="anonymous"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/dist/kit/kit.js"
+    integrity="sha384-5uXDQNBbD7X3vgvkylJMR9SA3pRg2tTaNT0+rZzQuaI1Omx4ycHTunAa0uA+c59Y" crossorigin="anonymous"></script>
+  <script defer src="https://umami-iamjarl.vercel.app/script.js" data-website-id="29beb01b-51b6-4992-a500-841c0b87a62b"></script>
 </head>
-<body>
-    <!-- partial:header -->
-    <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header">
-        <div class="container">
-            <a href="index.html" class="logo"><img src="app-icon.png" alt="" width="32" height="32" class="logo-icon">TrimrPix</a>
-            <nav class="nav" aria-label="Main navigation">
-                <a href="#features">Features</a>
-                <a href="#faq">FAQ</a>
-                <a href="support.html">Support</a>
-                <a href="https://apps.apple.com/app/trimrpix/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="appstore-mac" data-umami-event-placement="header" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">Get on Mac</a>
-            </nav>
+<body class="ij-page">
+<a class="ij-skip" href="#main">Skip to content</a>
+
+<ij-nav>
+  <a slot="brand" href="./">TrimrPix</a>
+  <a slot="links" href="#compare">Before and after</a>
+  <a slot="links" href="#guides">Guides</a>
+  <a slot="links" href="#faq">FAQ</a>
+  <a slot="secondary" href="support.html">Support</a>
+  <a slot="cta" href="https://apps.apple.com/app/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="store-click" data-umami-event-store="mac-app-store" data-umami-event-placement="nav" data-umami-event-locale="en">Download</a>
+</ij-nav>
+
+<main id="main">
+
+  <!-- 1. Hero: the kept headline and line, the store button, the loop -->
+  <section class="ij-hero ij-hero--centred" id="hero">
+    <div class="ij-container ij-hero__inner">
+      <div class="ij-hero__text">
+        <h1 class="ij-display">Trim file size. <mark>Keep quality.</mark></h1>
+        <p class="ij-lede">Shrink image file sizes on your Mac without visible quality loss. Drag, drop, optimize, and save space. Fast, private, and fully offline.</p>
+        <!-- dist/store/trimrpix.en.black.html, v1.32.0, verbatim -->
+        <!-- IAMJARL store button for TrimrPix (en, hero, black). Generated from apps.json, v1.32.0. Do not edit. -->
+        <div class="ij-store" data-ij-store="trimrpix" data-ij-store-locale="en">
+          <a class="ij-store-badge" href="https://apps.apple.com/app/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="store-click" data-umami-event-store="mac-app-store" data-umami-event-placement="hero" data-umami-event-locale="en">
+            <img src="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/badges/mac-app-store-black-en-us.svg" alt="Download on the Mac App Store" width="156" height="40">
+          </a>
+          <p class="ij-store-facts">$1.99 once · macOS 15.2 or later</p>
         </div>
-    </header>
-    <!-- /partial:header -->
+        <p class="ij-small"><a href="https://apps.apple.com/us/app/trimrpix/id6761081919?pt=128512007&amp;ct=site&amp;mt=8" data-umami-event="store-click" data-umami-event-store="app-store" data-umami-event-placement="hero-ios" data-umami-event-locale="en">Looking for iPhone or iPad?</a></p>
+      </div>
+      <div class="ij-hero__media" data-draft-slot="hero loop: images dragged in, sizes dropping (after #81)">
+        <div class="ij-window"><img src="screenshot-1.png" alt="TrimrPix with two photos dropped in, each with its original size" width="1800" height="900" fetchpriority="high"></div>
+      </div>
+    </div>
+  </section>
 
-    <main id="main">
-        <!-- Hero -->
-        <section class="hero">
-            <div class="container">
-                <div class="hero-content">
-                    <p class="hero-tagline">Made for Mac</p>
-                    <h1 class="hero-title">Trim file size.<br>Keep quality.</h1>
-                    <p class="hero-desc">Shrink image file sizes on your Mac without visible quality loss. Drag, drop, optimize, and save space. Fast, private, and fully offline.</p>
-                    <div class="hero-cta">
-                        <a href="https://apps.apple.com/app/trimrpix/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="appstore-mac" data-umami-event-placement="hero" class="btn btn-primary btn-large" target="_blank" rel="noopener noreferrer">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c1.33-1.33 3.17-1.67 4.5-1.5.9 1.01 1.53 2.48 1.4 3.94-1.55.08-3.15-.56-4.23-1.5-1.08-.95-1.9-2.27-1.9-3.94z"/></svg>
-                            Download on the App Store
-                        </a>
-                        <p class="hero-price"><span>$1.99 one-time</span> · <span>No subscription</span> · <span>macOS 15.2+</span></p>
-                        <p class="hero-ios"><a href="https://apps.apple.com/us/app/trimrpix/id6761081919?pt=128512007&amp;ct=site&amp;mt=8" data-umami-event="appstore-ios" data-umami-event-placement="hero-ios" target="_blank" rel="noopener noreferrer">Looking for iPhone or iPad? →</a></p>
-                    </div>
-                    <ul class="hero-badges">
-                        <li>Reduce size up to 80%</li>
-                        <li>Fully offline</li>
-                        <li>JPEG, PNG, GIF, AVIF, HEIC</li>
-                    </ul>
-                </div>
-                <div class="hero-visual">
-                    <picture>
-                        <source srcset="screenshot-1.avif" type="image/avif">
-                        <source srcset="screenshot-1.webp" type="image/webp">
-                        <img src="screenshot-1.png" alt="TrimrPix app window showing image optimization with drag and drop and file size savings" width="1800" height="900" loading="eager" fetchpriority="high" class="hero-screenshot">
-                    </picture>
-                </div>
-            </div>
-        </section>
+  <!-- 2. Before and after: one real photo at both sizes, made by the app at stated settings -->
+  <section class="ij-section ij-section--band" id="compare" aria-labelledby="compare-h">
+    <div class="ij-container ij-stack">
+      <h2 class="ij-headline" id="compare-h">One photo, two sizes.</h2>
+      <div class="draft-slot" data-draft-slot="before and after: the owner's photo, made by TrimrPix at Medium, with its measured sizes">
+        <p>Before and after goes here: the owner's photo, the original and what TrimrPix made of it at Medium, each with its measured size, and the size chips.</p>
+      </div>
+    </div>
+  </section>
 
-        <!-- Screenshots gallery -->
-        <section class="gallery" aria-label="App screenshots">
-            <div class="container">
-                <h2 class="visually-hidden">TrimrPix in action</h2>
-                <div class="gallery-grid">
-                    <figure class="gallery-item reveal">
-                        <a href="screenshot-1.png" target="_blank" rel="noopener noreferrer" aria-label="Open the full-size screenshot: Drag images in, or drop a whole folder">
-                            <picture>
-                                <source srcset="screenshot-1.avif" type="image/avif">
-                                <source srcset="screenshot-1.webp" type="image/webp">
-                                <img src="screenshot-1.png" alt="TrimrPix with two images added to the list, each showing its original size" width="1800" height="900" loading="lazy" class="gallery-img">
-                            </picture>
-                        </a>
-                        <figcaption>Drag images in, or drop a whole folder.</figcaption>
-                    </figure>
-                    <figure class="gallery-item reveal">
-                        <a href="screenshot-2.png" target="_blank" rel="noopener noreferrer" aria-label="Open the full-size screenshot: Pick a preset, or set the quality yourself">
-                            <picture>
-                                <source srcset="screenshot-2.avif" type="image/avif">
-                                <source srcset="screenshot-2.webp" type="image/webp">
-                                <img src="screenshot-2.png" alt="TrimrPix settings: compression preset, a quality slider at 80 percent, save options and Watch Folder" width="1000" height="1040" loading="lazy" class="gallery-img">
-                            </picture>
-                        </a>
-                        <figcaption>Pick a preset, or set the quality yourself.</figcaption>
-                    </figure>
-                    <figure class="gallery-item reveal">
-                        <a href="screenshot-3.png" target="_blank" rel="noopener noreferrer" aria-label="Open the full-size screenshot: Optimize one file, or the whole batch at once">
-                            <picture>
-                                <source srcset="screenshot-3.avif" type="image/avif">
-                                <source srcset="screenshot-3.webp" type="image/webp">
-                                <img src="screenshot-3.png" alt="TrimrPix with three images queued, each with its own Optimize button and Optimize All below" width="1892" height="1084" loading="lazy" class="gallery-img">
-                            </picture>
-                        </a>
-                        <figcaption>Optimize one file, or the whole batch at once.</figcaption>
-                    </figure>
-                </div>
-            </div>
-        </section>
-
-        <!-- Features -->
-        <section class="features" id="features">
-            <div class="container">
-                <h2 class="section-title">Why TrimrPix?</h2>
-                <p class="section-subtitle">Built for Mac. Fast, private, no account required.</p>
-                <div class="features-grid">
-                    <article class="feature-card reveal">
-                        <svg class="feature-icon" aria-hidden="true" focusable="false" viewBox="0 0 256 256" fill="currentColor"><!-- Phosphor arrows-in-simple, MIT --><path d="M213.66,53.66,163.31,104H192a8,8,0,0,1,0,16H144a8,8,0,0,1-8-8V64a8,8,0,0,1,16,0V92.69l50.34-50.35a8,8,0,0,1,11.32,11.32ZM112,136H64a8,8,0,0,0,0,16H92.69L42.34,202.34a8,8,0,0,0,11.32,11.32L104,163.31V192a8,8,0,0,0,16,0V144A8,8,0,0,0,112,136Z"/></svg>
-                        <h3>Reduce size by up to 80%</h3>
-                        <p>Smaller files in many cases with the quality you see preserved. <a href="compress-images-for-web.html">Compressing for the web</a></p>
-                    </article>
-                    <article class="feature-card reveal">
-                        <svg class="feature-icon" aria-hidden="true" focusable="false" viewBox="0 0 256 256" fill="currentColor"><!-- Phosphor cloud-slash, MIT --><path d="M53.92,34.62A8,8,0,1,0,42.08,45.38L81.32,88.55l-.06.12A65,65,0,0,0,72,88a64,64,0,0,0,0,128h88a87.34,87.34,0,0,0,31.8-5.93l10.28,11.31a8,8,0,1,0,11.84-10.76ZM160,200H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.3.12A88.4,88.4,0,0,0,72,128a8,8,0,0,0,16,0,72.25,72.25,0,0,1,5.06-26.54l87,95.7A71.66,71.66,0,0,1,160,200Zm88-72a87.89,87.89,0,0,1-22.35,58.61A8,8,0,0,1,213.71,176,72,72,0,0,0,117.37,70a8,8,0,0,1-9.48-12.89A88,88,0,0,1,248,128Z"/></svg>
-                        <h3>Fully offline</h3>
-                        <p>No uploads, no cloud. Everything runs on your Mac.</p>
-                    </article>
-                    <article class="feature-card reveal">
-                        <svg class="feature-icon" aria-hidden="true" focusable="false" viewBox="0 0 256 256" fill="currentColor"><!-- Phosphor receipt, MIT --><path d="M72,104a8,8,0,0,1,8-8h96a8,8,0,0,1,0,16H80A8,8,0,0,1,72,104Zm8,40h96a8,8,0,0,0,0-16H80a8,8,0,0,0,0,16ZM232,56V208a8,8,0,0,1-11.58,7.15L192,200.94l-28.42,14.21a8,8,0,0,1-7.16,0L128,200.94,99.58,215.15a8,8,0,0,1-7.16,0L64,200.94,35.58,215.15A8,8,0,0,1,24,208V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56Zm-16,0H40V195.06l20.42-10.22a8,8,0,0,1,7.16,0L96,199.06l28.42-14.22a8,8,0,0,1,7.16,0L160,199.06l28.42-14.22a8,8,0,0,1,7.16,0L216,195.06Z"/></svg>
-                        <h3>No account or subscription</h3>
-                        <p>One-time purchase. Download it and start, with no sign-in.</p>
-                    </article>
-                    <article class="feature-card reveal">
-                        <svg class="feature-icon" aria-hidden="true" focusable="false" viewBox="0 0 256 256" fill="currentColor"><!-- Phosphor images, MIT --><path d="M216,40H72A16,16,0,0,0,56,56V72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V184h16a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM72,56H216v62.75l-10.07-10.06a16,16,0,0,0-22.63,0l-20,20-44-44a16,16,0,0,0-22.62,0L72,109.37ZM184,200H40V88H56v80a16,16,0,0,0,16,16H184Zm32-32H72V132l36-36,49.66,49.66a8,8,0,0,0,11.31,0L194.63,120,216,141.38V168ZM160,84a12,12,0,1,1,12,12A12,12,0,0,1,160,84Z"/></svg>
-                        <h3>All major formats</h3>
-                        <p>Optimize JPEG, PNG, GIF, AVIF and HEIC in one app, plus scanned PDFs. <a href="image-formats-guide.html">Which format should you use?</a></p>
-                    </article>
-                    <article class="feature-card reveal">
-                        <svg class="feature-icon" aria-hidden="true" focusable="false" viewBox="0 0 256 256" fill="currentColor"><!-- Phosphor stack, MIT --><path d="M230.91,172A8,8,0,0,1,228,182.91l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,36,169.09l92,53.65,92-53.65A8,8,0,0,1,230.91,172ZM220,121.09l-92,53.65L36,121.09A8,8,0,0,0,28,134.91l96,56a8,8,0,0,0,8.06,0l96-56A8,8,0,1,0,220,121.09ZM24,80a8,8,0,0,1,4-6.91l96-56a8,8,0,0,1,8.06,0l96,56a8,8,0,0,1,0,13.82l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,24,80Zm23.88,0L128,126.74,208.12,80,128,33.26Z"/></svg>
-                        <h3>Drag & drop + batch</h3>
-                        <p>Drop hundreds of images, hit optimize, save time. <a href="batch-image-compression.html">How batch compression works</a></p>
-                    </article>
-                    <article class="feature-card reveal">
-                        <svg class="feature-icon" aria-hidden="true" focusable="false" viewBox="0 0 256 256" fill="currentColor"><!-- Phosphor eye, MIT --><path d="M247.31,124.76c-.35-.79-8.82-19.58-27.65-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.83,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,192c-30.78,0-57.67-11.19-79.93-33.25A133.47,133.47,0,0,1,25,128,133.33,133.33,0,0,1,48.07,97.25C70.33,75.19,97.22,64,128,64s57.67,11.19,79.93,33.25A133.46,133.46,0,0,1,231.05,128C223.84,141.46,192.43,192,128,192Zm0-112a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"/></svg>
-                        <h3>Watch Folder</h3>
-                        <p>Point it at the folder your screenshots land in. Every new capture gets a smaller copy beside it a couple of seconds later, without you opening the app.</p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA -->
-        <section class="cta">
-            <div class="container">
-                <h2 class="cta-title">Ready to trim your images?</h2>
-                <p class="cta-subtitle">Get TrimrPix on the App Store for Mac</p>
-                <a href="https://apps.apple.com/app/trimrpix/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="appstore-mac" data-umami-event-placement="cta" class="btn btn-primary btn-large" target="_blank" rel="noopener noreferrer">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c1.33-1.33 3.17-1.67 4.5-1.5.9 1.01 1.53 2.48 1.4 3.94-1.55.08-3.15-.56-4.23-1.5-1.08-.95-1.9-2.27-1.9-3.94z"/></svg>
-                    Download on the App Store
-                </a>
-                <p class="cta-note">macOS 15.2 or later · $1.99</p>
-            </div>
-        </section>
-
-        <!-- FAQ -->
-        <section class="faq" id="faq">
-            <div class="container">
-                <h2 class="section-title">Frequently Asked Questions</h2>
-                <div class="faq-list">
-                    <article class="faq-item reveal">
-                        <h3>What image formats does TrimrPix support?</h3>
-                        <p>TrimrPix optimizes JPEG, PNG, GIF, AVIF and HEIC, plus scanned PDFs, from one drag-and-drop interface. It opens WebP files but cannot make them smaller, because macOS itself has no WebP encoder.</p>
-                    </article>
-                    <article class="faq-item reveal">
-                        <h3>Can TrimrPix compress PDFs?</h3>
-                        <p>Scanned PDFs, yes. Drop one in and each page is re-encoded at your chosen quality, which typically takes about two thirds off the file size. PDFs that contain selectable text are left untouched on purpose: rasterising them would remove the text and usually make the file larger, so TrimrPix tells you rather than damaging the document.</p>
-                    </article>
-                    <article class="faq-item reveal">
-                        <h3>How does Watch Folder work?</h3>
-                        <p>You pick a folder and TrimrPix watches it. When a new file lands there it waits a couple of seconds for the file to finish writing, optimizes it, and saves the smaller version beside it. It watches for JPEG, PNG, GIF, AVIF, HEIC and scanned PDFs, and it ignores its own output, so a folder never optimizes itself in circles. It is off until you turn it on and choose a folder.</p>
-                    </article>
-                    <article class="faq-item reveal">
-                        <h3>What happens to my original files?</h3>
-                        <p>They are kept. TrimrPix writes the smaller version alongside the original as <code>yourphoto-optimized.jpg</code>, in the same folder, so you can compare the two before deciding what to keep. If you would rather it replaced the originals in place, there is an "Overwrite original files" setting, off by default.</p>
-                    </article>
-                    <article class="faq-item reveal">
-                        <h3>How much can I reduce file sizes?</h3>
-                        <p>It depends on the image and settings. Many images can be reduced by 30–80% while keeping visual quality high.</p>
-                    </article>
-                    <article class="faq-item reveal">
-                        <h3>How much does TrimrPix cost?</h3>
-                        <p>TrimrPix is a one-time purchase of $1.99 on the App Store. No subscription and no in-app purchases.</p>
-                    </article>
-                    <article class="faq-item reveal">
-                        <h3>Does TrimrPix work offline?</h3>
-                        <p>Yes. All processing happens on your Mac. Your images never leave your device.</p>
-                    </article>
-                    <article class="faq-item reveal">
-                        <h3>What macOS version do I need?</h3>
-                        <p>TrimrPix requires macOS 15.2 or later.</p>
-                    </article>
-                    <article class="faq-item reveal">
-                        <h3>Can I optimize many images at once?</h3>
-                        <p>Yes. Add as many images as you like and use batch optimization. Watch Folder can also auto-optimize new images in a folder.</p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- Closing CTA: the page previously ended on the FAQ, so the last thing a
-             reader saw after their questions were answered was the footer. -->
-        <!-- Guides overview: the guides were reachable only from the footer, so a
-             reader who was not ready to buy had nowhere obvious to go next. -->
-        <section class="guides" aria-labelledby="guides-title">
-            <div class="container">
-                <h2 class="section-title" id="guides-title">Guides</h2>
-                <p class="section-subtitle">Longer answers to the questions that come up around compressing images.</p>
-                <ul class="guides-list">
-                    <li class="reveal">
-                        <a href="image-formats-guide.html"><strong>JPEG, PNG, WebP, AVIF or HEIC?</strong></a>
-                        <p>Which format to reach for, and what each one is good at.</p>
-                    </li>
-                    <li class="reveal">
-                        <a href="compress-images-for-web.html"><strong>Compressing images for the web</strong></a>
-                        <p>Formats, sizes and a workflow for a faster site.</p>
-                    </li>
-                    <li class="reveal">
-                        <a href="batch-image-compression.html"><strong>Batch compression on Mac</strong></a>
-                        <p>Hundreds of images at once, and how to automate the repeat work.</p>
-                    </li>
-                    <li class="reveal">
-                        <a href="optimize-images-app-store.html"><strong>App Store screenshots</strong></a>
-                        <p>Getting screenshot sizes down without visible quality loss.</p>
-                    </li>
-                    <li class="reveal">
-                        <a href="remove-exif-data-on-mac.html"><strong>Removing EXIF and GPS data</strong></a>
-                        <p>What metadata your photos carry, and how to strip it.</p>
-                    </li>
-                    <li class="reveal">
-                        <a href="imageoptim-alternative.html"><strong>Coming from ImageOptim</strong></a>
-                        <p>How TrimrPix compares, and where ImageOptim is still the better fit.</p>
-                    </li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="closing-cta">
-            <div class="container">
-                <h2>Ready to trim your images?</h2>
-                <p>One purchase, no subscription, and nothing leaves your Mac.</p>
-                <a href="https://apps.apple.com/app/trimrpix/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="appstore-mac" data-umami-event-placement="closing" class="btn btn-primary btn-large" target="_blank" rel="noopener noreferrer">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                    Download on the App Store
-                </a>
-                <p class="closing-cta-note"><span>$1.99 one-time</span> &middot; <span>No subscription</span> &middot; <span>macOS 15.2+</span></p>
-            </div>
-        </section>
-    </main>
-
-    <!-- partial:footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>TrimrPix</h3>
-                    <p>Trim file size. Keep quality. Image optimizer for Mac.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Get the app</h3>
-                    <ul>
-                        <li><a href="https://apps.apple.com/app/trimrpix/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="appstore-mac" data-umami-event-placement="footer" target="_blank" rel="noopener noreferrer">App Store (Mac)</a></li>
-                        <li><a href="https://apps.apple.com/us/app/trimrpix/id6761081919?pt=128512007&amp;ct=site&amp;mt=8" data-umami-event="appstore-ios" data-umami-event-placement="footer" target="_blank" rel="noopener noreferrer">App Store (iOS)</a></li>
-                        <li><a href="https://trimrpixforios.iamjarl.com/" target="_blank" rel="noopener noreferrer">TrimrPix for iOS</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>More from IAMJARL</h3>
-                    <ul>
-                        <li><a href="https://iamjarl.com/" target="_blank" rel="noopener noreferrer">All projects</a></li>
-                        <li><a href="https://madebyhuman.iamjarl.com/" target="_blank" rel="noopener noreferrer">Made by Human</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Info</h3>
-                    <ul>
-                        <li><a href="support.html">Support</a></li>
-                        <li><a href="privacy.html">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Guides</h3>
-                    <ul>
-                        <li><a href="imageoptim-alternative.html">ImageOptim Alternative</a></li>
-                        <li><a href="image-formats-guide.html">Image Formats Guide</a></li>
-                        <li><a href="compress-images-for-web.html">Compress for Web</a></li>
-                        <li><a href="batch-image-compression.html">Batch Compression</a></li>
-                        <li><a href="optimize-images-app-store.html">App Store Images</a></li>
-                        <li><a href="remove-exif-data-on-mac.html">Remove EXIF Data</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 IAMJARL. All rights reserved.</p>
-            </div>
+  <!-- 3. The window that stays -->
+  <section class="ij-section" aria-labelledby="tour-h">
+    <div class="ij-container ij-stack">
+      <h2 class="ij-headline" id="tour-h">Drop them in. Watch them shrink.</h2>
+      <div class="ij-tour ij-tour--window">
+        <div class="ij-tour__screens" data-draft-slot="the window's light captures (after #81)">
+          <div class="ij-window" data-step="1"><img src="screenshot-3.png" alt="A batch of images in TrimrPix, each with its size and an Optimize button" width="1892" height="1084" loading="lazy" decoding="async"></div>
+          <div class="ij-window" data-step="2"><img src="screenshot-2.png" alt="TrimrPix's settings: a preset, the quality slider, saving and Watch Folder" width="1000" height="1040" loading="lazy" decoding="async"></div>
+          <div class="ij-window" data-step="3"><img src="screenshot-2.png" alt="Watch Folder in TrimrPix's settings" width="1000" height="1040" loading="lazy" decoding="async"></div>
+          <div class="ij-window" data-step="4"><img src="screenshot-1.png" alt="TrimrPix with images dropped in" width="1800" height="900" loading="lazy" decoding="async"></div>
         </div>
-    </footer>
-    <!-- /partial:footer -->
+        <ol class="ij-tour__steps">
+          <li class="ij-tour__step" data-step="1"><h3 class="ij-title">One or a few hundred</h3><p>Drop in single images or whole folders. Each shows its size before and after, and how much it saved, as it goes.</p></li>
+          <li class="ij-tour__step" data-step="2"><h3 class="ij-title">Quality, your call</h3><p>Low, Medium or High, or a slider from 10 to 100 %. Medium is the default.</p></li>
+          <li class="ij-tour__step" data-step="3"><h3 class="ij-title">Watch Folder</h3><p>Point it at the folder your screenshots or exports land in. Every new image gets a smaller copy beside it, without opening the window. It waits until a file has finished copying.</p></li>
+          <li class="ij-tour__step" data-step="4"><h3 class="ij-title">The formats you use</h3><p>JPEG, PNG, GIF, AVIF and HEIC, and PDFs that are images rather than text, such as scans. WebP files are left as they are: macOS has no way to write them.</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
 
-    <!-- Structured data: SoftwareApplication -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "TrimrPix",
-        "@id": "https://trimrpix.iamjarl.com/#mac-app",
-            "applicationCategory": "MultimediaApplication",
-        "applicationSubCategory": "Image Compression",
-        "operatingSystem": "macOS 15.2+",
-        "datePublished": "2026-02-01",
-        "downloadUrl": "https://apps.apple.com/app/trimrpix/id6758639590",
-        "installUrl": "https://apps.apple.com/app/trimrpix/id6758639590",
-        "offers": {
-            "@type": "Offer",
-            "price": "1.99",
-            "priceCurrency": "USD",
-            "url": "https://apps.apple.com/app/trimrpix/id6758639590",
-            "availability": "https://schema.org/InStock"
-        },
-        "description": "TrimrPix shrinks image file sizes on your Mac without visible quality loss. Drag, drop, optimize. Fast, private, fully offline. Reduce size by up to 80%. JPEG, PNG, GIF, AVIF, HEIC.",
-        "author": { "@type": "Organization", "name": "IAMJARL", "url": "https://iamjarl.com/" },
-        "publisher": { "@type": "Organization", "name": "IAMJARL", "url": "https://iamjarl.com/" },
-        "url": "https://trimrpix.iamjarl.com/",
-        "sameAs": "https://apps.apple.com/app/trimrpix/id6758639590",
-        "screenshot": [
-            "https://trimrpix.iamjarl.com/screenshot-1.png",
-            "https://trimrpix.iamjarl.com/screenshot-2.png",
-            "https://trimrpix.iamjarl.com/screenshot-3.png"
-        ],
-        "featureList": [
-            "Reduce image size by up to 80%",
-            "Fully offline – no uploads",
-            "JPEG, PNG, GIF, AVIF, HEIC",
-            "Drag & drop and batch processing",
-            "Watch Folder automation",
-            "Adjustable quality 60%–95%"
-        ]
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://trimrpix.iamjarl.com/" }]
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            { "@type": "Question", "name": "What image formats does TrimrPix support?", "acceptedAnswer": { "@type": "Answer", "text": "TrimrPix optimizes JPEG, PNG, GIF, AVIF and HEIC, plus scanned PDFs. It opens WebP files but cannot make them smaller, because macOS itself has no WebP encoder." } },
-            { "@type": "Question", "name": "How does Watch Folder work?", "acceptedAnswer": { "@type": "Answer", "text": "You pick a folder and TrimrPix watches it. When a new file lands there it waits a couple of seconds for the file to finish writing, optimizes it, and saves the smaller version beside it. It watches for JPEG, PNG, GIF, AVIF, HEIC and scanned PDFs, and ignores its own output so a folder never optimizes itself in circles. It is off until you turn it on and choose a folder." } },
-            { "@type": "Question", "name": "What happens to my original files?", "acceptedAnswer": { "@type": "Answer", "text": "Originals are kept. TrimrPix writes the smaller version alongside the original as yourphoto-optimized.jpg in the same folder. An \"Overwrite original files\" setting replaces them in place instead, and is off by default." } },
-            { "@type": "Question", "name": "Can TrimrPix compress PDFs?", "acceptedAnswer": { "@type": "Answer", "text": "TrimrPix compresses scanned PDFs by re-encoding each page at your chosen quality, typically taking about two thirds off the file size. PDFs containing selectable text are left untouched on purpose, because rasterising them would remove the text and usually make the file larger." } },
-            { "@type": "Question", "name": "How much can I reduce file sizes?", "acceptedAnswer": { "@type": "Answer", "text": "Many images can be reduced by 30–80% while keeping visual quality high." } },
-            { "@type": "Question", "name": "How much does TrimrPix cost?", "acceptedAnswer": { "@type": "Answer", "text": "TrimrPix is a one-time purchase of $1.99 on the App Store. No subscription." } },
-            { "@type": "Question", "name": "Does TrimrPix work offline?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. All processing happens on your Mac. Your images never leave your device." } },
-            { "@type": "Question", "name": "What macOS version do I need?", "acceptedAnswer": { "@type": "Answer", "text": "TrimrPix requires macOS 15.2 or later." } },
-            { "@type": "Question", "name": "Can I optimize many images at once?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Batch optimization and Watch Folder for automatic processing." } }
-        ]
-    }
-    </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var obs = new IntersectionObserver(function(entries) {
-            entries.forEach(function(e) {
-                if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
-            });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
-    });
-    </script>
+  <!-- 4. Where it works: one measured saving with its conditions, then the traits -->
+  <section class="ij-section ij-section--band" id="where" aria-labelledby="where-h">
+    <div class="ij-container ij-stack">
+      <h2 class="ij-headline" id="where-h">Where it works.</h2>
+      <div class="ij-traits">
+        <div class="ij-trait ij-trait--number" data-draft-slot="the measured saving and its conditions">
+          <p class="ij-numeral">−{{N}}%</p>
+          <p>{{FILES}} at Medium, measured with TrimrPix {{VERSION}}.</p>
+        </div>
+        <div class="ij-trait"><h3 class="ij-title">JPEG, PNG, GIF, AVIF, HEIC</h3><p>The formats you have.</p></div>
+        <div class="ij-trait"><h3 class="ij-title">PDFs that are images</h3><p>Scans and other image-only PDFs, page by page.</p></div>
+        <div class="ij-trait ij-trait--wide"><h3 class="ij-title">Watch Folder, metadata, resize</h3><p>Trim what lands in a folder, strip EXIF, GPS and IPTC, and resize before compressing.</p></div>
+        <div class="ij-trait"><h3 class="ij-title">Offline</h3><p>Nothing leaves your Mac.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Privacy and price as features -->
+  <section class="ij-section" aria-labelledby="privacy-h">
+    <div class="ij-container ij-stack">
+      <h2 class="ij-headline" id="privacy-h">Nothing uploaded. Paid for once.</h2>
+      <div class="ij-assurances">
+        <div class="ij-assurance"><h3 class="ij-title">Your images stay yours</h3><p>They are compressed on your Mac and never uploaded. No account, nothing to sign in to.</p></div>
+        <div class="ij-assurance"><h3 class="ij-title">Paid for once</h3><p>One purchase on the Mac App Store. No subscription, no in-app purchases.</p></div>
+        <div class="ij-assurance ij-assurance--label"><h3 class="ij-title">Data Not Collected</h3><p>The Mac App Store’s privacy label, as Apple shows it: “The developer does not collect any data from this app.”</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. A note from the maker, approved 2026-10-13 -->
+  <section class="ij-section ij-section--band" aria-label="A note from the maker">
+    <div class="ij-container">
+      <div class="ij-maker">
+        <p>I built TrimrPix to do one thing well. It makes your image files smaller without making them look worse, it runs on your Mac, and it uploads nothing. You pay for it once.</p>
+        <p class="ij-maker__sign">Jarl</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Guides and comparisons -->
+  <section class="ij-section" id="guides" aria-labelledby="guides-h">
+    <div class="ij-container ij-stack">
+      <h2 class="ij-headline" id="guides-h">Guides and comparisons.</h2>
+      <div class="ij-bento">
+          <a class="ij-card guide-card" href="imageoptim-alternative.html"><h3 class="ij-title">ImageOptim alternative</h3><p>How the two compare, and where ImageOptim is the better choice.</p></a>
+          <a class="ij-card guide-card" href="image-formats-guide.html"><h3 class="ij-title">JPEG, PNG, WebP, AVIF or HEIC?</h3><p>Which format to use for what.</p></a>
+          <a class="ij-card guide-card" href="compress-images-for-web.html"><h3 class="ij-title">Compress images for the web</h3><p>Smaller pages without visibly worse images.</p></a>
+          <a class="ij-card guide-card" href="batch-image-compression.html"><h3 class="ij-title">Batch compression on Mac</h3><p>Hundreds of images in one go, or a folder that does it for you.</p></a>
+          <a class="ij-card guide-card" href="optimize-images-app-store.html"><h3 class="ij-title">App Store images</h3><p>Screenshots and assets that pass review and load fast.</p></a>
+          <a class="ij-card guide-card" href="remove-exif-data-on-mac.html"><h3 class="ij-title">Remove EXIF data</h3><p>What photos carry about you, and how to take it out.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. FAQ, mirrored word for word in the FAQPage JSON-LD below -->
+  <section class="ij-section ij-section--band" id="faq" aria-labelledby="faq-h">
+    <div class="ij-container ij-stack">
+      <h2 class="ij-headline" id="faq-h">Questions.</h2>
+      <div class="faq-list" data-draft-slot="the sample-size answer waits on the measurement">
+          <div class="faq-item">
+            <h3 class="ij-title">Which formats does TrimrPix work with?</h3>
+            <p>JPEG, PNG, GIF, AVIF and HEIC, plus PDFs that are images rather than text, such as scans. WebP files are skipped with a message and left as they were, because macOS has no WebP encoder.</p>
+          </div>
+          <div class="faq-item">
+            <h3 class="ij-title">Can it compress PDFs?</h3>
+            <p>Yes, when the PDF is made of images rather than text, as a scan is: each page is re-encoded at the quality you choose. PDFs with selectable text are left alone on purpose, because turning them into images would remove the text and usually make the file bigger, and TrimrPix tells you when it skips one. A PDF whose text was turned into outlines, as some design tools export it, has no text layer either. It is treated like a scan, so it gets smaller, but its text comes out slightly softer.</p>
+          </div>
+          <div class="faq-item">
+            <h3 class="ij-title">How does Watch Folder work?</h3>
+            <p>You choose a folder and turn Watch Folder on. When a new image or image PDF lands there, TrimrPix waits until the file has finished copying, optimizes it, and saves the smaller copy beside it. The wait is 2 seconds by default and can be set from 0.5 to 10. It ignores its own output, and it is off until you turn it on.</p>
+          </div>
+          <div class="faq-item">
+            <h3 class="ij-title">What happens to my originals?</h3>
+            <p>They are kept. The smaller version is saved next to the original as yourphoto-optimized.jpg, so you can compare them. If you would rather replace the originals, turn on “Overwrite original files” in Settings; it is off by default. If compressing would make a file bigger, TrimrPix keeps the original bytes.</p>
+          </div>
+          <div class="faq-item">
+            <h3 class="ij-title">How much smaller will my images get?</h3>
+            <p>It depends on the image. Our sample folder, {{FILES}} at Medium, came out {{N}} % smaller in total. An image that is already well compressed may hardly shrink, and one that would grow is left as it was.</p>
+          </div>
+          <div class="faq-item">
+            <h3 class="ij-title">What does it cost?</h3>
+            <p>One purchase on the Mac App Store, with no subscription and no in-app purchases. The price is on the App Store button.</p>
+          </div>
+          <div class="faq-item">
+            <h3 class="ij-title">Does it work offline?</h3>
+            <p>Yes. Everything happens on your Mac and your images never leave it. The App Store privacy label reads “Data Not Collected”.</p>
+          </div>
+          <div class="faq-item">
+            <h3 class="ij-title">Which macOS do I need?</h3>
+            <p>macOS 15.2 or later.</p>
+          </div>
+          <div class="faq-item">
+            <h3 class="ij-title">Can I optimize many images at once?</h3>
+            <p>Yes. Drop in as many as you like and optimize them together or one by one. Watch Folder does it for new images on its own.</p>
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Close -->
+  <section class="ij-section" aria-label="Download TrimrPix">
+    <div class="ij-container ij-closing">
+      <p class="ij-wordmark">TrimrPix</p>
+      <!-- dist/store/trimrpix.en.footer.black.html, v1.32.0, verbatim -->
+      <!-- IAMJARL store button for TrimrPix (en, footer, black). Generated from apps.json, v1.32.0. Do not edit. -->
+      <div class="ij-store" data-ij-store="trimrpix" data-ij-store-locale="en">
+        <a class="ij-store-badge" href="https://apps.apple.com/app/id6758639590?pt=128512007&amp;ct=site&amp;mt=12" data-umami-event="store-click" data-umami-event-store="mac-app-store" data-umami-event-placement="footer" data-umami-event-locale="en">
+          <img src="https://cdn.jsdelivr.net/gh/jarllyng/iamjarl-design@v1.32.0/badges/mac-app-store-black-en-us.svg" alt="Download on the Mac App Store" width="156" height="40">
+        </a>
+        <p class="ij-store-facts">$1.99 once · macOS 15.2 or later</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<ij-footer app="trimrpix">
+  <a slot="links" href="support.html">Support</a>
+  <a slot="links" href="privacy.html">Privacy</a>
+  <!-- dist/footers/trimrpix.html, v1.32.0: the cross-links in the served HTML, for crawlers that do not run JavaScript -->
+  <!-- IAMJARL cross-links for TrimrPix: generated, do not edit -->
+  <!-- design system v1.32.0, registry updated 2026-10-13 -->
+  <!-- Paste inside <ij-footer app="trimrpix">. Rebuild to refresh. -->
+  <a slot="cross-links" href="https://trimrpixforios.iamjarl.com">TrimrPix for iOS</a>
+  <a slot="cross-links" href="https://botlens.iamjarl.com">BotLens</a>
+  <a slot="cross-links" href="https://pagelens.iamjarl.com">PageLens</a>
+  <a slot="cross-links" href="https://madebyhuman.iamjarl.com">Made by Human</a>
+  <a slot="cross-links" href="https://iamjarl.com">All projects</a>
+  <span slot="fineprint">© 2026 IAMJARL</span>
+</ij-footer>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "TrimrPix",
+    "@id": "https://trimrpix.iamjarl.com/#mac-app",
+    "applicationCategory": "MultimediaApplication",
+    "applicationSubCategory": "Image Compression",
+    "operatingSystem": "macOS 15.2+",
+    "datePublished": "2026-02-01",
+    "downloadUrl": "https://apps.apple.com/app/trimrpix/id6758639590",
+    "installUrl": "https://apps.apple.com/app/trimrpix/id6758639590",
+    "offers": {
+      "@type": "Offer",
+      "price": "1.99",
+      "priceCurrency": "USD",
+      "url": "https://apps.apple.com/app/id6758639590"
+    },
+    "description": "TrimrPix makes image files smaller on your Mac without making them look worse. JPEG, PNG, GIF, AVIF and HEIC, plus PDFs that are images. Offline, and paid for once.",
+    "author": {
+      "@type": "Organization",
+      "name": "IAMJARL",
+      "url": "https://iamjarl.com/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "IAMJARL",
+      "url": "https://iamjarl.com/"
+    },
+    "url": "https://trimrpix.iamjarl.com/",
+    "sameAs": "https://apps.apple.com/app/trimrpix/id6758639590",
+    "screenshot": [
+      "https://trimrpix.iamjarl.com/screenshot-1.png",
+      "https://trimrpix.iamjarl.com/screenshot-2.png",
+      "https://trimrpix.iamjarl.com/screenshot-3.png"
+    ],
+    "featureList": [
+      "JPEG, PNG, GIF, AVIF and HEIC",
+      "PDFs that are images, such as scans",
+      "Batch optimization",
+      "Quality presets, or a slider from 10% to 100%",
+      "Watch Folder",
+      "Metadata stripping",
+      "Resize before compressing",
+      "Fully offline"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://trimrpix.iamjarl.com/"
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Which formats does TrimrPix work with?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "JPEG, PNG, GIF, AVIF and HEIC, plus PDFs that are images rather than text, such as scans. WebP files are skipped with a message and left as they were, because macOS has no WebP encoder."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can it compress PDFs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, when the PDF is made of images rather than text, as a scan is: each page is re-encoded at the quality you choose. PDFs with selectable text are left alone on purpose, because turning them into images would remove the text and usually make the file bigger, and TrimrPix tells you when it skips one. A PDF whose text was turned into outlines, as some design tools export it, has no text layer either. It is treated like a scan, so it gets smaller, but its text comes out slightly softer."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does Watch Folder work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You choose a folder and turn Watch Folder on. When a new image or image PDF lands there, TrimrPix waits until the file has finished copying, optimizes it, and saves the smaller copy beside it. The wait is 2 seconds by default and can be set from 0.5 to 10. It ignores its own output, and it is off until you turn it on."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens to my originals?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "They are kept. The smaller version is saved next to the original as yourphoto-optimized.jpg, so you can compare them. If you would rather replace the originals, turn on “Overwrite original files” in Settings; it is off by default. If compressing would make a file bigger, TrimrPix keeps the original bytes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much smaller will my images get?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It depends on the image. Our sample folder, {{FILES}} at Medium, came out {{N}} % smaller in total. An image that is already well compressed may hardly shrink, and one that would grow is left as it was."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does it cost?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "One purchase on the Mac App Store, with no subscription and no in-app purchases. The price is on the App Store button."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does it work offline?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Everything happens on your Mac and your images never leave it. The App Store privacy label reads “Data Not Collected”."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which macOS do I need?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "macOS 15.2 or later."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I optimize many images at once?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Drop in as many as you like and optimize them together or one by one. Watch Folder does it for new images on its own."
+        }
+      }
+    ]
+  }
+  </script>
 </body>
 </html>

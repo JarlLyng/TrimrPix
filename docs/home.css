@@ -1,0 +1,28 @@
+/* The homepage on the design system's marketing kit (#86). Only what the kit does not cover:
+   the FAQ list, the guide cards as links, and the draft slots. Colours and type come from
+   the kit's tokens, so the page stays in TrimrPix's identity. */
+
+.faq-list { display: grid; gap: var(--ij-mkt-space-stack, 2rem); max-width: 72ch; }
+.faq-item { display: flex; flex-direction: column; gap: var(--ij-spacing-sm, 0.5rem); }
+.faq-item p { margin: 0; color: var(--ij-color-text-secondary); }
+
+/* Each guide is a whole card that links. */
+a.guide-card { color: inherit; text-decoration: none; transition: transform 0.15s ease; }
+a.guide-card:hover { transform: translateY(-2px); }
+a.guide-card:hover .ij-title { text-decoration: underline; text-underline-offset: 0.2em; }
+a.guide-card:focus-visible { outline: 2px solid var(--ij-color-text-primary); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { a.guide-card { transition: none; } a.guide-card:hover { transform: none; } }
+
+/* Draft slots: what waits on the owner's photo, the measurement or the captures after #81.
+   Visible on purpose, so a review screenshot cannot pass one off as finished. The deploy
+   workflow refuses to publish a page that still has one. */
+[data-draft-slot] { outline: 2px dashed var(--ij-color-text-secondary); outline-offset: 6px; position: relative; }
+[data-draft-slot]::before {
+  content: "Draft: " attr(data-draft-slot);
+  position: absolute; top: -1.9rem; left: 0; z-index: 1;
+  font: 600 0.75rem/1.2 var(--ij-font-mono, ui-monospace, monospace);
+  color: var(--ij-color-text-primary); background: var(--ij-color-bg-card, #fff);
+  padding: 0.2rem 0.45rem; border-radius: 4px;
+}
+.draft-slot { min-height: 16rem; display: grid; place-items: center; padding: 2rem; text-align: center; }
+.draft-slot p { max-width: 50ch; color: var(--ij-color-text-secondary); }
