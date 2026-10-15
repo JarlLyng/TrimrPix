@@ -29,12 +29,13 @@ Looking for iPhone or iPad? →
 
 "Will Thrall Peak in the San Gabriel Mountain Range" (iPhone 13 Pro Max, CC0, Wikimedia Commons).
 
-Labels: Original `6.6 MB` · After TrimrPix `1.7 MB`
+Labels: Original `6.57 MB` · Resized to 2048 px and compressed `1.73 MB`
 
-Chips: `6.6 MB → 1.7 MB` −74% · `4032 × 3024 → 2048 × 1536` · Medium, 80%
+Chips: `6.57 MB → 1.73 MB` −74% · `4032 × 3024 → 2048 × 1536` · Medium, 80%
 
 Caption: The same iPhone 13 Pro Max photo twice, both scaled to fit this page. On the right, what
-TrimrPix 1.7.2 made of it at Medium, resized to 2048 px on the long side. The sizes are the files'.
+TrimrPix 1.7.2 made of it: resized to 2048 px on the long side, and compressed at Medium. The sizes
+are the files'.
 
 Fineprint: Before and after photo: Mojavellama, CC0, Wikimedia Commons.
 
@@ -44,7 +45,7 @@ Fineprint: Before and after photo: Mojavellama, CC0, Wikimedia Commons.
 
 - **One or a few hundred.** Drop in single images or whole folders. Each shows its size before and
   after, and how much it saved, as it goes.
-- **Quality, your call.** Low, Medium or High, or a slider from 10 to 100 %. Medium is the default.
+- **Quality, your call.** Low, Medium or High, or a slider from 10 to 100%. Medium is the default.
 - **Watch Folder.** Point it at the folder your screenshots or exports land in. Every new image gets
   a smaller copy beside it, without opening the window. It waits until a file has finished copying.
 - **The formats you use.** JPEG, PNG, GIF, AVIF and HEIC, and PDFs that are images rather than text, such as scans. WebP files are left as
@@ -54,9 +55,12 @@ Fineprint: Before and after photo: Mojavellama, CC0, Wikimedia Commons.
 
 **−79%**
 
-30 iPhone photos (CC0, Wikimedia Commons), resized to 2048 px, at Medium: 160 MB → 34 MB, measured
-with TrimrPix 1.7.2. (At full size the same folder came out −25 %; the owner chose the resized figure
-on 2026-10-15, and the FAQ states both.)
+30 iPhone photos, Medium, resized to 2048 px for the web.
+
+At full size, without resizing: −25%. iPhone photos are already well compressed.
+
+(Owner's wording, 2026-10-15: the full-size figure sits directly under the big number, so −79% is
+never seen without it. Both come from tools/redesign/sample-report-*.json.)
 
 - JPEG, PNG, GIF, AVIF and HEIC
 - PDFs that are images, such as scans
@@ -118,7 +122,7 @@ original bytes.
 
 **How much smaller will my images get?**
 It depends on the image and on the size you need. Our sample, 30 iPhone photos (CC0, Wikimedia
-Commons) at Medium, came out 79 % smaller resized to 2048 px for the web, and 25 % smaller at full
+Commons) at Medium, came out 79% smaller resized to 2048 px for the web, and 25% smaller at full
 size, because iPhones already save their photos compressed. An image that is already well
 compressed may hardly shrink, and one that would grow is left as it was.
 
@@ -149,7 +153,7 @@ for new images on its own.
 
 ### Changed from today's site, and why
 
-- "30–80 %" and the PDF "about two thirds" are gone: neither was measured. The big number replaces
+- "30–80%" and the PDF "about two thirds" are gone: neither was measured. The big number replaces
   them once it is (#51).
 - "$1.99" is gone from the copy: the brief rules out hand-written prices.
 - Watch Folder states its real wait (0.5 to 10 seconds, 2 by default) and that it waits for copies
@@ -158,6 +162,6 @@ for new images on its own.
   outlined text is treated like a scan and comes out slightly softer. #45, option 1, decided by
   the owner 2026-10-13.
 - The size guard is stated in the originals answer, since it decides what a user ends up with.
-- No PNG-specific saving is claimed. In a function check, a photo-like PNG came out 1 % smaller and a
-  screenshot 31 %. If the page ever states a PNG figure, it should be measured, and say what it does
+- No PNG-specific saving is claimed. In a function check, a photo-like PNG came out 1% smaller and a
+  screenshot 31%. If the page ever states a PNG figure, it should be measured, and say what it does
   for screenshots and graphics rather than promise it for every PNG.
