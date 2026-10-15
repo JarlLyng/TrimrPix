@@ -51,7 +51,12 @@ final class Settings: SettingsProtocol {
     
     // MARK: - Singleton
     
+    #if DEBUG
+    // The website's capture mode works on settings of its own (ScreenshotMode).
+    static let shared = ScreenshotMode.current == nil ? Settings() : Settings(userDefaults: ScreenshotMode.emptySettings())
+    #else
     static let shared = Settings()
+    #endif
     
     // MARK: - Dependencies
     
