@@ -86,7 +86,12 @@ The shared header and footer live in `tools/partials/` and are written into ever
 the result. CI runs it with `--check` and fails the deploy if any page has drifted.
 
 The site runs on the design system's marketing kit and TrimrPix's identity (iamjarl-design, pinned
-to one tag, every file with its `integrity` from that tag's `dist/sri.json`). The homepage is built
+to one tag, every file with its `integrity` from that tag's `dist/sri.json`). **It serves its own copy**
+under `docs/assets/iamjarl-design@<tag>/`, not jsDelivr, which failed in practice and whose stylesheets
+would blank the page (the owner's decision, 2026-10-15). Take the files from the tag's GitHub archive,
+check each against its `sri.json` (the recipe is in the design repo's README, "A copy served from the
+site itself"), and make a bump a new folder, never an edit in place. The deploy refuses a page that
+loads a stylesheet or script from jsDelivr. The homepage is built
 from the kit and carries no partials. The subpages take the identity without the kit's sections, and
 their shared partials are `<ij-nav>` and `<ij-footer>`.
 
