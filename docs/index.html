@@ -97,9 +97,22 @@
   <section class="ij-section ij-section--band" id="compare" aria-labelledby="compare-h">
     <div class="ij-container ij-stack">
       <h2 class="ij-headline" id="compare-h">One photo, two sizes.</h2>
-      <div class="draft-slot" data-draft-slot="before and after: the owner's photo, made by TrimrPix at Medium, with its measured sizes">
-        <p>Before and after goes here: the owner's photo, the original and what TrimrPix made of it at Medium, each with its measured size, and the size chips.</p>
-      </div>
+      <figure class="ij-compare">
+        <figure class="ij-compare__item">
+          <picture><source srcset="compare-original.avif" type="image/avif"><img src="compare-original.jpg" alt="A mountain ridge with shrubs and trees under a blue sky, the original photo" width="1200" height="900" loading="lazy" decoding="async"></picture>
+          <figcaption><span>Original</span><span class="ij-num">6.6 MB</span></figcaption>
+        </figure>
+        <figure class="ij-compare__item">
+          <picture><source srcset="compare-trimrpix.avif" type="image/avif"><img src="compare-trimrpix.jpg" alt="The same photo after TrimrPix" width="1200" height="900" loading="lazy" decoding="async"></picture>
+          <figcaption><span>After TrimrPix</span><span class="ij-num"><mark>1.7 MB</mark></span></figcaption>
+        </figure>
+        <figcaption>The same iPhone 13 Pro Max photo twice, both scaled to fit this page. On the right, what TrimrPix 1.7.2 made of it at Medium, resized to 2048 px on the long side. The sizes are the files&rsquo;.</figcaption>
+      </figure>
+      <ul class="ij-chips" aria-label="The before and after, in numbers">
+        <li class="ij-chip"><span class="ij-num">6.6 MB → 1.7 MB</span> <mark>−74%</mark></li>
+        <li class="ij-chip"><span class="ij-num">4032 × 3024 → 2048 × 1536</span></li>
+        <li class="ij-chip">Medium, 80%</li>
+      </ul>
     </div>
   </section>
 
@@ -129,9 +142,9 @@
     <div class="ij-container ij-stack">
       <h2 class="ij-headline" id="where-h">Where it works.</h2>
       <div class="ij-traits">
-        <div class="ij-trait ij-trait--number" data-draft-slot="the measured saving and its conditions">
-          <p class="ij-numeral">−{{N}}%</p>
-          <p>{{FILES}} at Medium, measured with TrimrPix {{VERSION}}.</p>
+        <div class="ij-trait ij-trait--number">
+          <p class="ij-numeral">−79%</p>
+          <p>30 iPhone photos (CC0, Wikimedia Commons), resized to 2048 px, at Medium: <span class="ij-num">160 MB → 34 MB</span>, measured with TrimrPix 1.7.2.</p>
         </div>
         <div class="ij-trait"><h3 class="ij-title">JPEG, PNG, GIF, AVIF, HEIC</h3><p>The formats you have.</p></div>
         <div class="ij-trait"><h3 class="ij-title">PDFs that are images</h3><p>Scans and other image-only PDFs, page by page.</p></div>
@@ -182,7 +195,7 @@
   <section class="ij-section ij-section--band" id="faq" aria-labelledby="faq-h">
     <div class="ij-container ij-stack">
       <h2 class="ij-headline" id="faq-h">Questions.</h2>
-      <div class="faq-list" data-draft-slot="the sample-size answer waits on the measurement">
+      <div class="faq-list">
           <div class="faq-item">
             <h3 class="ij-title">Which formats does TrimrPix work with?</h3>
             <p>JPEG, PNG, GIF, AVIF and HEIC, plus PDFs that are images rather than text, such as scans. WebP files are skipped with a message and left as they were, because macOS has no WebP encoder.</p>
@@ -201,7 +214,7 @@
           </div>
           <div class="faq-item">
             <h3 class="ij-title">How much smaller will my images get?</h3>
-            <p>It depends on the image. Our sample folder, {{FILES}} at Medium, came out {{N}} % smaller in total. An image that is already well compressed may hardly shrink, and one that would grow is left as it was.</p>
+            <p>It depends on the image and on the size you need. Our sample, 30 iPhone photos (CC0, Wikimedia Commons) at Medium, came out 79 % smaller resized to 2048 px for the web, and 25 % smaller at full size, because iPhones already save their photos compressed. An image that is already well compressed may hardly shrink, and one that would grow is left as it was.</p>
           </div>
           <div class="faq-item">
             <h3 class="ij-title">What does it cost?</h3>
@@ -252,7 +265,7 @@
   <a slot="cross-links" href="https://pagelens.iamjarl.com">PageLens</a>
   <a slot="cross-links" href="https://madebyhuman.iamjarl.com">Made by Human</a>
   <a slot="cross-links" href="https://iamjarl.com">All projects</a>
-  <span slot="fineprint">© 2026 IAMJARL</span>
+  <span slot="fineprint">© 2026 IAMJARL · Before and after photo: Mojavellama, CC0, Wikimedia Commons</span>
 </ij-footer>
 
   <script type="application/ld+json">
@@ -359,7 +372,7 @@
         "name": "How much smaller will my images get?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It depends on the image. Our sample folder, {{FILES}} at Medium, came out {{N}} % smaller in total. An image that is already well compressed may hardly shrink, and one that would grow is left as it was."
+          "text": "It depends on the image and on the size you need. Our sample, 30 iPhone photos (CC0, Wikimedia Commons) at Medium, came out 79 % smaller resized to 2048 px for the web, and 25 % smaller at full size, because iPhones already save their photos compressed. An image that is already well compressed may hardly shrink, and one that would grow is left as it was."
         }
       },
       {

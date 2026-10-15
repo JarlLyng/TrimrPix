@@ -27,12 +27,16 @@ Looking for iPhone or iPad? →
 
 **One photo, two sizes.**
 
-Chips: `{{BEFORE}} MB → {{AFTER}} MB`
+"Will Thrall Peak in the San Gabriel Mountain Range" (iPhone 13 Pro Max, CC0, Wikimedia Commons).
 
-Caption: The same photo twice. On the left, the original at {{BEFORE}} MB. On the right, what
-TrimrPix {{VERSION}} made of it at the Medium preset, at {{AFTER}} MB. Nothing else was changed.
+Labels: Original `6.6 MB` · After TrimrPix `1.7 MB`
 
-Alt, left: "The original photo, {{BEFORE}} MB." Alt, right: "The same photo after TrimrPix, {{AFTER}} MB."
+Chips: `6.6 MB → 1.7 MB` −74% · `4032 × 3024 → 2048 × 1536` · Medium, 80%
+
+Caption: The same iPhone 13 Pro Max photo twice, both scaled to fit this page. On the right, what
+TrimrPix 1.7.2 made of it at Medium, resized to 2048 px on the long side. The sizes are the files'.
+
+Fineprint: Before and after photo: Mojavellama, CC0, Wikimedia Commons.
 
 ## 3. The window that stays
 
@@ -48,9 +52,11 @@ Alt, left: "The original photo, {{BEFORE}} MB." Alt, right: "The same photo afte
 
 ## 4. Where it works
 
-**−{{N}} %**
+**−79%**
 
-{{FILES}} at Medium, {{BEFORE_TOTAL}} → {{AFTER_TOTAL}}, measured with TrimrPix {{VERSION}}.
+30 iPhone photos (CC0, Wikimedia Commons), resized to 2048 px, at Medium: 160 MB → 34 MB, measured
+with TrimrPix 1.7.2. (At full size the same folder came out −25 %; the owner chose the resized figure
+on 2026-10-15, and the FAQ states both.)
 
 - JPEG, PNG, GIF, AVIF and HEIC
 - PDFs that are images, such as scans
@@ -111,9 +117,10 @@ Settings; it is off by default. If compressing would make a file bigger, TrimrPi
 original bytes.
 
 **How much smaller will my images get?**
-It depends on the image. Our sample folder, {{FILES}} at Medium, came out {{N}} % smaller in
-total. An image that is already well compressed may hardly shrink, and one that would grow is left
-as it was.
+It depends on the image and on the size you need. Our sample, 30 iPhone photos (CC0, Wikimedia
+Commons) at Medium, came out 79 % smaller resized to 2048 px for the web, and 25 % smaller at full
+size, because iPhones already save their photos compressed. An image that is already well
+compressed may hardly shrink, and one that would grow is left as it was.
 
 **What does it cost?**
 One purchase on the Mac App Store, with no subscription and no in-app purchases. The price is on
