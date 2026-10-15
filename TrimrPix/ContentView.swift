@@ -129,7 +129,16 @@ struct ContentView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView()
         }
-        .onAppear { viewModel.startWatchFolder() }
+        .onAppear {
+            #if DEBUG
+            if let screenshot = ScreenshotMode.current {
+                screenshot.stage(viewModel)
+                showSettings = screenshot.showsSettings
+                return
+            }
+            #endif
+            viewModel.startWatchFolder()
+        }
         .onDisappear { viewModel.stopWatchFolder() }
     }
 }
