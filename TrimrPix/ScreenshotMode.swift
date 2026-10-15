@@ -13,7 +13,8 @@ import Foundation
 ///
 /// Drag and drop can't be scripted, so without this the window can only be staged by hand.
 /// Launched with a folder, the app opens with that folder's images in the list, can press
-/// Optimize All and open Settings, and shows itself in light appearance, as the site is:
+/// Optimize All and open Settings (scrolled to its end with `-screenshotSettingsAtEnd YES`),
+/// and shows itself in light appearance, as the site is:
 ///
 ///     open -n TrimrPix.app --args -screenshotFolder ~/capture \
 ///       -screenshotOptimize YES -screenshotWindowSize 1000x711 \
@@ -36,6 +37,7 @@ struct ScreenshotMode: Sendable {
     let folder: URL
     let optimize: Bool
     let showsSettings: Bool
+    let settingsAtEnd: Bool
     let windowSize: CGSize?
 
     /// The mode the app was launched in, or nil for a normal launch.
@@ -49,6 +51,7 @@ struct ScreenshotMode: Sendable {
             folder: URL(fileURLWithPath: (path as NSString).expandingTildeInPath),
             optimize: arguments.bool(forKey: "screenshotOptimize"),
             showsSettings: arguments.bool(forKey: "screenshotSettings"),
+            settingsAtEnd: arguments.bool(forKey: "screenshotSettingsAtEnd"),
             windowSize: size?.count == 2 ? CGSize(width: size![0], height: size![1]) : nil
         )
     }()
@@ -87,6 +90,33 @@ struct ScreenshotMode: Sendable {
         if optimize {
             viewModel.optimizeAllImages()
         }
+        if settingsAtEnd {
+            Task { await scrollSettingsToEnd() }
+        }
+    }
+
+    /// Scrolls Settings to its end once the sheet is up, where Watch Folder is.
+    @MainActor
+    private func scrollSettingsToEnd() async {
+        for _ in 0..<20 {
+            try? await Task.sleep(for: .milliseconds(100))
+            guard let sheet = NSApp.windows.first(where: { $0.sheetParent != nil }),
+                  let content = sheet.contentView,
+                  let scrollView = Self.scrollViews(in: content).max(by: { $0.frame.height < $1.frame.height }),
+                  let document = scrollView.documentView,
+                  document.bounds.height > scrollView.contentView.bounds.height
+            else { continue }
+            let clip = scrollView.contentView
+            let end = document.isFlipped ? document.bounds.height - clip.bounds.height : 0
+            clip.scroll(to: NSPoint(x: clip.bounds.origin.x, y: end))
+            scrollView.reflectScrolledClipView(clip)
+            return
+        }
+    }
+
+    @MainActor
+    private static func scrollViews(in view: NSView) -> [NSScrollView] {
+        (view as? NSScrollView).map { [$0] } ?? view.subviews.flatMap { scrollViews(in: $0) }
     }
 }
 #endif
