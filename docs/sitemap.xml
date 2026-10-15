@@ -13,18 +13,28 @@
         <priority>1.0</priority>
         <image:image>
             <image:loc>https://trimrpix.iamjarl.com/screenshot-1.png</image:loc>
-            <image:title>TrimrPix – Trim file size. Keep quality. Mac image optimizer</image:title>
-            <image:caption>TrimrPix app window showing image optimization with drag and drop and file size savings</image:caption>
+            <image:title>TrimrPix after a batch</image:title>
+            <image:caption>TrimrPix after optimizing four photos at Medium, resized to 2048 px, each 70 to 80% smaller</image:caption>
         </image:image>
         <image:image>
             <image:loc>https://trimrpix.iamjarl.com/screenshot-2.png</image:loc>
-            <image:title>TrimrPix compression and batch processing</image:title>
-            <image:caption>TrimrPix compression settings with batch processing for multiple images</image:caption>
+            <image:title>TrimrPix settings</image:title>
+            <image:caption>TrimrPix settings: the Medium preset at 80% quality, resizing, PNG and saving</image:caption>
         </image:image>
         <image:image>
             <image:loc>https://trimrpix.iamjarl.com/screenshot-3.png</image:loc>
-            <image:title>TrimrPix before and after file sizes</image:title>
-            <image:caption>TrimrPix showing before and after file size comparison with savings</image:caption>
+            <image:title>A batch of photos in TrimrPix</image:title>
+            <image:caption>Thirty photos dropped into TrimrPix, each with its size and an Optimize button</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://trimrpix.iamjarl.com/screenshot-4.png</image:loc>
+            <image:title>TrimrPix Watch Folder</image:title>
+            <image:caption>Watch Folder turned on in TrimrPix settings, with a folder and a 2-second delay</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://trimrpix.iamjarl.com/screenshot-5.png</image:loc>
+            <image:title>The formats TrimrPix takes</image:title>
+            <image:caption>TrimrPix with a HEIC, an AVIF, a PDF, a GIF and a PNG dropped in</image:caption>
         </image:image>
     </url>
     <url>

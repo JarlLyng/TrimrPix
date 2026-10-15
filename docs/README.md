@@ -16,7 +16,8 @@ Hosted at **https://trimrpix.iamjarl.com/** via GitHub Pages.
 ## Assets
 
 - `styles.css` – Design tokens, article styles, responsive
-- `screenshot-1/2/3.png` – App screenshots
+- `screenshot-1` to `screenshot-5` (`.avif`, with a `.png` fallback) – App window captures, taken with the
+  Debug-only capture mode in `TrimrPix/ScreenshotMode.swift`
 - `favicon.png` – Favicon
 - `sitemap.xml` – XML sitemap (8 pages + images)
 - `robots.txt` – Crawler rules

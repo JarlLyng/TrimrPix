@@ -47,7 +47,7 @@ Fineprint: Before and after photo: Mojavellama, CC0, Wikimedia Commons.
   after, and how much it saved, as it goes.
 - **Quality, your call.** Low, Medium or High, or a slider from 10 to 100%. Medium is the default.
 - **Watch Folder.** Point it at the folder your screenshots or exports land in. Every new image gets
-  a smaller copy beside it, without opening the window. It waits until a file has finished copying.
+  a smaller copy beside it, with nothing to drag in. It waits until a file has finished copying.
 - **The formats you use.** JPEG, PNG, GIF, AVIF and HEIC, and PDFs that are images rather than text, such as scans. WebP files are left as
   they are: macOS has no way to write them.
 
