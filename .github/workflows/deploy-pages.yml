@@ -43,6 +43,15 @@ jobs:
             exit 1
           fi
 
+      # The design system is served from this site's own copy (docs/assets/), not a CDN:
+      # its stylesheets block the first paint, and jsDelivr has failed in practice.
+      - name: Refuse stylesheets or scripts from a CDN
+        run: |
+          if grep -n -E '<(link|script)[^>]*(href|src)="https://cdn\.jsdelivr\.net' docs/*.html; then
+            echo "A page loads a stylesheet or script from jsDelivr; serve the site's copy instead." >&2
+            exit 1
+          fi
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
         with:

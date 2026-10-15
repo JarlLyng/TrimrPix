@@ -1,0 +1,243 @@
+/* IAMJARL Design Tokens v1.32.2: generated, do not edit */
+
+:root {
+  /* Spacing */
+  --ij-spacing-xs: 4px;
+  --ij-spacing-sm: 8px;
+  --ij-spacing-md: 12px;
+  --ij-spacing-lg: 16px;
+  --ij-spacing-xl: 20px;
+  --ij-spacing-xxl: 24px;
+  --ij-spacing-xxxl: 32px;
+
+  /* Radius */
+  --ij-radius-sm: 8px;
+  --ij-radius-md: 12px;
+  --ij-radius-lg: 16px;
+
+  /* Typography */
+  --ij-font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --ij-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --ij-font-size-xs: 12px;
+  --ij-font-size-sm: 14px;
+  --ij-font-size-base: 16px;
+  --ij-font-size-lg: 18px;
+  --ij-font-size-xl: 24px;
+  --ij-font-size-xxl: 36px;
+  --ij-font-size-numeral-sm: 32px;
+  --ij-font-size-numeral-md: 56px;
+  --ij-font-size-numeral-lg: 80px;
+
+  --ij-line-height-xs: 16px;
+  --ij-line-height-sm: 20px;
+  --ij-line-height-base: 24px;
+  --ij-line-height-lg: 28px;
+  --ij-line-height-xl: 32px;
+  --ij-line-height-xxl: 44px;
+
+  --ij-font-weight-regular: 400;
+  --ij-font-weight-semibold: 600;
+  --ij-font-weight-bold: 700;
+
+  /* Shadows */
+  --ij-shadow-sm: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  --ij-shadow-md: 0px 4px 8px rgba(0, 0, 0, 0.08);
+  --ij-shadow-lg: 0px 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* Motion: duration */
+  --ij-duration-fast: 150ms;
+  --ij-duration-normal: 250ms;
+  --ij-duration-slow: 400ms;
+
+  /* Motion: easing */
+  --ij-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ij-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Breakpoints (for JS / SCSS use; CSS media queries need literal px values) */
+  --ij-breakpoint-popup: 320px;
+  --ij-breakpoint-sm: 640px;
+  --ij-breakpoint-md: 768px;
+  --ij-breakpoint-lg: 1024px;
+  --ij-breakpoint-xl: 1280px;
+  --ij-breakpoint-xxl: 1536px;
+
+  /* Container max-widths */
+  --ij-container-sm: 680px;
+  --ij-container-md: 900px;
+  --ij-container-lg: 1080px;
+  --ij-container-xl: 1400px;
+
+  /* Marketing scale (web only): fluid type and space for marketing pages */
+  --ij-mkt-display-size: clamp(3.25rem, 2.1105rem + 4.8619vw, 6rem);
+  --ij-mkt-display-leading: 1.02;
+  --ij-mkt-display-tracking: -0.02em;
+  --ij-mkt-headline-size: clamp(2.125rem, 1.5552rem + 2.4309vw, 3.5rem);
+  --ij-mkt-headline-leading: 1.08;
+  --ij-mkt-headline-tracking: -0.015em;
+  --ij-mkt-title-size: clamp(1.375rem, 1.2196rem + 0.663vw, 1.75rem);
+  --ij-mkt-title-leading: 1.25;
+  --ij-mkt-title-tracking: -0.005em;
+  --ij-mkt-lead-size: clamp(1.1875rem, 1.0839rem + 0.442vw, 1.4375rem);
+  --ij-mkt-lead-leading: 1.5;
+  --ij-mkt-lead-tracking: 0em;
+  --ij-mkt-body-size: clamp(1.125rem, 1.0991rem + 0.1105vw, 1.1875rem);
+  --ij-mkt-body-leading: 1.6;
+  --ij-mkt-body-tracking: 0em;
+  --ij-mkt-small-size: clamp(0.9375rem, 0.9116rem + 0.1105vw, 1rem);
+  --ij-mkt-small-leading: 1.5;
+  --ij-mkt-small-tracking: 0em;
+  --ij-mkt-numeral-size: clamp(4rem, 2.3425rem + 7.0718vw, 8rem);
+  --ij-mkt-numeral-leading: 1;
+  --ij-mkt-numeral-tracking: -0.03em;
+  --ij-mkt-wordmark-size: clamp(4.75rem, 0.5028rem + 18.1215vw, 15rem);
+  --ij-mkt-wordmark-leading: 0.9;
+  --ij-mkt-wordmark-tracking: -0.03em;
+  --ij-mkt-space-gutter: clamp(1.25rem, 0.1105rem + 4.8619vw, 4rem);
+  --ij-mkt-space-stack: clamp(1.25rem, 0.9392rem + 1.326vw, 2rem);
+  --ij-mkt-space-block: clamp(3rem, 1.9641rem + 4.4199vw, 5.5rem);
+  --ij-mkt-space-section: clamp(5.5rem, 3.4282rem + 8.8398vw, 10.5rem);
+  --ij-mkt-width-content: 1100px;
+  --ij-mkt-width-text: 640px;
+  --ij-mkt-width-narrow: 760px;
+
+  /* Focus ring */
+  --ij-focus-width: 2px;
+  --ij-focus-offset: 2px;
+
+  /* Z-index */
+  --ij-z-base: 0;
+  --ij-z-dropdown: 1000;
+  --ij-z-sticky: 1100;
+  --ij-z-overlay: 1200;
+  --ij-z-modal: 1300;
+  --ij-z-popover: 1400;
+  --ij-z-toast: 1500;
+  --ij-z-tooltip: 1600;
+
+  /* Opacity */
+  --ij-opacity-disabled: 0.4;
+  --ij-opacity-muted: 0.65;
+
+  /* Static colors */
+  --ij-color-black: #000000;
+  --ij-color-white: #FFFFFF;
+
+  /* Shared state colors */
+  --ij-color-success: #4CAF50;
+  --ij-color-on-success: #000000;
+  --ij-color-warning: #FF6B35;
+  --ij-color-on-warning: #000000;
+  --ij-color-error: #D70015;
+  --ij-color-on-error: #FFFFFF;
+
+  /* Mode colors (light default) */
+  --ij-color-primary-rgb: 164, 53, 210; /* deprecated, use color-mix() */
+  --ij-gradient-primary: linear-gradient(135deg, #A435D2, #E0529C); /* decorative only, no text colour clears AA */
+  --ij-gradient-brand: linear-gradient(135deg, #D0FF00, #A435D2); /* decorative only, no text colour clears AA */
+  --ij-color-primary: #A435D2;
+  --ij-color-on-primary: #FFFFFF;
+  --ij-color-primary-hover: #8E2BB8;
+  --ij-color-primary-pressed: #7A2499;
+  --ij-color-primary-subtle: rgba(164, 53, 210, 0.12);
+  --ij-color-text-primary: #000000;
+  --ij-color-text-secondary: rgba(0, 0, 0, 0.70);
+  --ij-color-text-tertiary: rgba(0, 0, 0, 0.55);
+  --ij-color-text-disabled: rgba(0, 0, 0, 0.35);
+  --ij-color-text-inverse: #FFFFFF;
+  --ij-color-bg-app: #FFFFFF;
+  --ij-color-bg-muted: rgba(0, 0, 0, 0.04);
+  --ij-color-bg-card: rgba(0, 0, 0, 0.04);
+  --ij-color-bg-disabled: rgba(0, 0, 0, 0.06);
+  --ij-color-surface-default: #FFFFFF;
+  --ij-color-surface-raised: rgba(0, 0, 0, 0.02);
+  --ij-color-border-subtle: rgba(0, 0, 0, 0.10);
+  --ij-color-border-default: rgba(0, 0, 0, 0.16);
+  --ij-color-state-success: #2E7D32;
+  --ij-color-state-warning: #C2410C;
+  --ij-color-state-error: #D70015;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ij-color-primary-rgb: 208, 255, 0; /* deprecated, use color-mix() */
+    --ij-gradient-primary: linear-gradient(135deg, #D0FF00, #5DE0A6, #37B6E9); /* text-safe: black */
+    --ij-gradient-brand: linear-gradient(135deg, #A435D2, #D0FF00); /* decorative only, no text colour clears AA */
+    --ij-color-primary: #D0FF00;
+    --ij-color-on-primary: #000000;
+    --ij-color-primary-hover: #B8E000;
+    --ij-color-primary-pressed: #A0C400;
+    --ij-color-primary-subtle: rgba(208, 255, 0, 0.15);
+    --ij-color-text-primary: #FFFFFF;
+    --ij-color-text-secondary: rgba(255, 255, 255, 0.75);
+    --ij-color-text-tertiary: rgba(255, 255, 255, 0.60);
+    --ij-color-text-disabled: rgba(255, 255, 255, 0.35);
+    --ij-color-text-inverse: #000000;
+    --ij-color-bg-app: #000000;
+    --ij-color-bg-muted: rgba(255, 255, 255, 0.05);
+    --ij-color-bg-card: rgba(255, 255, 255, 0.05);
+    --ij-color-bg-disabled: rgba(255, 255, 255, 0.07);
+    --ij-color-surface-default: #000000;
+    --ij-color-surface-raised: rgba(255, 255, 255, 0.03);
+    --ij-color-border-subtle: rgba(255, 255, 255, 0.12);
+    --ij-color-border-default: rgba(255, 255, 255, 0.18);
+    --ij-color-state-success: #4CAF50;
+    --ij-color-state-warning: #FF6B35;
+    --ij-color-state-error: #FF453A;
+  }
+}
+
+/* Explicit class overrides for manual mode switching */
+.light {
+  --ij-color-primary-rgb: 164, 53, 210; /* deprecated, use color-mix() */
+  --ij-gradient-primary: linear-gradient(135deg, #A435D2, #E0529C); /* decorative only, no text colour clears AA */
+  --ij-gradient-brand: linear-gradient(135deg, #D0FF00, #A435D2); /* decorative only, no text colour clears AA */
+  --ij-color-primary: #A435D2;
+  --ij-color-on-primary: #FFFFFF;
+  --ij-color-primary-hover: #8E2BB8;
+  --ij-color-primary-pressed: #7A2499;
+  --ij-color-primary-subtle: rgba(164, 53, 210, 0.12);
+  --ij-color-text-primary: #000000;
+  --ij-color-text-secondary: rgba(0, 0, 0, 0.70);
+  --ij-color-text-tertiary: rgba(0, 0, 0, 0.55);
+  --ij-color-text-disabled: rgba(0, 0, 0, 0.35);
+  --ij-color-text-inverse: #FFFFFF;
+  --ij-color-bg-app: #FFFFFF;
+  --ij-color-bg-muted: rgba(0, 0, 0, 0.04);
+  --ij-color-bg-card: rgba(0, 0, 0, 0.04);
+  --ij-color-bg-disabled: rgba(0, 0, 0, 0.06);
+  --ij-color-surface-default: #FFFFFF;
+  --ij-color-surface-raised: rgba(0, 0, 0, 0.02);
+  --ij-color-border-subtle: rgba(0, 0, 0, 0.10);
+  --ij-color-border-default: rgba(0, 0, 0, 0.16);
+  --ij-color-state-success: #2E7D32;
+  --ij-color-state-warning: #C2410C;
+  --ij-color-state-error: #D70015;
+}
+
+.dark {
+  --ij-color-primary-rgb: 208, 255, 0; /* deprecated, use color-mix() */
+  --ij-gradient-primary: linear-gradient(135deg, #D0FF00, #5DE0A6, #37B6E9); /* text-safe: black */
+  --ij-gradient-brand: linear-gradient(135deg, #A435D2, #D0FF00); /* decorative only, no text colour clears AA */
+  --ij-color-primary: #D0FF00;
+  --ij-color-on-primary: #000000;
+  --ij-color-primary-hover: #B8E000;
+  --ij-color-primary-pressed: #A0C400;
+  --ij-color-primary-subtle: rgba(208, 255, 0, 0.15);
+  --ij-color-text-primary: #FFFFFF;
+  --ij-color-text-secondary: rgba(255, 255, 255, 0.75);
+  --ij-color-text-tertiary: rgba(255, 255, 255, 0.60);
+  --ij-color-text-disabled: rgba(255, 255, 255, 0.35);
+  --ij-color-text-inverse: #000000;
+  --ij-color-bg-app: #000000;
+  --ij-color-bg-muted: rgba(255, 255, 255, 0.05);
+  --ij-color-bg-card: rgba(255, 255, 255, 0.05);
+  --ij-color-bg-disabled: rgba(255, 255, 255, 0.07);
+  --ij-color-surface-default: #000000;
+  --ij-color-surface-raised: rgba(255, 255, 255, 0.03);
+  --ij-color-border-subtle: rgba(255, 255, 255, 0.12);
+  --ij-color-border-default: rgba(255, 255, 255, 0.18);
+  --ij-color-state-success: #4CAF50;
+  --ij-color-state-warning: #FF6B35;
+  --ij-color-state-error: #FF453A;
+}

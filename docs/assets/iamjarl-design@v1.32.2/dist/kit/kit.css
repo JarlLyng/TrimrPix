@@ -1,0 +1,715 @@
+/* IAMJARL marketing kit v1.32.2: generated from kit/kit.css, do not edit */
+/* The marketing page kit (#65): sections every app site can compose.
+
+   Plain HTML with these classes. No JavaScript is needed to read any of it:
+   every section's resting state is complete, so crawlers, AI assistants,
+   link previews and visitors with motion switched off see the whole page.
+   kit.js only adds what moves.
+
+   Load after tokens.css and the site's identity sheet. Every colour comes from
+   them, so the same markup is Walkful's sand and magenta or Wean's grey-blue.
+   Sizes come from the marketing scale (--ij-mkt-*), which is separate from the
+   app scale. */
+
+/* ---------- Page ---------- */
+
+.ij-page {
+  margin: 0;
+  background: var(--ij-color-bg-app);
+  color: var(--ij-color-text-primary);
+  font-family: var(--ij-font-ui);
+  font-size: var(--ij-mkt-body-size);
+  line-height: var(--ij-mkt-body-leading);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+/* Content links take the text-safe accent, and nothing else does. A link
+   slotted into <ij-nav> or <ij-footer> lives in the page's DOM, and a page
+   rule beats a component's ::slotted rule whatever its specificity, so these
+   rules leave anything with a slot, and anything inside one, to the
+   component: the nav's CTA keeps its on-accent text, its links stay text
+   colours, the footer's links stay secondary (#72). */
+.ij-page a:not([slot], [slot] *, .ij-skip) { color: var(--ij-color-accent-text); text-underline-offset: 0.2em; }
+.ij-page :is(ij-nav, ij-footer):not(:defined) a { color: var(--ij-color-text-secondary); }
+.ij-page :focus-visible:not([slot], [slot] *) {
+  outline: var(--ij-focus-width) solid var(--ij-color-accent-text);
+  outline-offset: var(--ij-focus-offset);
+  border-radius: var(--ij-radius-sm);
+}
+.ij-page img, .ij-page video, .ij-page svg { max-width: 100%; }
+
+/* The skip link (#84): first in the body, so it works without JavaScript,
+   hidden until it takes focus, then above the sticky <ij-nav> in the accent
+   with its on-accent text, which validate.js holds to AA. The link rule above
+   leaves it alone, and <ij-nav> leaves out its own when the page has one. */
+.ij-skip {
+  position: fixed;
+  top: var(--ij-spacing-sm);
+  left: var(--ij-spacing-lg);
+  z-index: var(--ij-z-popover);
+  padding: var(--ij-spacing-sm) var(--ij-spacing-lg);
+  border-radius: var(--ij-radius-md);
+  background: var(--ij-color-accent);
+  color: var(--ij-color-on-accent);
+  font-weight: var(--ij-font-weight-semibold);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+.ij-skip:focus { transform: none; }
+
+/* <ij-footer> without JavaScript, or before it upgrades, shows its children.
+   A footer with a hand-written fallback (anything in no slot) shows that
+   alone; the slotted links and fineprint would otherwise repeat it (#84).
+   A footer with no fallback shows its slotted content. */
+.ij-page ij-footer:not(:defined):has(> :not([slot])) > [slot] { display: none; }
+
+.ij-container {
+  width: min(100% - 2 * var(--ij-mkt-space-gutter), var(--ij-mkt-width-content));
+  margin-inline: auto;
+}
+.ij-section { padding-block: var(--ij-mkt-space-section); }
+/* <ij-footer> placed straight in the page lines up with the content, as a
+   section would. It is display: block with no width of its own (#72). */
+.ij-page > ij-footer {
+  display: block;
+  width: min(100% - 2 * var(--ij-mkt-space-gutter), var(--ij-mkt-width-content));
+  margin-inline: auto;
+  padding-block: var(--ij-mkt-space-block);
+}
+/* A band on the card colour, for a section that should read as its own room.
+   Cards on a band swap to the page colour, so they still read as cards. */
+.ij-section--band { background: var(--ij-color-bg-card); }
+.ij-section--band .ij-card, .ij-section--band .ij-trait, .ij-section--band .ij-source,
+.ij-section--band .ij-review, .ij-section--band .ij-phone__screen { background: var(--ij-color-bg-app); }
+.ij-measure { max-width: var(--ij-mkt-width-text); }
+/* The kit's own blocks start with no margin, in one rule placed just before
+   the stack so the stack's spacing wins (#88). Set later in this file and as
+   specific, each block's own reset took a stack's spacing away: a source card
+   sat flush on its heading. .ij-page keeps a site's own h2 { margin } out. */
+.ij-page :where(.ij-display, .ij-headline, .ij-title, .ij-numeral, .ij-wordmark, .ij-lede, .ij-label, .ij-card, .ij-source, .ij-review, .ij-compare, .ij-chips) { margin: 0; }
+.ij-stack > * + * { margin-top: var(--ij-mkt-space-stack); }
+
+/* ---------- Type roles ---------- */
+
+/* The display face carries the voice; body copy stays the UI face. A face with
+   one weight (Young Serif) must not be asked for bold, so the weight is a hook. */
+.ij-display, .ij-headline, .ij-title, .ij-numeral, .ij-wordmark {
+  font-family: var(--ij-font-display, var(--ij-font-ui));
+  font-variation-settings: var(--ij-font-display-axes, normal);
+  font-weight: var(--ij-display-weight, 400);
+  font-synthesis: none;
+  text-wrap: balance;
+}
+/* The numbers may have a face of their own (#91): Anvil sets its headlines in
+   Outfit and its weights and reps in JetBrains Mono. */
+.ij-numeral {
+  font-family: var(--ij-font-numeral, var(--ij-font-display, var(--ij-font-ui)));
+  font-variation-settings: var(--ij-font-numeral-axes, var(--ij-font-display-axes, normal));
+}
+.ij-display  { font-size: var(--ij-mkt-display-size);  line-height: var(--ij-mkt-display-leading);  letter-spacing: var(--ij-mkt-display-tracking); }
+.ij-headline { font-size: var(--ij-mkt-headline-size); line-height: var(--ij-mkt-headline-leading); letter-spacing: var(--ij-mkt-headline-tracking); }
+.ij-title    { font-size: var(--ij-mkt-title-size);    line-height: var(--ij-mkt-title-leading);    letter-spacing: var(--ij-mkt-title-tracking); }
+.ij-numeral  { font-size: var(--ij-mkt-numeral-size);  line-height: var(--ij-mkt-numeral-leading);  letter-spacing: var(--ij-mkt-numeral-tracking); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ij-wordmark { font-size: var(--ij-mkt-wordmark-size); line-height: var(--ij-mkt-wordmark-leading); letter-spacing: var(--ij-mkt-wordmark-tracking); }
+.ij-lede {
+  font-size: var(--ij-mkt-lead-size);
+  line-height: var(--ij-mkt-lead-leading);
+  color: var(--ij-color-text-secondary);
+  max-width: 34ch;
+  text-wrap: pretty;
+}
+.ij-small { font-size: var(--ij-mkt-small-size); line-height: var(--ij-mkt-small-leading); color: var(--ij-color-text-secondary); }
+.ij-page p { text-wrap: pretty; }
+
+/* ---------- The store button (1.20.0's fragment) ---------- */
+
+ij-store-cta { display: block; }
+.ij-store { display: flex; flex-direction: column; align-items: flex-start; gap: var(--ij-spacing-sm); }
+.ij-store .ij-store-facts { margin: 0; font-size: var(--ij-mkt-small-size); color: var(--ij-color-text-secondary); }
+.ij-store-badge { display: inline-block; border-radius: var(--ij-radius-sm); }
+.ij-store-badge img { display: block; height: 48px; width: auto; }
+
+/* ---------- Hero: statement, line, store button, the product ---------- */
+
+.ij-hero { padding-block: var(--ij-mkt-space-block) var(--ij-mkt-space-section); }
+.ij-hero__text { display: flex; flex-direction: column; align-items: flex-start; gap: var(--ij-mkt-space-stack); }
+.ij-hero__text .ij-drawing { width: min(70%, 360px); margin-block: calc(var(--ij-mkt-space-stack) * -0.5) 0; }
+.ij-hero__media { display: flex; justify-content: center; }
+.ij-hero__inner { display: grid; gap: var(--ij-mkt-space-block); align-items: center; }
+
+@media (min-width: 768px) {
+  .ij-hero--split .ij-hero__inner { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); }
+}
+.ij-hero--centred .ij-hero__text { align-items: center; text-align: center; }
+.ij-hero--centred .ij-lede { margin-inline: auto; }
+.ij-hero--centred .ij-store { align-items: center; }
+
+/* ---------- The phone: straight, never tilted ----------
+
+   A generic phone, drawn in CSS, until a site's drawn frame replaces it: put
+   the SVG in .ij-phone__frame and add .ij-phone--drawn. Never Apple's own
+   bezel from here (its licence forbids redistribution), and never a drawing
+   with an island or side buttons (Apple's marketing rules). */
+
+.ij-phone {
+  --_w: var(--ij-phone-width, 320px);
+  --_r: calc(var(--_w) * 0.16);
+  --_bezel: calc(var(--_w) * 0.034);
+  position: relative;
+  flex: none;
+  width: min(var(--_w), 100%);
+  aspect-ratio: 9 / 19.5;
+  border-radius: var(--_r);
+  background: var(--ij-color-black);
+  /* The edge comes from the page's own border colour: invisible against a
+     light page, and what keeps a black phone from vanishing into a dark one. */
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in srgb, var(--ij-color-white) 14%, transparent),
+    0 0 0 1px var(--ij-color-border-default),
+    0 40px 80px -40px color-mix(in srgb, var(--ij-color-black) 45%, transparent);
+}
+.ij-phone__screen {
+  position: absolute;
+  inset: var(--_bezel);
+  border-radius: calc(var(--_r) - var(--_bezel));
+  overflow: hidden;
+  background: var(--ij-color-bg-card);
+}
+/* A <picture> stands in for its <img> wherever the kit sizes one (#99), so a
+   site can serve AVIF and WebP with a fallback: it lays out as if it weren't
+   there, and the rules below reach the <img> inside it. */
+:is(.ij-phone__screen, .ij-tv__screen, .ij-watch__screen, .ij-window, .ij-card__piece, .ij-compare__item) > picture { display: contents; }
+
+.ij-phone__screen > :is(img, video), .ij-phone__screen > picture > img {
+  display: block; width: 100%; height: 100%; object-fit: cover; object-position: top;
+}
+.ij-phone__frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.ij-phone--drawn { background: none; box-shadow: none; }
+
+/* ---------- A television and a watch, in the same spirit (#78) ----------
+
+   Plain frames for a capture from Apple TV and from Apple Watch: a screen with
+   a thin bezel on a small foot, and a watch face between two strap ends. No
+   logo, no crown, no buttons: Apple's marketing rules let a drawn device carry
+   nothing unique to its products, and its own frames never ship from here.
+   The screen fills with the capture: <img> or <video> in the __screen. */
+
+.ij-tv {
+  --_w: var(--ij-tv-width, 560px);
+  position: relative;
+  box-sizing: border-box;
+  width: min(var(--_w), 100%);
+  padding: calc(min(var(--_w), 100%) * 0.018);
+  margin-bottom: 14px;
+  border-radius: calc(min(var(--_w), 100%) * 0.022);
+  background: var(--ij-color-black);
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in srgb, var(--ij-color-white) 12%, transparent),
+    0 0 0 1px var(--ij-color-border-default);
+}
+.ij-tv__screen { aspect-ratio: 16 / 9; overflow: hidden; border-radius: 3px; background: var(--ij-color-bg-card); }
+.ij-tv__screen > :is(img, video), .ij-tv__screen > picture > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ij-tv::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 16%;
+  height: 10px;
+  transform: translateX(-50%);
+  border-radius: 0 0 4px 4px;
+  background: var(--ij-color-border-default);
+}
+
+.ij-watch {
+  --_w: var(--ij-watch-width, 170px);
+  position: relative;
+  box-sizing: border-box;
+  width: min(var(--_w), 100%);
+  padding: calc(min(var(--_w), 100%) * 0.075);
+  margin-block: calc(min(var(--_w), 100%) * 0.32);
+  border-radius: calc(min(var(--_w), 100%) * 0.26);
+  background: var(--ij-color-black);
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in srgb, var(--ij-color-white) 12%, transparent),
+    0 0 0 1px var(--ij-color-border-default);
+}
+.ij-watch__screen { aspect-ratio: 416 / 496; overflow: hidden; border-radius: 22%; background: var(--ij-color-bg-card); }
+.ij-watch__screen > :is(img, video), .ij-watch__screen > picture > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ij-watch::before, .ij-watch::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 64%;
+  height: calc(min(var(--_w), 100%) * 0.34);
+  transform: translateX(-50%);
+  background: var(--ij-color-bg-card);
+  box-shadow: 0 0 0 1px var(--ij-color-border-default);
+}
+.ij-watch::before { bottom: 100%; border-radius: 10px 10px 0 0; }
+.ij-watch::after { top: 100%; border-radius: 0 0 10px 10px; }
+
+/* ---------- A Mac window (#83) ----------
+   A Mac capture carries its own window chrome, so the kit draws no frame. It
+   clips the capture to the window's own corners, so a video, whose corners
+   are masked to black, never shows black against the ground, and a still's
+   transparent corners match; then it adds the border colour's edge and a soft
+   shadow. The corner is 2% of the width, a hair over macOS's own (1.9% on It's
+   mono's captures). --ij-window-width sizes it: 900px by default, a capture's
+   width in points. A screen recording in it is a video.ij-loop, as in a phone. */
+.ij-window {
+  --_w: var(--ij-window-width, 900px);
+  flex: none;
+  width: min(var(--_w), 100%);
+  container-type: inline-size;
+}
+.ij-window > :is(img, video), .ij-window > picture > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2cqi;
+  box-shadow:
+    0 0 0 1px var(--ij-color-border-default),
+    0 40px 80px -40px color-mix(in srgb, var(--ij-color-black) 60%, transparent);
+}
+.ij-hero__media > .ij-window { margin-inline: auto; }
+
+/* ---------- A drawing per statement ---------- */
+
+.ij-drawing { display: block; width: 100%; height: auto; color: var(--ij-color-accent); }
+/* A drawing's strokes keep their width on screen at any size, so a drawing
+   made for 480 px still reads at phone width (#75). */
+.ij-drawing path { vector-effect: non-scaling-stroke; }
+
+/* A data line in the drawings' hand: draw its path with kit/loose.js and give
+   it this class. Wean's taper staircase is one; it reads as a drawing, not a
+   chart (#75). */
+.ij-loose {
+  fill: none;
+  stroke: var(--ij-color-accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.ij-staircase { display: block; width: 100%; height: auto; }
+/* A drawing standing on its own in a section keeps to an illustration's size;
+   at the full content width its fine strokes would spread thin. */
+.ij-stack > .ij-drawing { width: min(100%, 560px); }
+.ij-statements { display: grid; gap: var(--ij-mkt-space-section); }
+.ij-statement { display: grid; gap: var(--ij-mkt-space-stack); align-items: center; }
+.ij-statement__text { display: flex; flex-direction: column; gap: var(--ij-spacing-lg); }
+.ij-statement__text p { margin: 0; color: var(--ij-color-text-secondary); max-width: 40ch; }
+/* Statements without drawings stand side by side, as short columns (#90). */
+.ij-statement:not(:has(> .ij-drawing)) { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 768px) {
+  .ij-statement { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--ij-mkt-space-block); }
+  .ij-statement:not(:has(> .ij-drawing)) { grid-template-columns: minmax(0, 1fr); }
+  .ij-statements:not(:has(.ij-drawing)) { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--ij-mkt-space-block); }
+  .ij-statement:nth-child(even) .ij-drawing { order: 2; }
+}
+
+/* ---------- Frameless pieces: one readable fragment of the app ---------- */
+
+.ij-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ij-spacing-lg);
+  padding: var(--ij-mkt-space-stack);
+  background: var(--ij-color-bg-card);
+  border-radius: var(--ij-radius-lg);
+  min-width: 0;
+}
+.ij-card p { margin: 0; color: var(--ij-color-text-secondary); }
+.ij-card .ij-numeral { color: var(--ij-color-text-primary); }
+.ij-card__piece { display: flex; align-items: center; justify-content: center; min-height: 160px; }
+.ij-card__piece > img, .ij-card__piece > picture > img { display: block; height: auto; border-radius: var(--ij-radius-md); }
+
+.ij-bento { display: grid; gap: var(--ij-spacing-lg); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 768px) {
+  .ij-bento { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .ij-bento > .ij-card { grid-column: span 2; }
+  .ij-bento > .ij-card--half { grid-column: span 3; }
+  .ij-bento > .ij-card--wide { grid-column: span 4; }
+}
+
+.ij-rows { display: grid; gap: var(--ij-mkt-space-block); }
+.ij-row { display: grid; gap: var(--ij-mkt-space-stack); align-items: center; }
+.ij-row__text { display: flex; flex-direction: column; gap: var(--ij-spacing-lg); }
+.ij-row__text p { margin: 0; color: var(--ij-color-text-secondary); max-width: 40ch; }
+@media (min-width: 768px) {
+  .ij-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--ij-mkt-space-block); }
+  .ij-row:nth-child(even) .ij-row__text { order: -1; }
+}
+
+/* ---------- The phone that stays: resting state ----------
+
+   Without JavaScript, or with reduced motion, the screens sit in a row and
+   the feature texts below them. kit.js turns it into one phone that holds
+   still while the texts scroll past. */
+
+.ij-tour { display: grid; gap: var(--ij-mkt-space-block); }
+.ij-tour__screens {
+  display: flex;
+  gap: var(--ij-mkt-space-stack);
+  justify-content: center;
+  overflow-x: auto;
+  padding-block: var(--ij-spacing-sm);
+  scroll-snap-type: x mandatory;
+}
+.ij-tour__screens > .ij-phone { --ij-phone-width: 220px; scroll-snap-align: center; }
+/* A centred row wider than its scroller overflows on both sides, and the part
+   past the start can't be scrolled to: on a phone the first screen sat half
+   off the edge (#80). Auto margins centre the row when it fits and start it at
+   the edge when it doesn't. */
+.ij-tour__screens > .ij-window { --ij-window-width: 520px; scroll-snap-align: center; }
+.ij-tour:not(.is-live) .ij-tour__screens { justify-content: flex-start; }
+.ij-tour:not(.is-live) .ij-tour__screens > :first-child { margin-inline-start: auto; }
+.ij-tour:not(.is-live) .ij-tour__screens > :last-child { margin-inline-end: auto; }
+.ij-tour__steps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ij-mkt-space-stack); }
+.ij-tour__step { display: flex; flex-direction: column; gap: var(--ij-spacing-sm); }
+.ij-tour__step p { margin: 0; color: var(--ij-color-text-secondary); max-width: 40ch; }
+@media (min-width: 768px) {
+  .ij-tour__steps { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+}
+
+/* The phone that stays, once kit.js has made it live (wide screens, motion
+   allowed): one phone holds still beside the feature texts, and its screen
+   crossfades with the text in the middle of the viewport. The texts are never
+   dimmed: every one stays readable, and the active one only gains a line. */
+.ij-tour.is-live { --ij-phone-width: 300px; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: start; }
+.ij-tour.is-live .ij-tour__screens {
+  position: sticky;
+  top: max(var(--ij-mkt-space-block), calc(50vh - var(--ij-phone-width) * 1.0833));
+  display: grid;
+  /* A definite track: a phone sized in % of a content-sized track has no width. */
+  grid-template-columns: minmax(0, var(--ij-phone-width));
+  justify-content: center;
+  overflow: visible;
+  padding: 0;
+}
+.ij-tour.is-live .ij-tour__screens > :is(.ij-phone, .ij-window) {
+  --ij-phone-width: inherit;
+  --ij-window-width: inherit;
+  grid-area: 1 / 1;
+  opacity: 0;
+}
+.ij-tour.is-live .ij-tour__screens > :is(.ij-phone, .ij-window).is-active { opacity: 1; }
+.ij-tour.is-live .ij-tour__steps {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  /* Room below the last text, so the phone still holds still while it is the
+     one in the middle: half the phone's height past the middle of the viewport. */
+  padding-bottom: max(0px, calc(var(--ij-phone-width) * 1.0833 - 35vh));
+}
+.ij-tour.is-live .ij-tour__step {
+  min-height: 70vh;
+  justify-content: center;
+  padding-left: var(--ij-mkt-space-stack);
+}
+/* The active text gains a short line beside its heading, and nothing else. */
+.ij-tour.is-live .ij-tour__step > :first-child { position: relative; }
+.ij-tour.is-live .ij-tour__step > :first-child::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--ij-mkt-space-stack) * -1);
+  top: 0.15em;
+  bottom: 0.15em;
+  width: 2px;
+  border-radius: 1px;
+  background: transparent;
+}
+.ij-tour.is-live .ij-tour__step.is-active > :first-child::before { background: var(--ij-color-accent); }
+/* Transitions only once the live state has settled, so becoming live on load
+   moves nothing: the first screen never animates. */
+.ij-tour.is-ready .ij-tour__screens > :is(.ij-phone, .ij-window) { transition: opacity var(--ij-duration-slow) var(--ij-easing-standard); }
+
+/* The window that stays (#83): the same tour with a Mac window in place of
+   the phone. The window takes the wider column, and holds still centred on
+   the middle of the viewport: its height is 0.711 of its width. */
+.ij-tour--window.is-live { --ij-window-width: 640px; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr); }
+.ij-tour--window.is-live .ij-tour__screens {
+  top: max(var(--ij-mkt-space-block), calc(50vh - var(--ij-window-width) * 0.356));
+  grid-template-columns: minmax(0, var(--ij-window-width));
+}
+.ij-tour--window.is-live .ij-tour__steps { padding-bottom: max(0px, calc(var(--ij-window-width) * 0.356 - 35vh)); }
+.ij-tour.is-ready .ij-tour__step > :first-child::before { transition: background-color var(--ij-duration-slow) var(--ij-easing-standard); }
+
+/* ---------- Where it works: short traits, one large number ---------- */
+
+.ij-traits { display: grid; gap: var(--ij-spacing-lg); grid-template-columns: minmax(0, 1fr); }
+.ij-trait { display: flex; flex-direction: column; justify-content: flex-end; gap: var(--ij-spacing-sm);
+            padding: var(--ij-mkt-space-stack); background: var(--ij-color-bg-card); border-radius: var(--ij-radius-lg); }
+.ij-trait p { margin: 0; color: var(--ij-color-text-secondary); }
+.ij-trait { min-width: 0; }
+.ij-trait .ij-title { overflow-wrap: break-word; }
+.ij-trait .ij-numeral { color: var(--ij-color-text-primary); }
+/* A trait can show its device: a television or a watch above its words. */
+.ij-trait > .ij-tv, .ij-trait > .ij-watch { align-self: center; }
+/* Or a drawing: a machine above its name, as It's mono shows its samplers. */
+.ij-trait > .ij-drawing { margin-bottom: auto; }
+/* Many short traits, like It's mono's eight samplers, stand two a row on a
+   phone instead of one long column; the number keeps the full row. */
+@media (max-width: 767px) {
+  .ij-traits--pairs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ij-traits--pairs > .ij-trait { padding: var(--ij-spacing-lg); }
+  .ij-traits--pairs > .ij-trait--number { grid-column: 1 / -1; }
+}
+@media (min-width: 768px) {
+  .ij-traits { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ij-trait--number { grid-column: span 2; grid-row: span 2; }
+  .ij-trait--wide { grid-column: span 2; }
+}
+
+/* ---------- Privacy and price, stated as features ---------- */
+
+.ij-assurances { display: grid; gap: var(--ij-mkt-space-stack); grid-template-columns: minmax(0, 1fr); }
+.ij-assurance { display: flex; flex-direction: column; gap: var(--ij-spacing-sm);
+                padding-top: var(--ij-spacing-lg); border-top: 1px solid var(--ij-color-border-default); }
+.ij-assurance p { margin: 0; color: var(--ij-color-text-secondary); }
+/* Apple's "Data Not Collected", quoted as the App Store states it. */
+.ij-assurance--label .ij-title::before {
+  content: ""; display: inline-block; width: 0.6em; height: 0.6em; margin-right: 0.4em;
+  border-radius: 50%; background: var(--ij-color-accent); vertical-align: 0.1em;
+}
+@media (min-width: 768px) {
+  .ij-assurances { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* ---------- A note from the maker ---------- */
+
+.ij-maker { max-width: var(--ij-mkt-width-narrow); margin-inline: auto; }
+.ij-maker p { font-size: var(--ij-mkt-lead-size); line-height: var(--ij-mkt-lead-leading); margin: 0 0 1em; }
+.ij-maker__sign { font-family: var(--ij-font-display, var(--ij-font-ui)); font-variation-settings: var(--ij-font-display-axes, normal); font-size: var(--ij-mkt-title-size); margin: 0; }
+.ij-maker__sign .ij-drawing { width: 140px; margin-top: var(--ij-spacing-xs); }
+
+/* ---------- A waveform, from real audio (#91) ----------
+   kit/wave.js draws it from a sample's peaks at build time. The outline is
+   filled with the accent and edged in the text colour, so a light accent still
+   reads on a light ground: TonVault's lime is 1.1:1 on its paper, and the ink
+   edge carries the shape while the lime fills it like a highlighter. */
+.ij-wave { display: block; width: 100%; height: auto; overflow: visible; }
+.ij-data .ij-wave { width: 7em; }
+.ij-wave path {
+  fill: var(--ij-color-accent);
+  stroke: var(--ij-color-text-primary);
+  stroke-width: 1;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ---------- Figures in a table (#91) ----------
+   The app's data as the picture: a week of sets, a health check's findings.
+   Names in the body face, numbers in the numeral face with tabular figures,
+   rows ruled in the border colour. */
+.ij-data { width: 100%; border-collapse: collapse; font-size: var(--ij-mkt-small-size); line-height: var(--ij-mkt-small-leading); }
+.ij-data :is(th, td) { padding: 0.5em 0.75em 0.5em 0; text-align: left; font-weight: 400; vertical-align: baseline; }
+.ij-data :is(th, td):last-child { padding-right: 0; }
+.ij-data tr + tr :is(th, td) { border-top: 1px solid var(--ij-color-border-default); }
+.ij-data th { color: var(--ij-color-text-secondary); }
+.ij-page .ij-num {
+  font-family: var(--ij-font-numeral, var(--ij-font-display, var(--ij-font-ui)));
+  font-variation-settings: var(--ij-font-numeral-axes, normal);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ij-data .ij-num { text-align: right; }
+
+/* ---------- Before and after (#96) ----------
+   The same real photo twice, at its original size and at its new one, each
+   labelled with its size, and the settings that made it under them: the
+   result is the picture. Side by side when there's room, stacked when not, so
+   it works in a card and at full width. The photos are the site's own. */
+.ij-compare {
+  display: grid;
+  gap: var(--ij-spacing-lg) var(--ij-mkt-space-stack);
+  /* Two columns at most, each at least 240px: side by side when both fit,
+     stacked when not, in a card or at full width. */
+  grid-template-columns: repeat(auto-fit, minmax(max(min(100%, 240px), calc(50% - var(--ij-mkt-space-stack))), 1fr));
+}
+.ij-compare__item { margin: 0; display: flex; flex-direction: column; gap: var(--ij-spacing-sm); min-width: 0; }
+.ij-compare__item > img, .ij-compare__item > picture > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--ij-radius-md);
+  box-shadow: 0 0 0 1px var(--ij-color-border-default);
+}
+.ij-compare__item > figcaption {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--ij-spacing-sm);
+  font-size: var(--ij-mkt-small-size);
+  color: var(--ij-color-text-secondary);
+}
+.ij-compare__item > figcaption .ij-num { color: var(--ij-color-text-primary); }
+.ij-compare > figcaption { grid-column: 1 / -1; font-size: var(--ij-mkt-small-size); color: var(--ij-color-text-secondary); }
+
+/* ---------- Size chips (#96) ----------
+   A file's size before and after, and what was saved, set loose on the page
+   with no card around them: 4.2 MB → 0.9 MB. In the numeral face. */
+.ij-chips { display: flex; flex-wrap: wrap; gap: var(--ij-spacing-sm); padding: 0; list-style: none; }
+.ij-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.55em;
+  padding: 0.4em 0.9em;
+  border: 1px solid var(--ij-color-border-default);
+  border-radius: var(--ij-radius-lg);
+  background: var(--ij-color-bg-card);
+  color: var(--ij-color-text-primary);
+  font-family: var(--ij-font-numeral, var(--ij-font-display, var(--ij-font-ui)));
+  font-variation-settings: var(--ij-font-numeral-axes, normal);
+  font-size: var(--ij-mkt-small-size);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- A highlighter and a label (#91) ----------
+   The accent as a fill behind on-accent text, the way TonVault uses its lime:
+   never as text on a light ground. And a label in the display face's capitals,
+   the way a manual numbers its sections. */
+.ij-page :is(mark, .ij-highlight) {
+  padding: 0 0.2em;
+  border-radius: 2px;
+  background: var(--ij-color-accent);
+  color: var(--ij-color-on-accent);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.ij-label {
+  font-family: var(--ij-font-display, var(--ij-font-ui));
+  font-variation-settings: var(--ij-font-display-axes, normal);
+  font-size: var(--ij-mkt-small-size);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ij-color-text-secondary);
+}
+
+/* ---------- A dated source for a cited fact ---------- */
+
+.ij-source { padding: var(--ij-mkt-space-stack); background: var(--ij-color-bg-card);
+             border-radius: var(--ij-radius-lg); display: flex; flex-direction: column; gap: var(--ij-spacing-lg); }
+.ij-source__fact { margin: 0; }
+.ij-source__meta { font-size: var(--ij-mkt-small-size); color: var(--ij-color-text-secondary); }
+
+/* ---------- Reviews, set as type (#83) ----------
+   Real reviews only, word for word, with the reviewer's name and country as
+   the store shows them. No stars and no avatars: the words are the proof. A
+   card beside them can carry what backs them, such as the source code. */
+
+.ij-reviews { display: grid; gap: var(--ij-spacing-lg); grid-template-columns: minmax(0, 1fr); }
+.ij-review {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--ij-mkt-space-stack);
+  padding: var(--ij-mkt-space-stack);
+  background: var(--ij-color-bg-card);
+  border-radius: var(--ij-radius-lg);
+}
+.ij-review blockquote { margin: 0; display: flex; flex-direction: column; gap: var(--ij-spacing-sm); }
+.ij-review blockquote > p {
+  margin: 0;
+  font-family: var(--ij-font-display, var(--ij-font-ui));
+  font-variation-settings: var(--ij-font-display-axes, normal);
+  font-size: var(--ij-mkt-title-size);
+  line-height: var(--ij-mkt-title-leading);
+}
+.ij-review figcaption { font-size: var(--ij-mkt-small-size); color: var(--ij-color-text-secondary); }
+@media (min-width: 768px) {
+  .ij-reviews { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* Bordered panels (#83): a site whose identity says "panels": "bordered"
+   draws its cards with a thin line, as in a hardware manual. Flat otherwise. */
+.ij-card, .ij-trait, .ij-source, .ij-review { border: var(--ij-panel-border, 0); }
+
+/* ---------- A scene: a photo across the page, for the mood (#81) ----------
+   For a site whose mood is a place, like WODrounds' gym. The photo sets the
+   mood and never carries the content: the numbers, the app and the words stay
+   the picture. Either a band of its own between sections, with nothing on it,
+   or behind a section's words (the closing wordmark and store button). Never
+   behind the hero, at most two per page, loaded lazily, and nothing moves.
+
+   The photo goes monochrome, so the accent stays the only colour, and is
+   dimmed toward the ground, fading into it at the foot so the scene meets the
+   next section without a seam. Words on a scene keep the photo's own room
+   above them and sit on a scrim of the ground that follows them, at 70%, and
+   all take the primary text colour: then they read at AA over any photo, a
+   white one on a dark site or a black one on a light site (the browser tests
+   prove both). --ij-scene-height sets a band's height. */
+.ij-scene {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: end;
+  min-height: var(--ij-scene-height, clamp(280px, 50vw, 640px));
+  overflow: hidden;
+  background: var(--ij-color-bg-app);
+  --ij-color-text-secondary: var(--ij-color-text-primary);
+  --ij-color-text-tertiary: var(--ij-color-text-primary);
+  --ij-color-accent-text: var(--ij-color-text-primary);
+}
+.ij-scene__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1);
+}
+.ij-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to bottom,
+    color-mix(in srgb, var(--ij-color-bg-app) 30%, transparent),
+    color-mix(in srgb, var(--ij-color-bg-app) 55%, transparent) 60%,
+    var(--ij-color-bg-app));
+}
+/* A photo shown mirrored, when the brief needs its line to run the other
+   way (Wean's waterline falls left to right). Its line is mirrored with it. */
+.ij-scene__photo--mirrored { transform: scaleX(-1); }
+/* The scene's one magenta line, drawn on the photo by hand (#90): an SVG the
+   size of the photo that crops exactly as the photo does, above the scene's
+   dimming, so the line stays vivid on the quiet picture. */
+.ij-scene__line {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.ij-scene > .ij-container {
+  --_fade: var(--ij-mkt-space-section);
+  position: relative;
+  margin-top: clamp(160px, 22vw, 320px);
+  padding-block: var(--ij-mkt-space-stack) var(--ij-mkt-space-section);
+}
+.ij-scene > .ij-container::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--_fade)) -100vw 0;
+  z-index: -1;
+  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--ij-color-bg-app) 70%, transparent) var(--_fade));
+}
+
+/* ---------- Closing: the wordmark, large ---------- */
+
+.ij-closing { text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--ij-mkt-space-stack); container-type: inline-size; }
+/* The wordmark as large as the scale allows, and never wider than its column.
+   --ij-wordmark-em is the word's width in em: about 3.5 for "Walkful" in
+   Fraunces, 5.1 for "WODrounds" in JetBrains Mono. The default suits a name of
+   six or seven letters in a proportional face; set it for a longer name or a
+   wide face, or the word runs past the column (found in the dark example). */
+.ij-closing .ij-wordmark { font-size: min(var(--ij-mkt-wordmark-size), 100cqi / var(--ij-wordmark-em, 4)); white-space: nowrap; }
+.ij-closing .ij-store { align-items: center; }
+.ij-closing .ij-drawing { width: min(100%, 760px); }
