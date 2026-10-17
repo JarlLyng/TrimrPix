@@ -440,6 +440,14 @@ final class ImageOptimizationViewModel: ObservableObject {
         logger.info("Watch folder stopped")
     }
     
+    /// Brings Watch Folder in line with settings that were just saved: starts it when it was
+    /// turned on, stops it when it was turned off, and restarts it on a new folder. Without
+    /// this, a change only took effect the next time the window opened.
+    func applyWatchFolderSettings() {
+        stopWatchFolder()
+        startWatchFolder()
+    }
+
     /// Indicates whether watch folder is currently active
     var isWatchFolderActive: Bool {
         watchFolderService.isWatching

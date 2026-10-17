@@ -127,7 +127,7 @@ struct ContentView: View {
             Text(viewModel.errorMessage ?? "An unknown error occurred")
         }
         .sheet(isPresented: $showSettings) {
-            SettingsView()
+            SettingsView(onSave: { viewModel.applyWatchFolderSettings() })
         }
         .onAppear { viewModel.startWatchFolder() }
         .onDisappear { viewModel.stopWatchFolder() }
