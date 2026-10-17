@@ -43,7 +43,7 @@ Fineprint: Before and after photo: Mojavellama, CC0, Wikimedia Commons.
 
 **Drop them in. Watch them shrink.**
 
-- **One or a few hundred.** Drop in single images or whole folders. Each shows its size before and
+- **One or a few hundred.** Drop in one image or a few hundred at once. Each shows its size before and
   after, and how much it saved, as it goes.
 - **Quality, your call.** Low, Medium or High, or a slider from 10 to 100%. Medium is the default.
 - **Watch Folder.** Point it at the folder your screenshots or exports land in. Every new image gets
@@ -111,8 +111,8 @@ either. It is treated like a scan, so it gets smaller, but its text comes out sl
 **How does Watch Folder work?**
 You choose a folder and turn Watch Folder on. When a new image or image PDF lands there, TrimrPix
 waits until the file has finished copying, optimizes it, and saves the smaller copy beside it. The
-wait is 2 seconds by default and can be set from 0.5 to 10. It ignores its own output, and it is off
-until you turn it on.
+wait is 2 seconds by default and can be set from 0.5 to 10. It watches while TrimrPix's window is open, ignores its own
+output, and is off until you turn it on.
 
 **What happens to my originals?**
 They are kept. The smaller version is saved next to the original with "-optimized" added to its

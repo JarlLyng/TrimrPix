@@ -1,4 +1,4 @@
-// IAMJARL <ij-nav> v1.32.2: generated, do not edit
+// IAMJARL <ij-nav> v1.33.1: generated, do not edit
 // Sources: components/nav-rules.js, components/labels.js, components/ij-nav.js
 
 // The rules <ij-nav> enforces, kept out of the DOM so they are covered by the
