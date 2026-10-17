@@ -2,6 +2,18 @@
 
 All notable changes to TrimrPix are documented here.
 
+## [1.7.3] - 2026-10-18
+
+### Changed
+- TrimrPix is under 3 MB, down from 87 MB. Its five icons are Apple's SF Symbols now; the icon library it used before shipped every icon in every weight (#81)
+- PDFs are described as "PDFs that are images, such as scans", in the drop zone and in the message for a PDF with text. A PDF whose text was turned into outlines has no text layer either, so it is treated like a scan (#45)
+- The PNG setting no longer promises 60-80% smaller files, which nothing had measured (#46)
+
+### Fixed
+- Watch Folder starts and stops as soon as Settings is saved, and moves to a newly chosen folder. Before, a change only took effect the next time the window opened (#90)
+- The Settings sheet scrolls instead of cutting off its title and Save button when Watch Folder is on (#89)
+- The Save button in Settings no longer draws a second button inside itself, and the alert when settings can't be saved is in English, not Danish (#89)
+
 ## [1.7.2] - 2026-10-04
 
 ### Fixed
