@@ -100,9 +100,9 @@ struct SettingsView: View {
                             .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
 
                         Toggle("Lossy PNG quantization", isOn: $settings.pngQuantizationEnabled)
-                            .help("Reduces PNG colors to 256 for dramatically smaller files. Slight quality trade-off.")
+                            .help("Reduces PNG colors to 256: smaller files, with a slight quality trade-off.")
 
-                        Text("Reduces file size by 60-80% for photo PNGs by limiting to 256 colors")
+                        Text("Limits PNGs to 256 colors for smaller files. Works best on screenshots and graphics")
                             .font(.trimrPixCaption)
                             .foregroundStyle(DesignTokens.Common.Text.secondary(colorScheme))
                     }
