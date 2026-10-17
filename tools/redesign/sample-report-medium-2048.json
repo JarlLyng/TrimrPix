@@ -1,0 +1,223 @@
+{
+  "files" : [
+    {
+      "after" : 809400,
+      "before" : 8095630,
+      "file" : "41 Exhibition Street Melbourne.jpg",
+      "outcome" : "smaller",
+      "sha256" : "9e730236a19a3942512705252a6f811010c6ef8d136735d47d01dbb000cb585e"
+    },
+    {
+      "after" : 1193790,
+      "before" : 3976683,
+      "file" : "Bear Lake, August 2024.jpg",
+      "outcome" : "smaller",
+      "sha256" : "7b20659f348d857101ce64f33de6c86f4b11febf20aef7c6d8ad80663a33313f"
+    },
+    {
+      "after" : 699579,
+      "before" : 2655197,
+      "file" : "Bearhat mountain from July 2025.jpg",
+      "outcome" : "smaller",
+      "sha256" : "accfe0e0d02edcbcb4c1ea01373ff5dc836b66102ba0e0f05d1724356da6db1a"
+    },
+    {
+      "after" : 1691196,
+      "before" : 5547249,
+      "file" : "Bicycle BK (1).jpg",
+      "outcome" : "smaller",
+      "sha256" : "b0beb9f1166508a562f3cb955b9d47fd55a6eec5c6cce2a133ed310dca384847"
+    },
+    {
+      "after" : 647539,
+      "before" : 5104062,
+      "file" : "Black tabby domestic short-haired cat.jpg",
+      "outcome" : "smaller",
+      "sha256" : "635fcf38e4260f64588f71fd048e2748bec66fe28525265b32f22783f44708b2"
+    },
+    {
+      "after" : 1500886,
+      "before" : 5553797,
+      "file" : "Cat on patio stones.jpg",
+      "outcome" : "smaller",
+      "sha256" : "bd50e032e6f990559e35d0986396bda32ef529e4a88fd98593d7c5ab9a6fab36"
+    },
+    {
+      "after" : 516523,
+      "before" : 2533294,
+      "file" : "Coffee-and-juice.jpeg",
+      "outcome" : "smaller",
+      "sha256" : "bb0c8c626c20786b64df2d8d9bc7f74fc7c867373cda19f80b8c2e8cf913d68c"
+    },
+    {
+      "after" : 676055,
+      "before" : 4537701,
+      "file" : "Convection doors in Tasmanian House III.jpg",
+      "outcome" : "smaller",
+      "sha256" : "84f0e47603a1c31738f02630b0e61b73394e0f0689d7fcc0d2f3ffebaab0b74a"
+    },
+    {
+      "after" : 1230513,
+      "before" : 3899873,
+      "file" : "Cornwall Bridge, Connecticut.jpg",
+      "outcome" : "smaller",
+      "sha256" : "fb33711cc8d81bd8e986c85551df39e3989a196a7f984f25d775717c12b66fbc"
+    },
+    {
+      "after" : 1632464,
+      "before" : 7192910,
+      "file" : "Cowbridge Physic Garden in spring.jpg",
+      "outcome" : "smaller",
+      "sha256" : "804ff11c028ced5f3b39bb41062b0a44d6e2f6f328a0b79eba4d4ada18161ee9"
+    },
+    {
+      "after" : 927177,
+      "before" : 3616016,
+      "file" : "Dog on a beach.jpg",
+      "outcome" : "smaller",
+      "sha256" : "ba1b80d67f590113adcbbe9476b2f25ed6cbc632ee7cb9b30eaaa62f7d936504"
+    },
+    {
+      "after" : 1316064,
+      "before" : 4873744,
+      "file" : "Echo Park lake in Los Angeles, CA.jpg",
+      "outcome" : "smaller",
+      "sha256" : "f788192b01dcee8c5a0863b0677e0e41ed7fa0bc1f67552a8c0fc34e7453f0e5"
+    },
+    {
+      "after" : 1891091,
+      "before" : 7008385,
+      "file" : "Foggy Morning Forest after rain.jpg",
+      "outcome" : "smaller",
+      "sha256" : "6d0c681cf62aea07e720f8afed8c200facf359c1752419f0ea24e2ede08d83f5"
+    },
+    {
+      "after" : 1497385,
+      "before" : 7222111,
+      "file" : "Garden - July 2024 - Sarah Stierch.jpg",
+      "outcome" : "smaller",
+      "sha256" : "b35d9374d5bc25b142e25b15b26a5a00abaaef6263644f97bba23749efa75a62"
+    },
+    {
+      "after" : 1496473,
+      "before" : 9023915,
+      "file" : "Heatherwood Park, Larkspur, CA August 2025.jpg",
+      "outcome" : "smaller",
+      "sha256" : "a3b90b933f96105d690d0c9750213342df46c6dca0d18867995ab515fadb8b6c"
+    },
+    {
+      "after" : 1173174,
+      "before" : 4201963,
+      "file" : "International Rotunda, Mission Inn (Riverside, California).jpg",
+      "outcome" : "smaller",
+      "sha256" : "d80c510ae295cf147b7497ca5996c00a134a40c376b83da2339fa74dd175e119"
+    },
+    {
+      "after" : 1709346,
+      "before" : 6229533,
+      "file" : "LE26 Bridge.jpg",
+      "outcome" : "smaller",
+      "sha256" : "c232d678bf2b2f1b1cc1c35f623094620a01bac4429039605693a0e9132e4365"
+    },
+    {
+      "after" : 536899,
+      "before" : 2243600,
+      "file" : "Mawson Cafe, Meadows 20250128-104348.jpg",
+      "outcome" : "smaller",
+      "sha256" : "4a765244e1021f073c24d7eb514fe55ce749c1fe3443f2540a6510ef6142e908"
+    },
+    {
+      "after" : 1805885,
+      "before" : 9690764,
+      "file" : "Muses Park (3).jpg",
+      "outcome" : "smaller",
+      "sha256" : "85bd47606aa9ef3e5cccffe711d9a7c6ee032cf1fab838c819b63b404615f1f9"
+    },
+    {
+      "after" : 489868,
+      "before" : 1750931,
+      "file" : "Pink flowers with vine.jpg",
+      "outcome" : "smaller",
+      "sha256" : "39a226dd547bae005920ad88ea4b80135c1bf2399b87b431d2d5c0aa7ae0ec8f"
+    },
+    {
+      "after" : 879872,
+      "before" : 2680952,
+      "file" : "Pizza with food waste.jpg",
+      "outcome" : "smaller",
+      "sha256" : "afc3a1ec7dde95e04361fc7165ce3404c6ed22a2494aa21043239725bc5ad71b"
+    },
+    {
+      "after" : 1388514,
+      "before" : 4389353,
+      "file" : "Porsuk River flowing through Eskişehir.jpg",
+      "outcome" : "smaller",
+      "sha256" : "ee819a66d31dbc7e421771742532ba2acbf339dcfceacaba3795c06d7369ac35"
+    },
+    {
+      "after" : 673225,
+      "before" : 5569648,
+      "file" : "Sunset in Mali.jpg",
+      "outcome" : "smaller",
+      "sha256" : "45bf840c99aad0af86c4556c16403962312b932d9c8852d146f68a7966de7df1"
+    },
+    {
+      "after" : 556741,
+      "before" : 2241183,
+      "file" : "Sunset in Oia June 29.jpg",
+      "outcome" : "smaller",
+      "sha256" : "42a468e8a5c65ffbbc9bac983d487427e081312b22c115010d3a6b608ccc6a9f"
+    },
+    {
+      "after" : 666576,
+      "before" : 2508598,
+      "file" : "Sydney Harbour Bridge View 16 October 2025.jpg",
+      "outcome" : "smaller",
+      "sha256" : "05fcffc9d9b5086893234a0f75201f9d95293df076ab284de28e2c5bb9e775e5"
+    },
+    {
+      "after" : 722881,
+      "before" : 17850395,
+      "file" : "The Riverlink Maitland 01.jpg",
+      "outcome" : "smaller",
+      "sha256" : "f61f910abb20db99b0d63206b3d122e69114e6c265cb75784dfd8f9b3af1d179"
+    },
+    {
+      "after" : 1884671,
+      "before" : 6509431,
+      "file" : "Titus Railroad Park in Kent, Washington - 1.jpg",
+      "outcome" : "smaller",
+      "sha256" : "8a9fd9d0a537cc132aa1ef010420e6e86b5700740eefe0c44a964a8a70347366"
+    },
+    {
+      "after" : 799225,
+      "before" : 3588808,
+      "file" : "Valenica Mar Harbour Spain - Image with boats in line up.jpg",
+      "outcome" : "smaller",
+      "sha256" : "f84a1975ecfd387037c291992c45565afeb54c6eaba19362e03e4806fda5a27d"
+    },
+    {
+      "after" : 1733245,
+      "before" : 6569741,
+      "file" : "Will Thrall Peak in the San Gabriel Mountain Range in California.jpg",
+      "outcome" : "smaller",
+      "sha256" : "5ba0d4692803c2e66b39ad55d1683ef1f4353c7c094d36ea4d1a4c389cb3aa5e"
+    },
+    {
+      "after" : 998489,
+      "before" : 2853551,
+      "file" : "Wright Mountain, San Gabriel Mountain Range, California.jpg",
+      "outcome" : "smaller",
+      "sha256" : "875f84f98465ab94656fbc40c8c95255081c13ab419b40bc088b830bc95001fe"
+    }
+  ],
+  "summary" : {
+    "app" : "1.7.2 (28)",
+    "bytesAfter" : 33744746,
+    "bytesBefore" : 159719018,
+    "files" : 30,
+    "measured" : "2026-10-14T23:30:30Z",
+    "savingPercent" : 78.900000000000006,
+    "settings" : "Medium (80%), PNG quantization on, resized to 2048 px on the long side, metadata stripped"
+  }
+}

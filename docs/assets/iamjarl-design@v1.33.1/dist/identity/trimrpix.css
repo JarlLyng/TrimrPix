@@ -1,0 +1,103 @@
+/* IAMJARL identity for TrimrPix: generated, do not edit */
+/* design system v1.33.1. Light only: this sheet holds the site in that mode whatever the visitor's setting. */
+/* Display face: Bricolage Grotesque (OFL-1.1). Self-host it; see design.md. */
+/* Numeral face: JetBrains Mono (OFL-1.1), for .ij-numeral. Load it too. */
+
+:root {
+  color-scheme: light;
+  --ij-color-bg-app: #F1F0F6;
+  --ij-color-bg-card: #FFFFFF;
+  --ij-color-surface-default: #FFFFFF;
+  --ij-color-text-primary: #1C1B22;
+  --ij-color-text-secondary: #47464C;
+  --ij-color-text-tertiary: #5C5B62;
+  --ij-color-accent: #D0FF00;
+  --ij-color-accent-rgb: 208, 255, 0;
+  --ij-color-on-accent: #000000;
+  --ij-color-accent-text: #4A5900;
+  --ij-color-accent-family: #4A5900;
+  --ij-color-accent-family-rgb: 74, 89, 0;
+  --ij-font-display: 'Bricolage Grotesque', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ij-font-numeral: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ij-font-numeral-axes: normal;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ij-color-primary-rgb: 164, 53, 210; /* deprecated, use color-mix() */
+    --ij-gradient-primary: linear-gradient(135deg, #A435D2, #E0529C); /* decorative only, no text colour clears AA */
+    --ij-gradient-brand: linear-gradient(135deg, #D0FF00, #A435D2); /* decorative only, no text colour clears AA */
+    --ij-color-primary: #A435D2;
+    --ij-color-on-primary: #FFFFFF;
+    --ij-color-primary-hover: #8E2BB8;
+    --ij-color-primary-pressed: #7A2499;
+    --ij-color-primary-subtle: rgba(164, 53, 210, 0.12);
+    --ij-color-text-primary: #000000;
+    --ij-color-text-secondary: rgba(0, 0, 0, 0.70);
+    --ij-color-text-tertiary: rgba(0, 0, 0, 0.55);
+    --ij-color-text-disabled: rgba(0, 0, 0, 0.35);
+    --ij-color-text-inverse: #FFFFFF;
+    --ij-color-bg-app: #FFFFFF;
+    --ij-color-bg-muted: rgba(0, 0, 0, 0.04);
+    --ij-color-bg-card: rgba(0, 0, 0, 0.04);
+    --ij-color-bg-disabled: rgba(0, 0, 0, 0.06);
+    --ij-color-surface-default: #FFFFFF;
+    --ij-color-surface-raised: rgba(0, 0, 0, 0.02);
+    --ij-color-border-subtle: rgba(0, 0, 0, 0.10);
+    --ij-color-border-default: rgba(0, 0, 0, 0.16);
+    --ij-color-state-success: #2E7D32;
+    --ij-color-state-warning: #C2410C;
+    --ij-color-state-error: #D70015;
+    --ij-color-bg-app: #F1F0F6;
+    --ij-color-bg-card: #FFFFFF;
+    --ij-color-surface-default: #FFFFFF;
+    --ij-color-text-primary: #1C1B22;
+    --ij-color-text-secondary: #47464C;
+    --ij-color-text-tertiary: #5C5B62;
+    --ij-color-accent: #D0FF00;
+    --ij-color-accent-rgb: 208, 255, 0;
+    --ij-color-on-accent: #000000;
+    --ij-color-accent-text: #4A5900;
+    --ij-color-accent-family: #4A5900;
+    --ij-color-accent-family-rgb: 74, 89, 0;
+  }
+}
+
+.dark {
+  --ij-color-primary-rgb: 164, 53, 210; /* deprecated, use color-mix() */
+  --ij-gradient-primary: linear-gradient(135deg, #A435D2, #E0529C); /* decorative only, no text colour clears AA */
+  --ij-gradient-brand: linear-gradient(135deg, #D0FF00, #A435D2); /* decorative only, no text colour clears AA */
+  --ij-color-primary: #A435D2;
+  --ij-color-on-primary: #FFFFFF;
+  --ij-color-primary-hover: #8E2BB8;
+  --ij-color-primary-pressed: #7A2499;
+  --ij-color-primary-subtle: rgba(164, 53, 210, 0.12);
+  --ij-color-text-primary: #000000;
+  --ij-color-text-secondary: rgba(0, 0, 0, 0.70);
+  --ij-color-text-tertiary: rgba(0, 0, 0, 0.55);
+  --ij-color-text-disabled: rgba(0, 0, 0, 0.35);
+  --ij-color-text-inverse: #FFFFFF;
+  --ij-color-bg-app: #FFFFFF;
+  --ij-color-bg-muted: rgba(0, 0, 0, 0.04);
+  --ij-color-bg-card: rgba(0, 0, 0, 0.04);
+  --ij-color-bg-disabled: rgba(0, 0, 0, 0.06);
+  --ij-color-surface-default: #FFFFFF;
+  --ij-color-surface-raised: rgba(0, 0, 0, 0.02);
+  --ij-color-border-subtle: rgba(0, 0, 0, 0.10);
+  --ij-color-border-default: rgba(0, 0, 0, 0.16);
+  --ij-color-state-success: #2E7D32;
+  --ij-color-state-warning: #C2410C;
+  --ij-color-state-error: #D70015;
+  --ij-color-bg-app: #F1F0F6;
+  --ij-color-bg-card: #FFFFFF;
+  --ij-color-surface-default: #FFFFFF;
+  --ij-color-text-primary: #1C1B22;
+  --ij-color-text-secondary: #47464C;
+  --ij-color-text-tertiary: #5C5B62;
+  --ij-color-accent: #D0FF00;
+  --ij-color-accent-rgb: 208, 255, 0;
+  --ij-color-on-accent: #000000;
+  --ij-color-accent-text: #4A5900;
+  --ij-color-accent-family: #4A5900;
+  --ij-color-accent-family-rgb: 74, 89, 0;
+}
