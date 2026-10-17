@@ -16,7 +16,7 @@ TrimrPix is a macOS app built with SwiftUI, focusing on high-quality image compr
 
 ### 🖼️ Image Processing
 - **High-quality compression** with focus on optimal file size reduction
-- **Multi-format support:** JPEG, PNG, GIF, AVIF and HEIC, plus scanned PDFs
+- **Multi-format support:** JPEG, PNG, GIF, AVIF and HEIC, plus PDFs that are images, such as scans
 - **WebP is not compressed:** macOS has no WebP encoder, so WebP files are skipped with a message and left as they were
 - **Smart compression:** a quality slider from 10% to 100%, or the Low, Medium and High presets, for JPEG, AVIF and HEIC
 - **Progressive JPEG:** Optimized Huffman encoding for 5-15% smaller JPEGs

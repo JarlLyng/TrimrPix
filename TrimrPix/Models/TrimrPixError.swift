@@ -91,7 +91,7 @@ enum TrimrPixError: LocalizedError {
             return "Skipped \(url.lastPathComponent): macOS cannot write WebP files, so TrimrPix has no way to make this one smaller. It was left exactly as it was."
 
         case .pdfHasTextLayer(let url):
-            return "Skipped \(url.lastPathComponent): this PDF contains selectable text, and compressing it would remove the text without making the file smaller. TrimrPix only compresses scanned PDFs."
+            return "Skipped \(url.lastPathComponent): this PDF contains selectable text, and compressing it would remove the text without making the file smaller. TrimrPix only compresses PDFs that are images rather than text, such as scans."
 
         case .fileNotFound(let url):
             return "File not found: \(url.lastPathComponent)"
@@ -223,7 +223,7 @@ enum TrimrPixError: LocalizedError {
         case .webPEncodingUnavailable:
             return "Convert it to JPEG, PNG or AVIF first, or use a WebP tool such as cwebp"
         case .pdfHasTextLayer:
-            return "Text PDFs are already efficient. Only scanned PDFs, which are really pages of images, can be made smaller"
+            return "Text PDFs are already efficient. Only PDFs that are images rather than text, such as scans, can be made smaller"
         case .imageTooLarge:
             return "Reduce the image's resolution or size first"
         case .compressionFailed, .jpegCompressionFailed, .pngCompressionFailed,

@@ -60,7 +60,7 @@ Target audience, positioning, pricing reasoning, SEO/ASO playbooks, and competit
 
 - **5 image formats:** JPEG, PNG, GIF, AVIF, HEIC.
 - **WebP is refused.** macOS has no WebP encoder, so `optimizeWebPData` throws `webPEncodingUnavailable` and tells the user the file was left alone. Watch Folder does not pick up `.webp` at all. Do not list WebP as a supported format.
-- **Scanned PDFs** — pages re-encoded at the chosen quality. PDFs *with a text layer are refused on purpose* (rasterising them destroys the text and usually grows the file).
+- **PDFs that are images rather than text, such as scans** — pages re-encoded at the chosen quality. PDFs *with a text layer are refused on purpose* (rasterising them destroys the text and usually grows the file). A PDF whose text was turned into outlines has no text layer either, so it is treated like a scan and its text comes out slightly softer (#45, decided 2026-10-13: say so, no detection heuristic).
 - **Quality control:** slider from 10% to 100% in steps of 10 for JPEG/AVIF/HEIC (`SettingsView.swift:46`); presets Low/Medium/High/Custom.
 - **PNG lossy quantization** (median-cut, 256 colors) + alpha stripping for opaque images.
 - **Progressive JPEG** (optimized Huffman); **GIF** LZW re-encode preserving animation.
@@ -75,7 +75,7 @@ Target audience, positioning, pricing reasoning, SEO/ASO playbooks, and competit
 - No cloud upload, account, or internet processing — fully local.
 - Not the iOS "in-place Photos library" model — this is a file/folder tool with auto-save.
 - No subscription / IAP.
-- **Not a general PDF compressor** — only scanned (text-free) PDFs. No merging, splitting, page editing, OCR, or encryption.
+- **Not a general PDF compressor** — only PDFs without a text layer (scans, or text turned into outlines). No merging, splitting, page editing, OCR, or encryption.
 
 ## Marketing site (`docs/`)
 
