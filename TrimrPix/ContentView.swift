@@ -66,8 +66,9 @@ struct ContentView: View {
                     Text("Drag images here to optimize")
                         .font(.trimrPixHeadline)
                         .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
-                    Text("Supported formats: JPEG, PNG, GIF, AVIF, HEIC, and scanned PDF")
+                    Text("Supported formats: JPEG, PNG, GIF, AVIF, HEIC, and PDFs that are images, such as scans")
                         .font(.trimrPixSubheadline)
+                        .multilineTextAlignment(.center) // wraps in a narrow window
                         .foregroundStyle(DesignTokens.Common.Text.secondary(colorScheme))
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
