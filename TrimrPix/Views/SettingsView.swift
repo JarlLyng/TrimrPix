@@ -10,6 +10,9 @@ import IAMJARLDesignTokens
 
 /// Settings view – uses IAMJARL Design System tokens only
 struct SettingsView: View {
+    /// Called once the settings are saved, so the window can act on them (Watch Folder).
+    var onSave: () -> Void = {}
+
     @StateObject private var settings = Settings.shared
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
@@ -189,6 +192,7 @@ struct SettingsView: View {
                         alert.runModal()
                         return
                     }
+                    onSave()
                     dismiss()
                 }
                 .foregroundStyle(DesignTokens.Common.OnPrimary.text(colorScheme))

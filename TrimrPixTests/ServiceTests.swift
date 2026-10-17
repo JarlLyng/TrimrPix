@@ -237,6 +237,43 @@ struct ImageOptimizationViewModelTests {
         #expect(vm.isWatchFolderActive == false)
         #expect(watch.stopCount == 1)
     }
+
+    /// Turning Watch Folder on or off in Settings takes effect on Save, not at the next launch.
+    @Test func savedWatchFolderSettingsTakeEffectAtOnce() throws {
+        let watch = MockWatchFolderService()
+        let settings = StubSettings()
+        settings.watchFolderPath = FileManager.default.temporaryDirectory.path
+        let vm = makeViewModel(watch: watch, settings: settings)
+        vm.startWatchFolder() // the window opens with Watch Folder off
+        #expect(vm.isWatchFolderActive == false)
+
+        settings.watchFolderEnabled = true
+        vm.applyWatchFolderSettings()
+        #expect(vm.isWatchFolderActive)
+        #expect(watch.watchedPath == settings.watchFolderPath)
+
+        settings.watchFolderEnabled = false
+        vm.applyWatchFolderSettings()
+        #expect(vm.isWatchFolderActive == false)
+    }
+
+    @Test func savingANewWatchFolderMovesTheWatch() throws {
+        let watch = MockWatchFolderService()
+        let settings = StubSettings()
+        settings.watchFolderEnabled = true
+        settings.watchFolderPath = FileManager.default.temporaryDirectory.path
+        let vm = makeViewModel(watch: watch, settings: settings)
+        vm.startWatchFolder()
+
+        let other = TempDir()
+        settings.watchFolderPath = other.url.path
+        vm.applyWatchFolderSettings()
+
+        #expect(vm.isWatchFolderActive)
+        #expect(watch.watchedPath == other.url.path)
+        #expect(watch.startCount == 2)
+        #expect(watch.stopCount == 1)
+    }
 }
 
 // MARK: - WatchFolderService
