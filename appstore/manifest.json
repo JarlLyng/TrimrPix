@@ -1,0 +1,16 @@
+{
+  "app": "TrimrPix",
+  "mode": "dark",
+  "accent": "#D0FF00",
+  "out_dir": "1.7.3",
+  "shots": [
+    {"raw": "raw/1-batch.png", "slot": "mac-hidpi", "out": "mac-1.png",
+     "caption": "iPhone photos [79% smaller] when resized for the web"},
+    {"raw": "raw/2-quality.png", "slot": "mac-hidpi", "out": "mac-2.png",
+     "caption": "Quality, *your call*"},
+    {"raw": "raw/3-watch.png", "slot": "mac-hidpi", "out": "mac-3.png",
+     "caption": "Watch Folder trims *what lands in it*"},
+    {"raw": "raw/4-formats.png", "slot": "mac-hidpi", "out": "mac-4.png",
+     "caption": "JPEG, PNG, GIF, AVIF, HEIC. *And scanned PDFs.*"}
+  ]
+}
