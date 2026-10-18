@@ -16,8 +16,9 @@ down from), RGB without alpha, and `listing.md`.
 ## The captures
 
 Taken with the capture mode in Debug builds (`TrimrPix/ScreenshotMode.swift`, #88), on the
-site's sample of CC0 iPhone photos (`tools/redesign/fetch_sample.py`). The window is 1280 × 720
-points at 2x, light, and active. The usage, including the build without the sandbox it needs to
+site's sample of CC0 iPhone photos (`tools/redesign/fetch_sample.py`), light, active and at 2x.
+The window is 1280 × 810 points for 1 and 4, tall enough to show all six files without scrolling,
+and 1280 × 720 for 2 and 3, where the Settings sheet is the subject. The usage, including the build without the sandbox it needs to
 read a folder, is at the top of `ScreenshotMode.swift`. The four states:
 
 1. Six photos after Optimize All, at Medium, resized to 2048 px (`-screenshotOptimize YES
