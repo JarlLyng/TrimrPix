@@ -1,185 +1,85 @@
+<img src="TrimrPix/Assets.xcassets/AppIcon.appiconset/256x256.png" alt="" width="80" height="80">
+
 # TrimrPix
 
-[![macOS](https://img.shields.io/badge/macOS-15.2+-blue.svg)](https://www.apple.com/macos/)
-[![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg)](https://swift.org/)
-[![Xcode](https://img.shields.io/badge/Xcode-26+-blue.svg)](https://developer.apple.com/xcode/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+Trim file size. Keep quality.
 
-[![Co-created with AI](https://madebyhuman.iamjarl.com/badges/co-created-white.svg)](https://madebyhuman.iamjarl.com)
+<!-- IAMJARL README store block for TrimrPix (en). Generated from apps.json, v1.35.0. Do not edit. -->
+<p>
+  <a href="https://apps.apple.com/app/id6758639590?pt=128512007&amp;ct=github&amp;mt=12"><picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/JarlLyng/iamjarl-design/v1.35.0/badges/mac-app-store-white-en-us.svg">
+    <img src="https://raw.githubusercontent.com/JarlLyng/iamjarl-design/v1.35.0/badges/mac-app-store-black-en-us.svg" alt="Download on the Mac App Store" width="156" height="40">
+  </picture></a>
+  <br>
+  $1.99 once · macOS 15.2 or later · <a href="https://trimrpix.iamjarl.com">trimrpix.iamjarl.com</a>
+</p>
 
-<img src="App store images/Screenshots/app_screenshot.png" width="600" alt="TrimrPix Screenshot">
+<p>
+  <img src="appstore/1.7.3/mac-1.png" alt="iPhone photos 79% smaller when resized for the web. TrimrPix after optimizing six photos at Medium, resized to 2048 px, each 70 to 80% smaller." width="720">
+</p>
 
-## 📋 Description
-TrimrPix is a macOS app built with SwiftUI, focusing on high-quality image compression with a simple user interface. The goal is to offer a modern and efficient image optimization solution with the same core functionality as [ImageOptim](https://github.com/ImageOptim/ImageOptim), but with newer technology and optimized performance.
+TrimrPix makes image files smaller on your Mac without visible quality loss. Drop in one image or a few hundred, or point Watch Folder at the folder your screenshots and exports land in, and each optimized copy is saved beside its original. It takes JPEG, PNG, GIF, AVIF and HEIC, and PDFs that are images, such as scans, and strips EXIF, GPS and IPTC data on the way. It's made for anyone who puts images on the web, in decks or in email. Everything runs on your Mac: nothing is uploaded, there's no account, and you pay for it once.
 
-## ✨ Features
+## For developers
 
-### 🖼️ Image Processing
-- **High-quality compression** with focus on optimal file size reduction
-- **Multi-format support:** JPEG, PNG, GIF, AVIF and HEIC, plus PDFs that are images, such as scans
-- **WebP is not compressed:** macOS has no WebP encoder, so WebP files are skipped with a message and left as they were
-- **Smart compression:** a quality slider from 10% to 100%, or the Low, Medium and High presets, for JPEG, AVIF and HEIC
-- **Progressive JPEG:** Optimized Huffman encoding for 5-15% smaller JPEGs
-- **PNG lossy quantization:** Median-cut color reduction (256 colors) for 60-80% smaller PNGs
-- **Advanced PNG optimization:** Alpha channel stripping for opaque images
-- **GIF re-encoding:** LZW re-compression with metadata stripping (preserves animation)
-- **Metadata stripping:** Removes EXIF, GPS, IPTC data from all formats
-- **Image resizing:** Optional pre-compression downscaling (configurable max dimension)
-- **Format validation:** Ensures file integrity before processing
+<p>
+  <a href="https://madebyhuman.iamjarl.com"><picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://madebyhuman.iamjarl.com/badges/co-created-white.svg">
+    <img src="https://madebyhuman.iamjarl.com/badges/co-created-black.svg" alt="Co-created with AI" width="120" height="40"></picture></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License"></a>
+  <a href="https://github.com/JarlLyng/TrimrPix/actions/workflows/ci.yml"><img src="https://github.com/JarlLyng/TrimrPix/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+</p>
 
-### 🎯 User Experience
-- **Drag & Drop Interface** for intuitive image addition
-- **Batch processing** with concurrent optimization
-- **Individual optimization** with per-image controls
-- **Real-time feedback:** File size comparison and percentage reduction
-- **Auto-save:** Saves optimized images in the same folder as originals (default)
-- **Manual save:** Fallback to save dialog when folder access is restricted
-- **Individual removal:** Remove single images from the list
+The developer half: what's in the app, how to build and run it, how it's put together, and how to contribute. The iPhone and iPad app is a separate project at [trimrpixforios.iamjarl.com](https://trimrpixforios.iamjarl.com).
 
-### ⚙️ Advanced Features
-- **Compression presets:** Low (60%), Medium (80%), High (95%), Custom
-- **Watch Folder:** Automatically processes new images with configurable delay (0.5-10s)
-- **Settings panel:** Compression quality, save options, and watch folder configuration
-- **Overwrite protection:** Option to overwrite originals or create new files
-- **Smart file naming:** Automatically handles filename conflicts with unique naming
-- **Error handling:** User-friendly messages with recovery suggestions
+### What's in it
 
-## 🛠️ Technologies
-- **SwiftUI** – Modern UI development for macOS
-- **Core Image** – Image processing and compression
-- **ImageIO / CGImageDestination** – Native JPEG, AVIF and HEIC compression with metadata stripping
-- **CGImageSource** – Image loading, resizing, and GIF frame extraction
-- **Async/Await** – Modern Swift concurrency for responsive UI during image processing
-- **OSLog** – Unified logging system for debugging and monitoring
-- **Protocol-Oriented Design** – Dependency injection and testability
+- **Formats:** JPEG, PNG, GIF, AVIF and HEIC, and PDFs that are images rather than text, such as scans. A PDF with a text layer is left alone on purpose, since rasterising it would remove the text and usually make it bigger. A PDF whose text was turned into outlines has no text layer either, so it is treated like a scan and its text comes out slightly softer.
+- **WebP is skipped** with a message. macOS has no WebP encoder, so TrimrPix can't make those files smaller, and Watch Folder doesn't pick them up.
+- **Quality:** Low (60%), Medium (80%, the default) or High (95%), or your own from 10 to 100% in steps of 10, for JPEG, AVIF and HEIC.
+- **Per format:** progressive JPEG with optimized Huffman tables; PNG quantized to 256 colors (median cut), which works best on screenshots and graphics, with the alpha channel removed where an image has no transparency; GIF re-encoded with LZW, animation kept.
+- **Metadata:** EXIF, GPS and IPTC are stripped.
+- **Resize:** an optional downscale to a maximum dimension before compressing. It never upscales.
+- **Size guard:** if compressing would make a file bigger, the original is kept.
+- **Batch:** optimize everything at once, concurrently and with progress, or one image at a time.
+- **Watch Folder:** new images in a folder you choose are optimized while TrimrPix's window is open, after a wait of 0.5 to 10 seconds (2 by default), so a file still being copied is finished first.
+- **Saving:** by default beside the original, with `-optimized` in its name and a number if that name is taken, or over the original if you turn that on. With auto-save off, a save dialog asks where.
+- **Help menu:** Send Feedback… opens an email draft with the app and macOS versions filled in, which you see before anything is sent. TrimrPix Support opens the support page.
+- **Private:** the app makes no network requests of its own. Your images never leave your Mac, and there's no account or tracking.
 
-## ⚙️ Architecture
+Requirements: macOS 15.2 or later to run it, and Xcode 26 (the macOS 26 SDK) to build it.
 
-TrimrPix follows MVVM architecture with protocol-oriented design. See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed documentation.
+### Build and run
 
-**Key principles:**
-- MVVM with clear separation of concerns
-- Protocol-based dependency injection
-- Security-scoped resource access for sandboxing
-- Async/await for concurrent processing
-- Centralized error handling and logging
+1. Clone the repo.
+2. Open `TrimrPix.xcodeproj` in Xcode 26 or later.
+3. Run the **TrimrPix** scheme with `⌘R`. The unit tests are the `TrimrPixTests` target: **Product → Test**, `⌘U`, or:
 
-## 📁 Project Structure
-```
-TrimrPix/
-├── TrimrPixApp.swift              # App entry point
-├── ContentView.swift              # Main view with UI components
-├── Models/
-│   ├── ImageItem.swift            # Image data model with lazy thumbnails
-│   ├── Settings.swift             # User settings and preferences
-│   └── TrimrPixError.swift       # Centralized error types
-├── ViewModels/
-│   └── ImageOptimizationViewModel.swift  # Business logic coordination
-├── Views/
-│   └── SettingsView.swift         # Settings panel UI
-├── Services/
-│   ├── CompressionService.swift   # Image compression with security-scoped access
-│   ├── ColorQuantizer.swift       # Median-cut color quantization for PNG
-│   ├── WatchFolderService.swift   # File system monitoring
-│   ├── Logger.swift               # Structured logging service
-│   └── Protocols.swift            # Service protocol definitions
-└── Assets.xcassets/               # App icons and assets
-```
-
-## 🔧 Technical Details
-
-- **File Type Detection:** UTType-based format identification
-- **Security-Scoped Resources:** Automatic handling of sandboxed file access
-- **Filename Conflicts:** Automatic unique naming (e.g., `image-optimized-2.png`)
-- **Memory Optimization:** Lazy-loaded thumbnails resized to max 120px
-- **Concurrent Processing:** TaskGroup-based batch optimization
-- **Error Handling:** Detailed error messages with recovery suggestions
-
-## 📖 Installation & Usage
-
-### 🚀 Quick Start
-
-#### Option 1: App Store (Recommended)
-- **Get TrimrPix on the Mac App Store:** [apps.apple.com/app/trimrpix/id6758639590](https://apps.apple.com/app/trimrpix/id6758639590)  
-- One-time purchase. Requires macOS 15.2 or later.
-
-#### Option 2: Build from Source
-1. **Clone the repository:**
    ```bash
-   git clone https://github.com/jarllyng/TrimrPix.git
-   cd TrimrPix
+   xcodebuild test -project TrimrPix.xcodeproj -scheme TrimrPix -destination 'platform=macOS'
    ```
 
-2. **Open in Xcode:**
-   ```bash
-   open TrimrPix.xcodeproj
-   ```
+The app is sandboxed. Debug builds have a capture mode for the website's and the App Store's screenshots; its usage is at the top of `TrimrPix/ScreenshotMode.swift`, and Release builds don't contain it.
 
-3. **Build and run:**
-   - Select your target device/simulator
-   - Press `Cmd + R` to build and run
+**Tech stack:** Swift 6 · SwiftUI · ImageIO · PDFKit · MetricKit · StoreKit · [IAMJARLDesignTokens](https://github.com/JarlLyng/iamjarl-design)
 
-#### Option 3: Command Line Build
-```bash
-# Clone and build
-git clone https://github.com/jarllyng/TrimrPix.git
-cd TrimrPix
-./build.sh
-```
+**Documentation:**
 
-### 📋 Requirements
-- **macOS:** 15.2 or newer
-- **Xcode:** 15.0 or newer
-- **Swift:** 5.9 or newer
+- [`AGENTS.md`](AGENTS.md): project context for developers and AI assistants.
+- [`ARCHITECTURE.md`](ARCHITECTURE.md): the service layer, dependency injection, errors and logging.
+- [`CODE_STYLE.md`](CODE_STYLE.md) and [`CONTRIBUTING.md`](CONTRIBUTING.md): how code is written here, and how to send a change.
+- [`CHANGELOG.md`](CHANGELOG.md): what changed in each release.
+- [`PRIVACY.md`](PRIVACY.md) and [`SECURITY.md`](SECURITY.md).
+- [`appstore/`](appstore/): the App Store text and screenshots for each release, and how they are made.
 
-### 🎯 How to Use
-1. **Add Images:** Drag and drop images onto the app window
-2. **Optimize:** Click "Optimize All" or optimize individual images
-3. **Configure:** Use the settings panel (gear icon) to customize compression
-4. **Watch Folder:** Enable automatic processing of new images in a folder
+### Contributing
 
-## 🔍 Known Limitations
-- **AVIF:** Depends on macOS system support — falls back to original data if unavailable
-- **macOS Version:** Requires macOS 15.2 or newer
-- **Sandboxing:** May require save dialog for folders without explicit access
+Issues and pull requests are welcome. For a bigger change, open an issue first so we can talk it through. A bug report helps most with your macOS version, the steps to reproduce it, what you expected and what happened.
 
-## 🚀 Future Roadmap
+### Support
 
-### 🎯 Planned Features
-- **Enhanced Compression:**
-  - SVG optimization
-- **UI/UX:**
-  - Before/after image preview
-  - Progress tracking for large batches
-- **Integration:**
-  - Finder context menu integration
-  - Command-line interface
+[support@iamjarl.com](mailto:support@iamjarl.com) for bugs, questions and ideas, or **Help → Send Feedback…** in the app. The website is [trimrpix.iamjarl.com](https://trimrpix.iamjarl.com).
 
-## 🤝 Contributing
+### License
 
-We welcome contributions! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-### 🐛 Bug Reports
-If you find a bug, please open an issue with:
-- macOS version
-- Steps to reproduce
-- Expected vs actual behavior
-- Screenshots if applicable
-
-### 💡 Feature Requests
-Have an idea for a new feature? Open an issue and let's discuss it!
-
-## 📞 Support
-
-- **Email:** [support@iamjarl.com](mailto:support@iamjarl.com), for bug reports, questions and ideas
-- **Website:** [trimrpix.iamjarl.com](https://trimrpix.iamjarl.com/)
-- **App Store:** [TrimrPix on the App Store](https://apps.apple.com/app/trimrpix/id6758639590)
-- **Source & issues:** [GitHub](https://github.com/JarlLyng/TrimrPix) (for developers)
-
-## 📢 License
-
-MIT License – Free to use and adapt.
-
----
-
-**Made with ❤️ for the macOS community**
+[MIT](LICENSE).
