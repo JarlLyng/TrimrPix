@@ -66,7 +66,7 @@ Target audience, positioning, pricing reasoning, SEO/ASO playbooks, and competit
 - **Progressive JPEG** (optimized Huffman); **GIF** LZW re-encode preserving animation.
 - **Metadata stripping** — EXIF / GPS / IPTC across formats.
 - **Optional resize** (max-dimension downscale) before compression.
-- **Drag & drop**, **batch** (concurrent) + per-image controls; real-time size/percentage feedback.
+- **Drag & drop** of files or folders: a dropped folder adds its images and PDFs, subfolders included, by Watch Folder's rule (`FolderFiles`: no WebP, no `-optimized` output), skipping hidden files and package contents (#92). **Batch** (concurrent) + per-image controls; real-time size/percentage feedback.
 - **Watch Folder** — auto-processes new images (configurable 0.5–10s delay).
 - **Auto-save** in the originals' folder (default) or manual save dialog; overwrite-or-new with conflict-safe naming.
 - **Help menu:** "TrimrPix Support" opens the support page; "Send Feedback…" opens a `mailto:support@iamjarl.com` draft with the app and macOS versions filled in (`FeedbackMail.swift`). The user sees it all before sending; the app sends nothing itself.

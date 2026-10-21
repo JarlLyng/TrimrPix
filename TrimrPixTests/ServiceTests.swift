@@ -276,6 +276,80 @@ struct ImageOptimizationViewModelTests {
     }
 }
 
+// MARK: - Dropping a folder (#92)
+
+@Suite("Dropping a folder", .serialized)
+@MainActor
+struct FolderDropTests {
+
+    private func dropped(_ url: URL) -> [NSItemProvider] { [NSItemProvider(contentsOf: url)!] }
+
+    private func write(_ names: [String], in tmp: TempDir) throws {
+        for name in names {
+            let url = tmp.file(name)
+            try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try Data([1, 2, 3]).write(to: url)
+        }
+    }
+
+    @Test func aFolderAddsItsImagesAndPDFsWithItsSubfolders() async throws {
+        let tmp = TempDir()
+        try write(["photo.jpg", "shot.png", "anim.gif", "scan.pdf", "sub/nested.heic"], in: tmp)
+        // Not taken, as in Watch Folder: WebP, TrimrPix's own output, other files, hidden
+        // files, and the inside of a package.
+        try write(["image.webp", "photo-optimized.jpg", "notes.txt", ".hidden.jpg", "Some.app/inside.jpg"], in: tmp)
+        let vm = makeViewModel()
+
+        await vm.handleDrop(providers: dropped(tmp.url))
+
+        #expect(vm.images.map(\.filename) == ["anim.gif", "photo.jpg", "scan.pdf", "shot.png", "nested.heic"])
+        #expect(vm.showError == false)
+    }
+
+    @Test func theSameFolderTwiceAddsNothingNew() async throws {
+        let tmp = TempDir()
+        try write(["a.jpg", "b.jpg"], in: tmp)
+        let vm = makeViewModel()
+
+        await vm.handleDrop(providers: dropped(tmp.url))
+        await vm.handleDrop(providers: dropped(tmp.url))
+
+        #expect(vm.images.count == 2)
+    }
+
+    @Test func aFolderWithNothingToOptimizeSaysSo() async throws {
+        let tmp = TempDir()
+        try write(["notes.txt", "image.webp"], in: tmp)
+        let vm = makeViewModel()
+
+        await vm.handleDrop(providers: dropped(tmp.url))
+
+        #expect(vm.images.isEmpty)
+        #expect(vm.showError)
+        #expect(vm.errorMessage?.contains(tmp.url.lastPathComponent) == true)
+    }
+
+    @Test func aFileOfAnotherTypeIsSkipped() async throws {
+        let tmp = TempDir()
+        try write(["notes.txt"], in: tmp)
+        let vm = makeViewModel()
+
+        await vm.handleDrop(providers: dropped(tmp.file("notes.txt")))
+
+        #expect(vm.images.isEmpty)
+        #expect(vm.showError == false)
+    }
+
+    @Test func folderFilesFollowsWatchFoldersRule() {
+        #expect(FolderFiles.accepts("Photo.JPG"))
+        #expect(FolderFiles.accepts("scan.pdf"))
+        #expect(!FolderFiles.accepts("image.webp"))
+        #expect(!FolderFiles.accepts("photo-optimized.jpg"))
+        #expect(!FolderFiles.accepts("photo-optimized-2.png"))
+        #expect(!FolderFiles.accepts("README"))
+    }
+}
+
 // MARK: - WatchFolderService
 
 @Suite("WatchFolderService", .serialized)

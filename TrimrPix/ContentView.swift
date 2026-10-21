@@ -63,7 +63,7 @@ struct ContentView: View {
 
             if viewModel.images.isEmpty {
                 VStack(spacing: DesignTokens.Spacing.sm) {
-                    Text("Drag images here to optimize")
+                    Text("Drag images or folders here to optimize")
                         .font(.trimrPixHeadline)
                         .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
                     Text("Supported formats: JPEG, PNG, GIF, AVIF, HEIC, and PDFs that are images, such as scans")
@@ -174,7 +174,7 @@ struct DropZoneView: View {
             }
         }
         .frame(height: 120)
-        .onDrop(of: [UTType.image.identifier, UTType.pdf.identifier], isTargeted: $isHighlighted) { providers in
+        .onDrop(of: [UTType.image.identifier, UTType.pdf.identifier, UTType.fileURL.identifier], isTargeted: $isHighlighted) { providers in
             Task { await viewModel.handleDrop(providers: providers) }
             return true
         }
