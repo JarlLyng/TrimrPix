@@ -53,9 +53,10 @@ final class ImageOptimizationViewModel: ObservableObject {
     
     // MARK: - Security-Scoped Resources
     
-    /// Tracks security-scoped resource access for dropped files
-    /// Maps image ID to whether access was granted
-    private var securityScopedAccess: [UUID: Bool] = [:]
+    /// Tracks security-scoped resource access for dropped items: for each image, the URL
+    /// whose access was started, which is the file itself or the folder it was dropped in.
+    /// A folder's access is stopped once none of its images is left in the list.
+    private var securityScopedURLs: [UUID: URL] = [:]
 
     /// The watch-folder URL we started security-scoped access on, if any.
     /// Kept so `stopWatchFolder()` can balance the `startAccessingSecurityScopedResource()`
@@ -125,8 +126,11 @@ final class ImageOptimizationViewModel: ObservableObject {
                 typeIdentifier = UTType.image.identifier
             } else if provider.hasItemConformingToTypeIdentifier(UTType.pdf.identifier) {
                 typeIdentifier = UTType.pdf.identifier
+            } else if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
+                // A folder, or a file that is neither, which is skipped below.
+                typeIdentifier = UTType.fileURL.identifier
             } else {
-                logger.debug("Item is neither an image nor a PDF, skipping")
+                logger.debug("Item is neither an image, a PDF nor a file, skipping")
                 continue
             }
             
@@ -140,7 +144,20 @@ final class ImageOptimizationViewModel: ObservableObject {
                     failedCount += 1
                     continue
                 }
-                
+
+                if typeIdentifier == UTType.fileURL.identifier {
+                    let values = try? url.resourceValues(forKeys: [.isDirectoryKey, .isPackageKey])
+                    if values?.isDirectory == true, values?.isPackage != true {
+                        loadedCount += await addFolder(url)
+                        continue
+                    }
+                    guard let type = UTType(filenameExtension: url.pathExtension),
+                          type.conforms(to: .image) || type.conforms(to: .pdf) else {
+                        logger.debug("Dropped file is neither an image nor a PDF, skipping: \(url.lastPathComponent)")
+                        continue
+                    }
+                }
+
                 // Check if image is already added
                 if images.contains(where: { $0.url.path == url.path }) {
                     logger.debug("Image already in list, skipping: \(url.lastPathComponent)")
@@ -161,7 +178,7 @@ final class ImageOptimizationViewModel: ObservableObject {
                     
                     // Track security-scoped access
                     if hasAccess {
-                        self.securityScopedAccess[imageItem.id] = true
+                        self.securityScopedURLs[imageItem.id] = url
                     }
                     
                     loadedCount += 1
@@ -195,15 +212,13 @@ final class ImageOptimizationViewModel: ObservableObject {
     func clearImages() {
         let count = images.count
         
-        // Stop all security-scoped resource access
-        for imageItem in images {
-            if securityScopedAccess[imageItem.id] == true {
-                imageItem.url.stopAccessingSecurityScopedResource()
-                logger.debug("Stopped security-scoped access for: \(imageItem.filename)")
-            }
+        // Stop all security-scoped resource access, once per file or folder
+        for url in Set(securityScopedURLs.values) {
+            url.stopAccessingSecurityScopedResource()
+            logger.debug("Stopped security-scoped access for: \(url.lastPathComponent)")
         }
-        
-        securityScopedAccess.removeAll()
+
+        securityScopedURLs.removeAll()
         images.removeAll()
         logger.info("Cleared \(count) images from list")
     }
@@ -215,11 +230,12 @@ final class ImageOptimizationViewModel: ObservableObject {
             let imageItem = images[index]
             let filename = imageItem.filename
             
-            // Stop security-scoped resource access if it was started
-            if securityScopedAccess[id] == true {
-                imageItem.url.stopAccessingSecurityScopedResource()
-                securityScopedAccess.removeValue(forKey: id)
-                logger.debug("Stopped security-scoped access for: \(filename)")
+            // Stop security-scoped access if it was started, unless it is a folder's and
+            // another image from that folder is still in the list
+            if let scopedURL = securityScopedURLs.removeValue(forKey: id),
+               !securityScopedURLs.values.contains(scopedURL) {
+                scopedURL.stopAccessingSecurityScopedResource()
+                logger.debug("Stopped security-scoped access for: \(scopedURL.lastPathComponent)")
             }
             
             images.remove(at: index)
@@ -469,6 +485,9 @@ final class ImageOptimizationViewModel: ObservableObject {
                 
                 if let url = item as? URL {
                     continuation.resume(returning: url)
+                } else if let data = item as? Data {
+                    // A file URL can arrive as its data representation.
+                    continuation.resume(returning: URL(dataRepresentation: data, relativeTo: nil))
                 } else {
                     continuation.resume(returning: nil)
                 }
@@ -476,6 +495,36 @@ final class ImageOptimizationViewModel: ObservableObject {
         }
     }
     
+    /// Adds the images and PDFs in a dropped folder and its subfolders, picked by the same rule
+    /// as Watch Folder (`FolderFiles`). Returns how many were added.
+    private func addFolder(_ folder: URL) async -> Int {
+        let hasAccess = folder.startAccessingSecurityScopedResource()
+        // Off the main actor: a big folder takes a while to walk.
+        let files = await Task.detached { FolderFiles.files(in: folder) }.value
+
+        var added = 0
+        for file in files where !images.contains(where: { $0.url.path == file.path }) {
+            guard let imageItem = try? ImageItem(url: file) else {
+                logger.warning("Could not add file from dropped folder: \(file.lastPathComponent)")
+                continue
+            }
+            images.append(imageItem)
+            if hasAccess {
+                securityScopedURLs[imageItem.id] = folder
+            }
+            added += 1
+        }
+
+        if hasAccess && added == 0 {
+            folder.stopAccessingSecurityScopedResource()
+        }
+        if files.isEmpty {
+            showError(message: "“\(folder.lastPathComponent)” has no images or PDFs that TrimrPix can optimize.")
+        }
+        logger.info("Added \(added) of \(files.count) file(s) from dropped folder: \(folder.lastPathComponent)")
+        return added
+    }
+
     /// Shows an error message to the user
     /// - Parameter message: The error message to display
     private func showError(message: String) {

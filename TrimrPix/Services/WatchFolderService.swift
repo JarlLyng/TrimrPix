@@ -34,9 +34,6 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
     private let compressionService: any CompressionServiceProtocol
     private let settings: any SettingsProtocol
     private let logger: any LoggerProtocol
-    // No "webp": macOS cannot write WebP, so those files can only be skipped, and a
-    // watched folder has no way to explain that to anyone. Better not to pick them up.
-    private let supportedExtensions = ["jpg", "jpeg", "png", "gif", "avif", "heic", "heif", "pdf"]
     private var debounceTask: Task<Void, Never>?
     private var scanTask: Task<Void, Never>?
     private var processedFiles: Set<String> = [] // Track processed files to avoid re-processing
@@ -231,7 +228,6 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
         // Snapshot Sendable values on the main actor before doing background work.
         let path = watchedPath
         let delaySeconds = settings.watchFolderDelay
-        let extensions = supportedExtensions
         let compressionSettings = settings.compressionSnapshot
         let compressionService = self.compressionService
         let logger = self.logger
@@ -252,13 +248,9 @@ final class WatchFolderService: NSObject, WatchFolderServiceProtocol, Observable
                 contents = []
             }
 
-            let imageFiles = contents.filter { file in
-                let fileExtension = (file as NSString).pathExtension.lowercased()
-                // Filter out output files (e.g., *-optimized.*) to prevent a re-optimization loop.
-                let filename = (file as NSString).deletingPathExtension
-                let isOutputFile = filename.contains("-optimized")
-                return extensions.contains(fileExtension) && !isOutputFile
-            }
+            // The same rule as a dropped folder: supported types, no WebP, and not our own
+            // *-optimized output, which would loop.
+            let imageFiles = contents.filter(FolderFiles.accepts)
 
             logger.debug("Found \(imageFiles.count) image file(s) in watched folder (excluding output files)")
 
