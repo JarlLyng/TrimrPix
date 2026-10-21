@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  No lastmod, on purpose. The hand-written dates went stale (all nine said
-  2026-09-08 a month on), and a date stamped at deploy would mark every page as
-  changed every time. Google only uses lastmod it can trust, and accepts a
-  sitemap without it. If dates come back, derive them from git, never by hand.
+  No lastmod here, on purpose. The deploy writes each page's from git, the date of the last
+  commit to its file (tools/date_sitemap.py, #96). Never hand-write it: the hand-written dates
+  went stale, and Google stops trusting a date that is always the same or always today.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
