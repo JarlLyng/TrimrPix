@@ -51,18 +51,16 @@ website's light look from the next version on, and replace 1.7.3's dark set then
 - **Ground** `#F1F0F6`, the site's. **Caption text** `#1C1B22`.
 - **Lime `#D0FF00` only as a highlighter chip behind black text**, as on the site's "Keep
   quality.". **Never lime text on the light ground.**
-- **Accent text, where a caption needs it, is olive `#4A5900`.**
+- **Accent text and the tick above the caption are olive `#4A5900`.**
 
-In the manifest that is:
+In the manifest that is (the hub's tool takes a chip fill of its own since 9284d1c):
 
 ```json
 "mode": "light", "ground": "#F1F0F6", "text": "#1C1B22",
-"accent": "#D0FF00", "chip_text": "#000000"
+"accent": "#4A5900", "chip": "#D0FF00", "chip_text": "#000000"
 ```
 
-The tool draws a `[chip]`, an `*accent*` phrase and the tick above the caption all in the one
-`accent`. So with lime as the accent, emphasise with `[chips]` only: a `*phrase*` would be
-lime text. A caption that wants olive text instead sets `"accent": "#4A5900"` on its own shot,
-and then has no chip. 1.7.3's `*phrase*` captions need rewriting either way.
+So a caption can have olive `*accent*` text and a lime `[chip]`, as the site does. 1.7.3's
+captions are rewritten with the next set.
 
 Superseded sets are deleted rather than kept; git history has them.
