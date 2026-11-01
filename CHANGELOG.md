@@ -2,6 +2,11 @@
 
 All notable changes to TrimrPix are documented here.
 
+## [Unreleased]
+
+### Added
+- Drop a folder onto the window to add the images and PDFs in it and its subfolders. It takes the same files Watch Folder does: no WebP, and not TrimrPix's own `-optimized` copies. Hidden files and the inside of packages, such as a Photos library, are left out. A folder with nothing to optimize says so (#92)
+
 ## [1.7.3] - 2026-10-18
 
 ### Changed

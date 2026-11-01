@@ -41,7 +41,7 @@ The developer half: what's in the app, how to build and run it, how it's put tog
 - **Metadata:** EXIF, GPS and IPTC are stripped.
 - **Resize:** an optional downscale to a maximum dimension before compressing. It never upscales.
 - **Size guard:** if compressing would make a file bigger, the original is kept.
-- **Batch:** optimize everything at once, concurrently and with progress, or one image at a time.
+- **Batch:** drop in files or whole folders, subfolders included, and optimize everything at once, concurrently and with progress, or one image at a time.
 - **Watch Folder:** new images in a folder you choose are optimized while TrimrPix's window is open, after a wait of 0.5 to 10 seconds (2 by default), so a file still being copied is finished first.
 - **Saving:** by default beside the original, with `-optimized` in its name and a number if that name is taken, or over the original if you turn that on. With auto-save off, a save dialog asks where.
 - **Help menu:** Send Feedback… opens an email draft with the app and macOS versions filled in, which you see before anything is sent. TrimrPix Support opens the support page.
