@@ -6,8 +6,9 @@ and served by GitHub Pages. Nothing in this folder is published by Pages.
 ```
 appstore/
   manifest.json     the poster set: which capture, which caption, which slot
-  raw/              the window captures the posters are made from
+  raw/              1.7.3's window captures, which its posters were made from
   <version>/        what is uploaded for that release: mac-*.png, and listing.md for the text
+  <version>/raw/    from 1.8.0 on, that version's window captures
 ```
 
 Current: **`1.7.3/`**, four posters at 2880 × 1800 (the Mac's largest slot, which Apple scales
@@ -29,6 +30,23 @@ including the build without the sandbox it needs to read a folder, is at the top
    -watchFolderEnabled YES -watchFolderPath /Users/Shared/Screenshots`).
 4. One file per format, just dropped in: a HEIC, an AVIF and an image PDF made from the sample
    photos with `sips`, a GIF of the app's own window, a PNG screenshot of it, and a JPEG.
+
+### 1.8.0's captures, in `1.8.0/raw/`
+
+The same capture mode and sample, light, active and at 2x, but the window is 1440 × 900 points
+for all six, so every capture is 2880 × 1800, the shape of the Mac slot.
+
+1. Seven photos after Optimize All, with the same settings as 1.7.3's. The seventh fills the
+   taller window.
+2. and 3. Settings, as in 1.7.3.
+4. One file per format, as in 1.7.3. The GIF and the PNG are made from this set's own captures.
+5. A folder dragged from Finder and held over the drop zone, which shows its highlight (#92).
+   A window capture leaves out the drag image, so this one is the screen region of the window,
+   given the window capture's transparent corners.
+6. The seven photos that folder added from its three subfolders, just dropped in.
+
+5 and 6 come from a real drag in Finder, since the capture mode can't stage a drop. They were
+taken in a capture build launched on an empty folder.
 
 ## The posters
 
