@@ -69,7 +69,7 @@ The app is sandboxed. Debug builds have a capture mode for the website's and the
 - [`ARCHITECTURE.md`](ARCHITECTURE.md): the service layer, dependency injection, errors and logging.
 - [`CODE_STYLE.md`](CODE_STYLE.md) and [`CONTRIBUTING.md`](CONTRIBUTING.md): how code is written here, and how to send a change.
 - [`CHANGELOG.md`](CHANGELOG.md): what changed in each release.
-- [`PRIVACY.md`](PRIVACY.md) and [`SECURITY.md`](SECURITY.md).
+- [`docs/PRIVACY.md`](docs/PRIVACY.md) and [`SECURITY.md`](SECURITY.md).
 - [`appstore/`](appstore/): the App Store text and screenshots for each release, and how they are made.
 
 ### Contributing

@@ -1,4 +1,3 @@
-# Copy to <repo>/.github/ISSUE_TEMPLATE/feature_request.yml and replace TrimrPix / JarlLyng/TrimrPix.
 name: Feature request
 description: Suggest a new feature or improvement for TrimrPix.
 title: '[Feature] '
@@ -7,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for the suggestion. Every IAMJARL app is deliberately focused, so the clearer the problem you're trying to solve, the easier it is to evaluate. "Not right now" is a normal answer — it's not a judgement of the idea.
+        Thanks for the suggestion. Every IAMJARL app is deliberately focused, so the clearer the problem you're trying to solve, the easier it is to evaluate. "Not right now" is a normal answer, and it's not a judgement of the idea.
 
   - type: textarea
     id: problem

@@ -1,5 +1,5 @@
-# Deploy marketingsitet (docs/) til GitHub Pages
-# Kører ved push til main når docs/ ændres, eller manuelt
+# Deploys the marketing site (docs/) to GitHub Pages
+# Runs on a push to main that changes docs/, or by hand
 # Repo Settings → Pages → Source: GitHub Actions
 
 name: Deploy marketing site

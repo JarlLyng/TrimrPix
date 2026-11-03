@@ -1,7 +1,3 @@
-# Copy to <repo>/.github/ISSUE_TEMPLATE/marketing_idea.yml and replace TrimrPix / JarlLyng/TrimrPix.
-# NOTE: this is for PUBLIC-SAFE marketing tasks only. Competitive-sensitive strategy
-# (positioning, pricing reasoning, channel edge, competitor analysis) goes in the PRIVATE
-# iamjarl-strategy hub instead — never in a public issue.
 name: Marketing idea / task
 description: A public-safe marketing idea or task (content, post, screenshot, outreach).
 title: '[Marketing] '
@@ -10,8 +6,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        For **public-safe** marketing work only — a blog post, a community thread, a screenshot to redo, an ASO copy tweak.
-        **Anything competitive-sensitive** (positioning, pricing reasoning, channel plans that reveal an edge, competitor analysis) does **not** belong in a public issue — put it in the private [iamjarl-strategy](https://github.com/JarlLyng/iamjarl-strategy) hub instead.
+        For **public-safe** marketing work only: a blog post, a community thread, a screenshot to redo, an ASO copy tweak.
+        **Anything competitive-sensitive** (positioning, pricing reasoning, channel plans that reveal an edge, competitor analysis) does **not** belong in a public issue.
 
   - type: textarea
     id: idea
@@ -41,5 +37,5 @@ body:
     attributes:
       label: Public-safe check
       options:
-        - label: This contains nothing a competitor reading it could use against us (else it goes in the private strategy hub)
+        - label: This contains nothing a competitor reading it could use against us
           required: true

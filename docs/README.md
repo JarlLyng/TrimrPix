@@ -12,6 +12,8 @@ Hosted at **https://trimrpix.iamjarl.com/** via GitHub Pages.
 - `compress-images-for-web.html` – Web compression guide
 - `batch-image-compression.html` – Batch + Watch Folder guide
 - `optimize-images-app-store.html` – App Store image optimization
+- `remove-exif-data-on-mac.html` – Removing EXIF data on a Mac
+- `404.html` – Not found
 
 ## Assets
 
@@ -19,13 +21,15 @@ Hosted at **https://trimrpix.iamjarl.com/** via GitHub Pages.
 - `screenshot-1` to `screenshot-5` (`.avif`, with a `.png` fallback) – App window captures, taken with the
   Debug-only capture mode in `TrimrPix/ScreenshotMode.swift`
 - `favicon.png` – Favicon
-- `sitemap.xml` – XML sitemap (8 pages + images)
+- `sitemap.xml` – XML sitemap (9 pages + images). The deploy adds each page's `lastmod` from git
 - `robots.txt` – Crawler rules
 - `CNAME` – Custom domain config
 
 ## Deployment
 
-GitHub Pages serves from `/docs` on `main`. Push to deploy.
+A GitHub Actions workflow, `.github/workflows/deploy-pages.yml`, deploys `docs/` to GitHub Pages on every push to `main`
+that changes `docs/`. It checks the shared header and footer, refuses draft slots and CDN stylesheets or
+scripts, and dates the sitemap from git (`tools/date_sitemap.py`).
 
 ## Local Preview
 
