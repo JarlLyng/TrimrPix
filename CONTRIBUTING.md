@@ -1,19 +1,19 @@
 # Contributing to TrimrPix
 
-We welcome contributions! Whether it's bug reports, feature requests, or pull requests — all help is appreciated.
+We welcome contributions! Whether it's bug reports, feature requests, or pull requests, all help is appreciated.
 
 ## Getting Started
 
 1. Fork the repository
 2. Clone your fork
-3. Open `TrimrPix.xcodeproj` in Xcode 16+
+3. Open `TrimrPix.xcodeproj` in Xcode 26 or later (the macOS 26 SDK; Xcode 16 can't build it)
 4. Build and run (requires macOS 15.2+)
 
 ## Development Setup
 
-- **Swift 5.9+** with `any` keyword for protocol types
+- **Swift 6** language mode, with existential `any` for protocol types
 - **SwiftUI** for all views
-- **MVVM architecture** — see [ARCHITECTURE.md](ARCHITECTURE.md) for details
+- **MVVM architecture:** see [ARCHITECTURE.md](ARCHITECTURE.md) for details
 - **Design tokens** from [iamjarl-design](https://github.com/JarlLyng/iamjarl-design) package
 
 ## Before Submitting a PR

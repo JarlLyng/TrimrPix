@@ -21,7 +21,7 @@ All services use protocol-based interfaces, enabling dependency injection and si
 - `LoggerProtocol`
 - `FileManagerProtocol`
 
-The project uses Swift 5.9+ existential any types (`any` keyword) for protocol types:
+The project uses existential `any` types for protocol types:
 - Required for better type safety
 - Makes protocol type usage explicit
 - Used in property declarations, parameter types, and return types
@@ -42,9 +42,11 @@ Centralized logging system through `Logger`:
 
 ```
 TrimrPix/
-├── TrimrPixApp.swift          # App entry point
+├── TrimrPixApp.swift          # App entry point, and the Help menu
 ├── ContentView.swift          # Main UI view
+├── ScreenshotMode.swift       # Debug-only capture mode for the site's and store's screenshots
 ├── Models/
+│   ├── FolderFiles.swift      # Which files a watched or dropped folder gives (no WebP, no -optimized)
 │   ├── ImageItem.swift        # Image data model
 │   ├── Settings.swift         # Settings management
 │   └── TrimrPixError.swift    # Centralized error types
@@ -56,6 +58,8 @@ TrimrPix/
 │   ├── CompressionService.swift    # Image compression logic
 │   ├── ColorQuantizer.swift        # Median-cut color quantization for PNG
 │   ├── WatchFolderService.swift    # File system monitoring
+│   ├── FeedbackMail.swift          # The Send Feedback… mailto draft
+│   ├── MetricsService.swift        # MetricKit diagnostics, logged locally
 │   ├── Logger.swift                # Logging service
 │   └── Protocols.swift             # Service protocol definitions
 └── Assets.xcassets/          # App icons and assets
@@ -82,7 +86,7 @@ Concurrent TaskGroup → optimizeImage(at:) for each
     ↓
 CompressionService.optimizeImage()
     ↓
-Format-specific optimization (JPEG/PNG/GIF/WebP/AVIF/HEIC)
+Format-specific optimization (JPEG/PNG/GIF/AVIF/HEIC, PDFs that are images; WebP is refused)
     ↓
 Save optimized file based on settings
     ↓
@@ -161,13 +165,15 @@ Optimized file saved
 #### CompressionService
 - Implements `CompressionServiceProtocol`
 - Handles format-specific compression:
-  - JPEG: Progressive encoding via CGImageDestination with optimized Huffman tables (60%-95%)
+  - JPEG: Progressive encoding via CGImageDestination with optimized Huffman tables, at the chosen quality
   - PNG: Lossy quantization (median-cut, 256 colors) with fallback to alpha channel stripping
   - GIF: Re-encoding via CGImageSource/CGImageDestination with LZW re-compression (preserves animation timing)
-  - WebP: Compression via CGImageDestination (macOS 14+)
   - AVIF: Compression via CGImageDestination with graceful fallback
   - HEIC: Compression via CGImageDestination
-- Shared helper method `compressWithCGImageDestination()` for JPEG/WebP/AVIF/HEIC with metadata stripping
+  - PDF (`optimizePDFData`): a PDF without a text layer, a scan or one whose text was turned into outlines, has its pages re-encoded as JPEG at the chosen quality. A PDF with a text layer is refused with `pdfHasTextLayer`, since rasterising it would remove the text and usually make it bigger
+  - WebP: refused with `webPEncodingUnavailable` (`optimizeWebPData`), since macOS has no WebP encoder
+- Shared helper method `compressWithCGImageDestination()` for JPEG/AVIF/HEIC with metadata stripping
+- **Size guard** (`optimizeImage`): if the result is not smaller than the original, the original's data is kept
 - Shared `loadImage()` helper with optional pre-compression resizing via `CGImageSourceCreateThumbnailAtIndex`
 - **Metadata stripping**: EXIF, GPS, IPTC, and MakerApple data removed from all CGImageDestination formats
 - **Image resizing**: Optional downscaling before compression (configurable max dimension, never upscales)
@@ -191,7 +197,7 @@ Optimized file saved
 - Debouncing with configurable delay (from Settings, 0.5-10s) to avoid redundant events
 - File stability check with configurable delay (from Settings)
 - Validates folder path and permissions before starting
-- **Loop Prevention**: Filters output files (`*-optimized*`) and tracks processed files to avoid re-optimization
+- **Loop Prevention**: Picks files by `FolderFiles`, which leaves out WebP and output files (`*-optimized*`), the same rule as a folder dropped on the window, and tracks processed files to avoid re-optimization
 - **Processed Files Tracking**: Set-based tracking of already-processed files to prevent re-processing
 
 #### Logger
@@ -282,7 +288,8 @@ Planned improvements are tracked as [GitHub Issues](https://github.com/JarlLyng/
 - **SwiftUI**: UI framework
 - **Foundation**: Core functionality
 - **AppKit**: macOS-specific functionality (NSSavePanel, NSImage)
-- **ImageIO**: CGImageSource/CGImageDestination for JPEG/PNG/GIF/WebP/AVIF/HEIC compression and image resizing
+- **ImageIO**: CGImageSource/CGImageDestination for JPEG/PNG/GIF/AVIF/HEIC compression and image resizing
+- **PDFKit**: reading PDFs, checking for a text layer, and rebuilding scanned ones
 - **StoreKit**: App Store review prompts
 - **OSLog**: Unified logging system
 - **UniformTypeIdentifiers**: File type identification

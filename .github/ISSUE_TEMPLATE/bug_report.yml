@@ -1,4 +1,3 @@
-# Copy to <repo>/.github/ISSUE_TEMPLATE/bug_report.yml and replace TrimrPix / JarlLyng/TrimrPix / trimrpix.iamjarl.com.
 name: Bug report
 description: Something in the TrimrPix app or marketing site is broken or behaves unexpectedly.
 title: '[Bug] '
@@ -8,7 +7,7 @@ body:
     attributes:
       value: |
         Thanks for taking the time to report a bug. The more concrete the details, the faster it can be fixed.
-        For security vulnerabilities, **do not file a public issue** — see [SECURITY.md](https://github.com/JarlLyng/TrimrPix/blob/main/SECURITY.md) for the private reporting channel.
+        For security vulnerabilities, **do not file a public issue**. See [SECURITY.md](https://github.com/JarlLyng/TrimrPix/blob/main/SECURITY.md) for the private reporting channel.
 
   - type: input
     id: summary
