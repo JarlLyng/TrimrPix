@@ -48,6 +48,10 @@ for all six, so every capture is 2880 × 1800, the shape of the Mac slot.
 5 and 6 come from a real drag in Finder, since the capture mode can't stage a drop. They were
 taken in a capture build launched on an empty folder.
 
+The drop zone says "Drop images or folders here" from 1.8.0 on, so 1 and 4 were taken again with
+it, on 2026-11-15. 2 and 3 were not: the Settings sheet covers the drop zone, and a capture
+taken again came out the same.
+
 ## The posters
 
 Composed with the hub's `tools/appstore_screenshots.py`. 1.7.3's set is on the dark ground with
