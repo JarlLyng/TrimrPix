@@ -123,7 +123,9 @@ sentry-cli debug-files upload --org iamjarl --project trimrpix-macos <archive>/d
 The privacy policy, `TrimrPix/PrivacyInfo.xcprivacy` and the App Store label name the same
 kinds of data, all not linked to the user and not used for tracking:
 
-- **Crash Data and Performance Data,** for app functionality;
+- **Crash Data, Performance Data and Other Diagnostic Data,** for app functionality (Other
+  Diagnostic Data, as sentry-cocoa's own manifest declares it, by the owner's decision of
+  2026-11-15 for every app with Sentry);
 - **Product Interaction,** for analytics: the two counts.
 
 The entitlement `com.apple.security.network.client` exists for Sentry alone. The app makes no
