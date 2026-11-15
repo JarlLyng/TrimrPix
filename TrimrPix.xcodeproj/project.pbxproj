@@ -257,6 +257,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
 			);
 			name = "Refuse an archive without a Sentry DSN";
 			outputFileListPaths = (
@@ -265,7 +266,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# The DSN as the app will read it. An xcconfig cuts a raw https://... to \"https:\",\n# so check its shape, not just that it is set. Its value is never printed.\ncase \"${SENTRY_DSN}\" in\n  https://*@*) exit 0 ;;\nesac\nif [ -z \"${SENTRY_DSN}\" ]; then\n  PROBLEM=\"is empty\"\nelse\n  PROBLEM=\"does not start with https:// or has no @ (in an xcconfig, write the DSN's // as /\\$()/)\"\nfi\nif [ \"${ACTION}\" = \"install\" ]; then\n  echo \"error: SENTRY_DSN ${PROBLEM}, so this archive would ship without crash reports. Put the DSN in Sentry.xcconfig, or in the Xcode Cloud workflow's environment. See SENTRY.md.\"\n  exit 1\nfi\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\n  echo \"warning: SENTRY_DSN ${PROBLEM}, so this Release build has crash reporting off. See SENTRY.md.\"\nfi\n";
+			shellScript = "# The DSN the app will read, from the built Info.plist: a build setting can be set and still\n# never reach the app (an ignored INFOPLIST_KEY_, or an xcconfig that cut https:// to \"https:\").\n# Its value is never printed.\nDSN=$(/usr/bin/plutil -extract SentryDSN raw \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true)\ncase \"${DSN}\" in\n  https://*@*) exit 0 ;;\nesac\nif [ -z \"${DSN}\" ]; then\n  PROBLEM=\"is empty or missing in the built Info.plist\"\nelse\n  PROBLEM=\"in the built Info.plist does not start with https:// or has no @ (in an xcconfig, write the DSN's // as /\\$()/)\"\nfi\nif [ \"${ACTION}\" = \"install\" ]; then\n  echo \"error: SentryDSN ${PROBLEM}, so this archive would ship without crash reports. Put the DSN in Sentry.xcconfig, or in the Xcode Cloud workflow's environment. See SENTRY.md.\"\n  exit 1\nfi\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\n  echo \"warning: SentryDSN ${PROBLEM}, so this Release build has crash reporting off. See SENTRY.md.\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -451,11 +452,11 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "TrimrPix-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "TrimrPix - Modern image optimization tool";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 IAMJARL. All rights reserved.";
-				INFOPLIST_KEY_SentryDSN = "$(SENTRY_DSN)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -489,11 +490,11 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "TrimrPix-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "TrimrPix - Modern image optimization tool";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 IAMJARL. All rights reserved.";
-				INFOPLIST_KEY_SentryDSN = "$(SENTRY_DSN)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
