@@ -4,7 +4,7 @@ Quick-start context for developers and AI assistants. Detailed specs in `docs/` 
 
 ## What is TrimrPix?
 
-A macOS SwiftUI app for high-quality image compression with a simple UI — the same core idea as [ImageOptim](https://github.com/ImageOptim/ImageOptim) but with modern formats and Apple-Silicon performance. Everything runs locally; no cloud, no accounts, no internet required.
+A macOS SwiftUI app for high-quality image compression with a simple UI — the same core idea as [ImageOptim](https://github.com/ImageOptim/ImageOptim) but with modern formats and Apple-Silicon performance. Everything runs locally; no cloud, no accounts, no internet required. Your images never leave the Mac; the one connection is anonymous crash reports and counts to Sentry (`SENTRY.md`).
 
 - **Developer:** [IAMJARL](https://iamjarl.com) (Jarl)
 - **Website:** [trimrpix.iamjarl.com](https://trimrpix.iamjarl.com)
@@ -72,7 +72,7 @@ Target audience, positioning, pricing reasoning, SEO/ASO playbooks, and competit
 - **Help menu:** "TrimrPix Support" opens the support page; "Send Feedback…" opens a `mailto:support@iamjarl.com` draft with the app and macOS versions filled in (`FeedbackMail.swift`). The user sees it all before sending; the app sends nothing itself.
 
 ### Features that do NOT exist (common hallucination targets)
-- No cloud upload, account, or internet processing — fully local.
+- No cloud upload, account, or internet processing — fully local. The network entitlement exists for Sentry alone: anonymous crash reports, MetricKit diagnostics and two counts, one shared user `anonymous`, no file names or paths (`SENTRY.md`). Don't send anything else, and don't add an identifier.
 - Not the iOS "in-place Photos library" model — this is a file/folder tool with auto-save.
 - No subscription / IAP.
 - **Not a general PDF compressor** — only PDFs without a text layer (scans, or text turned into outlines). No merging, splitting, page editing, OCR, or encryption.
@@ -127,5 +127,5 @@ or it is invisible, and should come from a fragment where one exists.
 - Open `TrimrPix.xcodeproj` and run the **TrimrPix** scheme. Tests in `TrimrPixTests`.
 
 ## Conventions
-- Privacy-first: images never leave the Mac; no tracking.
+- Privacy-first: images never leave the Mac; no tracking. Anonymous telemetry follows the hub's recipe in `SENTRY.md`; re-run its envelope check after every sentry-cocoa upgrade.
 - See `ARCHITECTURE.md` for the service layer (`CompressionService`, `ColorQuantizer`, `WatchFolderService`).

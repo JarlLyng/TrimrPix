@@ -1,0 +1,10 @@
+// Build settings for the TrimrPix app target, on top of the project's own.
+//
+// The Sentry DSN comes from Sentry.xcconfig, which is gitignored: copy
+// Sentry.xcconfig.example to it locally, and Xcode Cloud writes it from the
+// workflow's SENTRY_DSN (ci_scripts/ci_post_clone.sh). The include is optional,
+// so a clone without it still builds and tests, with crash reporting off. An
+// archive without a DSN is refused by the target's "Refuse an archive without a
+// Sentry DSN" build phase. See SENTRY.md.
+
+#include? "Sentry.xcconfig"

@@ -33,7 +33,7 @@ TrimrPix is a single-purpose image compressor with a deliberately small attack s
 - **No backend.** No server, no database, no API endpoints.
 - **No accounts.** No sign-up, no authentication, no password storage.
 - **Images never leave the Mac.** All compression is local; nothing is uploaded.
-- **No tracking.** No analytics in the app. The marketing website uses Umami for aggregate page views (no cookies, no fingerprinting).
+- **No tracking.** Anonymous crash reports, Apple's diagnostics and two counts go to Sentry, with one shared user, no ID and nothing about your files ([SENTRY.md](SENTRY.md)); that's the app's only network connection. The marketing website uses Umami for aggregate page views (no cookies, no fingerprinting).
 - **Local file access only.** The app reads/writes the images and folders you point it at (including the optional Watch Folder), via security-scoped access.
 
 If you find a way to break any of those guarantees, I want to know.
