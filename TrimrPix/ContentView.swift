@@ -168,7 +168,7 @@ struct DropZoneView: View {
                     .imageScale(.large)
                     .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
                     .accessibilityHidden(true) // the text beside it says it
-                Text("Drop images here")
+                Text("Drop images or folders here")
                     .font(.trimrPixHeadline)
                     .foregroundStyle(DesignTokens.Common.Text.primary(colorScheme))
             }

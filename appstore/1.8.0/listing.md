@@ -13,7 +13,8 @@ Counted: the description is 2,332 characters (limit 4,000), the promotional text
   subfolders, in the order Finder lists them (#92, #99). It takes the same files Watch Folder
   does: no WebP, and not TrimrPix's own `-optimized` copies. Hidden files and the inside of
   packages, such as a Photos library, are left out. A folder with nothing to optimize says so.
-- The empty window says "Drag images or folders here to optimize".
+- The empty window says "Drag images or folders here to optimize", and the drop zone at the top
+  of the window "Drop images or folders here".
 - **Anonymous crash reports and two counts** (#106, #107). When the Mac is online, the app sends
   Sentry its crash reports, Apple's diagnostics (MetricKit), whether a session ended in a crash,
   and two counts, one for each image optimized, with its output format, and one for the

@@ -9,7 +9,7 @@ All notable changes to TrimrPix are documented here.
 - Anonymous crash reports and Apple's diagnostics, sent to Sentry when the Mac is online, with two counts: an image optimized, with its output format, and the kilobytes it saved. Every install reports as the same user, "anonymous", with no installation or device ID, and no file name, path or image content is sent. The privacy manifest declares Crash Data, Performance Data, Other Diagnostic Data and Product Interaction, none linked to the user or used for tracking. `SENTRY.md` lists what is sent (#106)
 
 ### Changed
-- The empty window says "Drag images or folders here to optimize" (#92)
+- The empty window says "Drag images or folders here to optimize", and the drop zone at the top of the window "Drop images or folders here" (#92)
 
 ## [1.7.3] - 2026-10-18
 
