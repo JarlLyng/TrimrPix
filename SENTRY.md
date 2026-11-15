@@ -96,7 +96,10 @@ The app reads the DSN in this order:
   `ci_scripts/ci_post_clone.sh` writes `Sentry.xcconfig` from it, escaping the `//`.
 - **Without a DSN,** builds and tests run with crash reporting off. **An archive is refused:**
   the app target's build phase "Refuse an archive without a Sentry DSN" stops it with an error,
-  locally and on Xcode Cloud, so a release can't ship with crash reports silently off.
+  locally and on Xcode Cloud, so a release can't ship with crash reports silently off. It checks
+  the DSN's shape, not just that it is set: it must start with `https://` and contain `@`, so a
+  DSN an xcconfig cut to `https:` is refused too. A Release build that isn't an archive only
+  gets a warning. CI checks both refusals on every pull request.
 
 ## Symbols (dSYMs)
 
