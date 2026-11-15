@@ -18,7 +18,7 @@ Trim file size. Keep quality.
   <img src="appstore/1.7.3/mac-1.png" alt="iPhone photos 79% smaller when resized for the web. TrimrPix after optimizing six photos at Medium, resized to 2048 px, each 70 to 80% smaller." width="720">
 </p>
 
-TrimrPix makes image files smaller on your Mac without visible quality loss. Drop in one image or a few hundred, or point Watch Folder at the folder your screenshots and exports land in, and each optimized copy is saved beside its original. It takes JPEG, PNG, GIF, AVIF and HEIC, and PDFs that are images, such as scans, and strips EXIF, GPS and IPTC data on the way. It's made for anyone who puts images on the web, in decks or in email. Everything runs on your Mac: nothing is uploaded, there's no account, and you pay for it once.
+TrimrPix makes image files smaller on your Mac without visible quality loss. Drop in one image or a few hundred, or point Watch Folder at the folder your screenshots and exports land in, and each optimized copy is saved beside its original. It takes JPEG, PNG, GIF, AVIF and HEIC, and PDFs that are images, such as scans, and strips EXIF, GPS and IPTC data on the way. It's made for anyone who puts images on the web, in decks or in email. Everything runs on your Mac: your images are never uploaded, there's no account, and you pay for it once.
 
 ## For developers
 
@@ -45,7 +45,7 @@ The developer half: what's in the app, how to build and run it, how it's put tog
 - **Watch Folder:** new images in a folder you choose are optimized while TrimrPix's window is open, after a wait of 0.5 to 10 seconds (2 by default), so a file still being copied is finished first.
 - **Saving:** by default beside the original, with `-optimized` in its name and a number if that name is taken, or over the original if you turn that on. With auto-save off, a save dialog asks where.
 - **Help menu:** Send Feedback… opens an email draft with the app and macOS versions filled in, which you see before anything is sent. TrimrPix Support opens the support page.
-- **Private:** the app makes no network requests of its own. Your images never leave your Mac, and there's no account or tracking.
+- **Private:** your images never leave your Mac, and there's no account or tracking. The one connection the app makes is to Sentry, for anonymous crash reports, Apple's diagnostics and two anonymous counts (images optimized, kilobytes saved), with no ID and nothing about your files. [`SENTRY.md`](SENTRY.md) says exactly what is sent.
 
 Requirements: macOS 15.2 or later to run it, and Xcode 26 (the macOS 26 SDK) to build it.
 
@@ -67,6 +67,7 @@ The app is sandboxed. Debug builds have a capture mode for the website's and the
 
 - [`AGENTS.md`](AGENTS.md): project context for developers and AI assistants.
 - [`ARCHITECTURE.md`](ARCHITECTURE.md): the service layer, dependency injection, errors and logging.
+- [`SENTRY.md`](SENTRY.md): the anonymous crash reports and counts, the DSN, symbols, and the envelope check after an SDK upgrade.
 - [`CODE_STYLE.md`](CODE_STYLE.md) and [`CONTRIBUTING.md`](CONTRIBUTING.md): how code is written here, and how to send a change.
 - [`CHANGELOG.md`](CHANGELOG.md): what changed in each release.
 - [`docs/PRIVACY.md`](docs/PRIVACY.md) and [`SECURITY.md`](SECURITY.md).

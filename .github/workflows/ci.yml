@@ -51,3 +51,27 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             DEVELOPMENT_TEAM="" \
             -skip-testing:TrimrPixUITests
+
+      # An archive without a Sentry DSN would ship with crash reports silently off.
+      # The app target refuses it (build phase "Refuse an archive without a Sentry
+      # DSN"); check that it still does. `install` runs with ACTION=install, as an
+      # archive does. This clone has no Sentry.xcconfig, so the DSN is empty.
+      - name: An archive without a Sentry DSN is refused
+        run: |
+          if xcodebuild install \
+              -project TrimrPix.xcodeproj \
+              -scheme TrimrPix \
+              -configuration Release \
+              -derivedDataPath ./build \
+              DSTROOT="$RUNNER_TEMP/dst" \
+              CODE_SIGNING_ALLOWED=NO \
+              DEVELOPMENT_TEAM="" > install.log 2>&1; then
+            echo "::error::An install without a Sentry DSN succeeded; the archive check is not working."
+            exit 1
+          fi
+          if ! grep -q "error: SENTRY_DSN is empty" install.log; then
+            tail -40 install.log
+            echo "::error::The install failed, but not on the missing DSN."
+            exit 1
+          fi
+          echo "Refused, as it should be: $(grep -m1 'error: SENTRY_DSN is empty' install.log)"
