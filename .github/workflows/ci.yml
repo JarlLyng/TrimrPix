@@ -75,3 +75,26 @@ jobs:
             exit 1
           fi
           echo "Refused, as it should be: $(grep -m1 'error: SENTRY_DSN is empty' install.log)"
+
+      # A DSN cut short by an xcconfig ("https:") must be refused too, not only an
+      # empty one: the archive check reads the DSN's shape.
+      - name: An archive with a cut-off Sentry DSN is refused
+        run: |
+          if xcodebuild install \
+              -project TrimrPix.xcodeproj \
+              -scheme TrimrPix \
+              -configuration Release \
+              -derivedDataPath ./build \
+              DSTROOT="$RUNNER_TEMP/dst" \
+              CODE_SIGNING_ALLOWED=NO \
+              DEVELOPMENT_TEAM="" \
+              SENTRY_DSN="https:" > install-cut.log 2>&1; then
+            echo "::error::An install with the DSN cut to \"https:\" succeeded; the archive check is not working."
+            exit 1
+          fi
+          if ! grep -q "error: SENTRY_DSN does not start with https://" install-cut.log; then
+            tail -40 install-cut.log
+            echo "::error::The install failed, but not on the cut-off DSN."
+            exit 1
+          fi
+          echo "Refused, as it should be."

@@ -265,7 +265,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${ACTION}\" = \"install\" ] && [ -z \"${SENTRY_DSN}\" ]; then\n  echo \"error: SENTRY_DSN is empty, so this archive would ship without crash reports. Put the DSN in Sentry.xcconfig, or in the Xcode Cloud workflow's environment. See SENTRY.md.\"\n  exit 1\nfi\n";
+			shellScript = "# The DSN as the app will read it. An xcconfig cuts a raw https://... to \"https:\",\n# so check its shape, not just that it is set. Its value is never printed.\ncase \"${SENTRY_DSN}\" in\n  https://*@*) exit 0 ;;\nesac\nif [ -z \"${SENTRY_DSN}\" ]; then\n  PROBLEM=\"is empty\"\nelse\n  PROBLEM=\"does not start with https:// or has no @ (in an xcconfig, write the DSN's // as /\\$()/)\"\nfi\nif [ \"${ACTION}\" = \"install\" ]; then\n  echo \"error: SENTRY_DSN ${PROBLEM}, so this archive would ship without crash reports. Put the DSN in Sentry.xcconfig, or in the Xcode Cloud workflow's environment. See SENTRY.md.\"\n  exit 1\nfi\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\n  echo \"warning: SENTRY_DSN ${PROBLEM}, so this Release build has crash reporting off. See SENTRY.md.\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
