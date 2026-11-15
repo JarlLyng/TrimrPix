@@ -38,7 +38,7 @@ struct TelemetryTests {
         event.exceptions = [exception]
         let crumb = Breadcrumb(level: .info, category: "app")
         crumb.message = "Opened ~/Desktop/secret plans.png"
-        crumb.data = ["path": "/Users/jane/x.jpg"]
+        crumb.setData(value: "/Users/jane/x.jpg", key: "path")
         event.breadcrumbs = [crumb]
 
         let sent = Telemetry.anonymize(event)
@@ -46,7 +46,28 @@ struct TelemetryTests {
         #expect(sent.message?.formatted == "Could not read <path>")
         #expect(sent.exceptions?.first?.value == "No such file: <path>")
         #expect(sent.breadcrumbs?.first?.message?.contains("Desktop") == false)
-        #expect(sent.breadcrumbs?.first?.data == nil)
+        #expect(sent.breadcrumbs?.first?.data?.isEmpty ?? true)
+    }
+
+    @Test func aBreadcrumbCarriesNoDataWhateverItsKeys() throws {
+        let crumb = Breadcrumb(level: .info, category: "http")
+        crumb.setData(value: "/Users/jane/Pictures/IMG_0042.HEIC", key: "path")
+        crumb.setData(value: "3F2504E0-4F89-11D3-9A0C-0305E82C3301", key: "a-key-nobody-planned-for")
+        crumb.setData(value: ["nested": "/Users/jane"], key: "context")
+
+        let sent = try #require(Telemetry.scrub(crumb))
+
+        #expect(sent.data?.isEmpty ?? true)
+        // What goes in the envelope: no `data` at all.
+        #expect(sent.serialize()["data"] == nil)
+        #expect(sent.serialize()["category"] as? String == "http")
+    }
+
+    @Test func aBreadcrumbWithoutDataStaysWithout() throws {
+        let sent = try #require(Telemetry.scrub(Breadcrumb(level: .info, category: "app")))
+
+        #expect(sent.data == nil)
+        #expect(sent.serialize()["data"] == nil)
     }
 
     @Test func theAppsOwnPathLosesTheUserName() {
