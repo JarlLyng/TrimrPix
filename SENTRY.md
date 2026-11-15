@@ -68,15 +68,21 @@ Point a Debug build at a local stand-in for Sentry and read what it sends.
    SENTRY_DSN="http://0123456789abcdef0123456789abcdef@127.0.0.1:8969/1" \
      TrimrPix.app/Contents/MacOS/TrimrPix -screenshotFolder <a copy of a few photos> -screenshotOptimize YES
    ```
+5. **Crash it, for the breadcrumbs:** the Debug test event is sent before the app is active,
+   so it carries none of the SDK's own breadcrumbs. Bring the app to the front (`open
+   TrimrPix.app`), send it `kill -SEGV <pid>`, and run step 4 again: the crash report it
+   sends carries the SDK's `app.lifecycle` breadcrumb, which sentry-cocoa always gives a
+   `state` in its data.
 
 **It passes when:**
 - the `session` items' `did` is `anonymous`;
-- the `event` item's `user` is `{"id": "anonymous"}`, with no `device_app_hash`, no
+- every `event` item's `user` is `{"id": "anonymous"}`, with no `device_app_hash`, no
   `contexts.device.id` and no `server_name`;
+- no breadcrumb has a `data` key, the crash report's `app.lifecycle` breadcrumb included;
 - the `trace_metric` items carry no `user.*` attribute;
 - the fake ID, the photos' names and your user name appear nowhere.
 
-**Last checked with sentry-cocoa 9.34.0 on 2026-11-15: passed.**
+**Last checked with sentry-cocoa 9.34.0 on 2026-11-16: passed.**
 
 ## The DSN
 

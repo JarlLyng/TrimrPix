@@ -130,6 +130,14 @@ enum Telemetry {
         #if DEBUG
         return "debug"
         #else
+        // `appStoreReceiptURL` is deprecated since macOS 15 in favour of StoreKit's
+        // `AppTransaction`, and stays on purpose. `AppTransaction.shared` is async and
+        // StoreKit has no synchronous way to ask (checked in the macOS 27.2 SDK), but
+        // the environment must be known before `SentrySDK.start`: sentry-cocoa 9.34.0
+        // stamps the launch session with `options.environment` as it starts. Setting
+        // it later would send that session, and any crash from before StoreKit answers,
+        // under the wrong environment; waiting for StoreKit would delay crash reporting.
+        // So this warning stays until StoreKit offers a synchronous answer.
         guard let receipt = Bundle.main.appStoreReceiptURL,
               FileManager.default.fileExists(atPath: receipt.path) else { return "local" }
         return receipt.lastPathComponent == "sandboxReceipt" ? "testflight" : "production"
@@ -175,11 +183,17 @@ enum Telemetry {
         path?.replacingOccurrences(of: #"/Users/[^/]+"#, with: "/Users/<user>", options: .regularExpression)
     }
 
+    /// A breadcrumb keeps its message, with paths redacted, and carries no data.
     static func scrub(_ breadcrumb: Breadcrumb) -> Breadcrumb? {
         if let message = breadcrumb.message {
             breadcrumb.message = redactPaths(message)
         }
-        breadcrumb.data = nil
+        // Every key it has, not just the ones we know of: the SDK's own breadcrumbs
+        // can carry anything. The `data` setter is deprecated and sentry-cocoa 9.34.0
+        // has no call that clears it all, so each key is removed on its own. `data`
+        // returns a copy, so removing keys while going through it is safe, and an
+        // empty `data` is left out of the envelope.
+        breadcrumb.data?.keys.forEach { breadcrumb.setData(value: nil, key: $0) }
         return breadcrumb
     }
 
