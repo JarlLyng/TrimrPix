@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Keys Xcode can't generate, merged into the generated Info.plist (GENERATE_INFOPLIST_FILE).
+     SentryDSN comes from the SENTRY_DSN build setting (Sentry.xcconfig); an INFOPLIST_KEY_ setting
+     would be ignored, as Xcode only generates Apple's own keys. See SENTRY.md. -->
+<plist version="1.0">
+<dict>
+	<key>SentryDSN</key>
+	<string>$(SENTRY_DSN)</string>
+</dict>
+</plist>
