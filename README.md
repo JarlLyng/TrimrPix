@@ -68,6 +68,7 @@ The app is sandboxed. Debug builds have a capture mode for the website's and the
 - [`AGENTS.md`](AGENTS.md): project context for developers and AI assistants.
 - [`ARCHITECTURE.md`](ARCHITECTURE.md): the service layer, dependency injection, errors and logging.
 - [`SENTRY.md`](SENTRY.md): the anonymous crash reports and counts, the DSN, symbols, and the envelope check after an SDK upgrade.
+- [`SITE.md`](SITE.md): how the website in `docs/` is built and changed.
 - [`CODE_STYLE.md`](CODE_STYLE.md) and [`CONTRIBUTING.md`](CONTRIBUTING.md): how code is written here, and how to send a change.
 - [`CHANGELOG.md`](CHANGELOG.md): what changed in each release.
 - [`docs/PRIVACY.md`](docs/PRIVACY.md) and [`SECURITY.md`](SECURITY.md).
