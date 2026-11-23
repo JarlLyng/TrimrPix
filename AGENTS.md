@@ -123,17 +123,13 @@ states, open issues and plans go stale within days; they live in `CHANGELOG.md`,
 
 ## Marketing site (`docs/`)
 
-Plain static files, deployed when a push to `main` changes `docs/`. **Read `SITE.md` first.** In
-short: edit `tools/partials/` and run `tools/sync_partials.py`, never the pages; the design system
-is the site's own copy, never jsDelivr; store pieces are pasted verbatim, with no price written by
-hand; every App Store link carries the Umami `store-click` attributes.
+Everything in `docs/` is published as it is when a push to `main` changes it, so developer notes
+never go there. **Read `SITE.md` before changing anything in `docs/`.**
 
 ## Requirements and build
-- **macOS 15.2+** deployment target; **Swift 6** mode, SwiftUI, async/await.
-- **Xcode 26 and the macOS 26 SDK.** Older Xcodes fail on MetricKit payload APIs in MetricsService.
-  CI runs on `macos-26`.
-- Open `TrimrPix.xcodeproj`, run the **TrimrPix** scheme; tests are in `TrimrPixTests`.
-- Xcode Cloud builds releases when `release` moves; `SENTRY.md` covers the DSN and symbols.
+
+The README's "Build and run" and `CONTRIBUTING.md` have the OS floor, the Xcode version, the scheme
+and the tests. `SENTRY.md` has the DSN and the symbols for a release build.
 
 ## Conventions
 - Uses `iamjarl-design` tokens (`IAMJARLDesignTokens`), with no hardcoded colors, spacing, radius
