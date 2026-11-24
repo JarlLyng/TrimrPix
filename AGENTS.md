@@ -14,7 +14,7 @@ connection is anonymous crash reports and counts to Sentry (`SENTRY.md`).
 - **Website:** [trimrpix.iamjarl.com](https://trimrpix.iamjarl.com)
 - **App Store:** [id6758639590](https://apps.apple.com/app/trimrpix/id6758639590)
 - **License:** [MIT](LICENSE), open source. **Price:** $1.99 USD one-time, no IAP, no subscription, no ads.
-- **Status:** 1.7.3 is live. The features below describe `main`; `CHANGELOG.md` says which version brought each.
+- **Status:** 1.8.0 is live. The features below describe `main`; `CHANGELOG.md` says which version brought each.
 - **Sister app:** [TrimrPix for iOS](https://trimrpixforios.iamjarl.com), a separate app that replaces photos in place.
 
 ## Boundaries: work only in this repo
