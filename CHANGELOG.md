@@ -2,7 +2,7 @@
 
 All notable changes to TrimrPix are documented here.
 
-## [1.8.0] - 2026-11-01
+## [1.8.0] - 2026-11-24
 
 ### Added
 - Drop a folder onto the window to add the images and PDFs in it and its subfolders, in the order Finder lists them. It takes the same files Watch Folder does: no WebP, and not TrimrPix's own `-optimized` copies. Hidden files and the inside of packages, such as a Photos library, are left out. A folder with nothing to optimize says so (#92)
