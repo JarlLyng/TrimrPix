@@ -76,3 +76,6 @@ CLAUDE.local.md
 .mcp.json
 GEMINI.md
 .github/copilot-instructions.md
+
+# Sentry DSN: local only, written by ci_scripts/ci_post_clone.sh on Xcode Cloud
+Sentry.xcconfig

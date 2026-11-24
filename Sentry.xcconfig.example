@@ -1,0 +1,9 @@
+// Copy to Sentry.xcconfig (gitignored) and paste the DSN of the Sentry project
+// trimrpix-macos, from Sentry → Settings → Projects → trimrpix-macos → Client Keys.
+//
+// In an xcconfig "//" starts a comment, so write the DSN's "//" as "/$()/":
+//   SENTRY_DSN = https:/$()/<public key>@o<org>.ingest.sentry.io/<project>
+//
+// The DSN is a public client key (it ships inside the app), but it stays out of
+// git. Empty means crash reporting is off; an archive refuses an empty DSN.
+SENTRY_DSN =

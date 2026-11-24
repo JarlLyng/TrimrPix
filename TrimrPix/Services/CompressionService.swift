@@ -118,6 +118,8 @@ final class CompressionService: CompressionServiceProtocol, @unchecked Sendable 
             }
             
             logger.info("Successfully optimized image: \(savedURL.lastPathComponent)")
+            // Anonymous: the output format and the kilobytes saved, nothing about the file.
+            Telemetry.imageOptimized(fileExtension: fileExtension, bytesSaved: Int64(originalSize - optimizedData.count))
             return savedURL
         } catch let error as TrimrPixError {
             logger.error("Save failed: \(error.technicalDescription)")

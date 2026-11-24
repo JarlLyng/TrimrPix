@@ -51,3 +51,69 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             DEVELOPMENT_TEAM="" \
             -skip-testing:TrimrPixUITests
+
+      # The DSN must reach the built app's Info.plist, not just a build setting: an
+      # INFOPLIST_KEY_ for a key that isn't Apple's own is silently ignored, which is how
+      # an app ships without crash reports. A test DSN, checked by shape, never printed.
+      - name: A Sentry DSN reaches the built Info.plist
+        run: |
+          xcodebuild build \
+            -project TrimrPix.xcodeproj \
+            -scheme TrimrPix \
+            -configuration Release \
+            -derivedDataPath ./build \
+            CODE_SIGNING_ALLOWED=NO \
+            DEVELOPMENT_TEAM="" \
+            'SENTRY_DSN=https:/$()/0123456789abcdef0123456789abcdef@o1.ingest.sentry.io/1' > dsn-build.log 2>&1 || { tail -40 dsn-build.log; exit 1; }
+          DSN=$(plutil -extract SentryDSN raw build/Build/Products/Release/TrimrPix.app/Contents/Info.plist 2>/dev/null || true)
+          case "$DSN" in
+            https://*@*) echo "SentryDSN is in the built Info.plist, in the right shape." ;;
+            *) echo "::error::SentryDSN is missing or malformed in the built Info.plist."; exit 1 ;;
+          esac
+
+      # An archive without a Sentry DSN would ship with crash reports silently off.
+      # The app target refuses it (build phase "Refuse an archive without a Sentry
+      # DSN"); check that it still does. `install` runs with ACTION=install, as an
+      # archive does. This clone has no Sentry.xcconfig, so the DSN is empty.
+      - name: An archive without a Sentry DSN is refused
+        run: |
+          if xcodebuild install \
+              -project TrimrPix.xcodeproj \
+              -scheme TrimrPix \
+              -configuration Release \
+              -derivedDataPath ./build \
+              DSTROOT="$RUNNER_TEMP/dst" \
+              CODE_SIGNING_ALLOWED=NO \
+              DEVELOPMENT_TEAM="" > install.log 2>&1; then
+            echo "::error::An install without a Sentry DSN succeeded; the archive check is not working."
+            exit 1
+          fi
+          if ! grep -q "error: SentryDSN is empty or missing in the built Info.plist" install.log; then
+            tail -40 install.log
+            echo "::error::The install failed, but not on the missing DSN."
+            exit 1
+          fi
+          echo "Refused, as it should be: $(grep -m1 'error: SentryDSN is empty' install.log)"
+
+      # A DSN cut short by an xcconfig ("https:") must be refused too, not only an
+      # empty one: the archive check reads the DSN's shape.
+      - name: An archive with a cut-off Sentry DSN is refused
+        run: |
+          if xcodebuild install \
+              -project TrimrPix.xcodeproj \
+              -scheme TrimrPix \
+              -configuration Release \
+              -derivedDataPath ./build \
+              DSTROOT="$RUNNER_TEMP/dst" \
+              CODE_SIGNING_ALLOWED=NO \
+              DEVELOPMENT_TEAM="" \
+              SENTRY_DSN="https:" > install-cut.log 2>&1; then
+            echo "::error::An install with the DSN cut to \"https:\" succeeded; the archive check is not working."
+            exit 1
+          fi
+          if ! grep -q "error: SentryDSN in the built Info.plist does not start with https://" install-cut.log; then
+            tail -40 install-cut.log
+            echo "::error::The install failed, but not on the cut-off DSN."
+            exit 1
+          fi
+          echo "Refused, as it should be."

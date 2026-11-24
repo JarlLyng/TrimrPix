@@ -13,6 +13,8 @@ import SwiftUI
 @main
 struct TrimrPixApp: App {
     init() {
+        // Anonymous crash reports and counts, when the build has a DSN (SENTRY.md).
+        Telemetry.start()
         MetricsService.shared.start()
     }
 

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2F5AD0C22F65C81A000DEA3D /* IAMJARLDesignTokens in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5AD0C12F65C81A000DEA3D /* IAMJARLDesignTokens */; };
+		2F5AD0D22F65C81A000DEA3D /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5AD0D12F65C81A000DEA3D /* Sentry */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2F5AD0D32F65C81A000DEA3D /* TrimrPix.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TrimrPix.xcconfig; sourceTree = "<group>"; };
 		3B5228362D6E843500CF16B0 /* TrimrPix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrimrPix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B5228472D6E843600CF16B0 /* TrimrPixTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrimrPixTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B5228512D6E843600CF16B0 /* TrimrPixUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrimrPixUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,6 +59,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F5AD0C22F65C81A000DEA3D /* IAMJARLDesignTokens in Frameworks */,
+				2F5AD0D22F65C81A000DEA3D /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +87,7 @@
 				3B52284A2D6E843600CF16B0 /* TrimrPixTests */,
 				3B5228542D6E843600CF16B0 /* TrimrPixUITests */,
 				3B5228372D6E843500CF16B0 /* Products */,
+				2F5AD0D32F65C81A000DEA3D /* TrimrPix.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,6 +111,7 @@
 				3B5228322D6E843500CF16B0 /* Sources */,
 				3B5228332D6E843500CF16B0 /* Frameworks */,
 				3B5228342D6E843500CF16B0 /* Resources */,
+				2F5AD0D42F65C81A000DEA3D /* Refuse an archive without a Sentry DSN */,
 			);
 			buildRules = (
 			);
@@ -118,6 +123,7 @@
 			name = TrimrPix;
 			packageProductDependencies = (
 				2F5AD0C12F65C81A000DEA3D /* IAMJARLDesignTokens */,
+				2F5AD0D12F65C81A000DEA3D /* Sentry */,
 			);
 			productName = TrimrPix;
 			productReference = 3B5228362D6E843500CF16B0 /* TrimrPix.app */;
@@ -203,6 +209,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				2F5AD0C02F65C81A000DEA3D /* XCRemoteSwiftPackageReference "iamjarl-design" */,
+				2F5AD0D02F65C81A000DEA3D /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3B5228372D6E843500CF16B0 /* Products */;
@@ -239,6 +246,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2F5AD0D42F65C81A000DEA3D /* Refuse an archive without a Sentry DSN */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Refuse an archive without a Sentry DSN";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# The DSN the app will read, from the built Info.plist: a build setting can be set and still\n# never reach the app (an ignored INFOPLIST_KEY_, or an xcconfig that cut https:// to \"https:\").\n# Its value is never printed.\nDSN=$(/usr/bin/plutil -extract SentryDSN raw \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\" 2>/dev/null || true)\ncase \"${DSN}\" in\n  https://*@*) exit 0 ;;\nesac\nif [ -z \"${DSN}\" ]; then\n  PROBLEM=\"is empty or missing in the built Info.plist\"\nelse\n  PROBLEM=\"in the built Info.plist does not start with https:// or has no @ (in an xcconfig, write the DSN's // as /\\$()/)\"\nfi\nif [ \"${ACTION}\" = \"install\" ]; then\n  echo \"error: SentryDSN ${PROBLEM}, so this archive would ship without crash reports. Put the DSN in Sentry.xcconfig, or in the Xcode Cloud workflow's environment. See SENTRY.md.\"\n  exit 1\nfi\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\n  echo \"warning: SentryDSN ${PROBLEM}, so this Release build has crash reporting off. See SENTRY.md.\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3B5228322D6E843500CF16B0 /* Sources */ = {
@@ -404,6 +434,7 @@
 		};
 		3B52285C2D6E843600CF16B0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2F5AD0D32F65C81A000DEA3D /* TrimrPix.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -412,7 +443,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = KDWZ3WNLDK;
@@ -421,6 +452,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "TrimrPix-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "TrimrPix - Modern image optimization tool";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
@@ -429,7 +461,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.7.3;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamjarl.trimrpix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -440,6 +472,7 @@
 		};
 		3B52285D2D6E843600CF16B0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2F5AD0D32F65C81A000DEA3D /* TrimrPix.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -448,7 +481,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = KDWZ3WNLDK;
@@ -457,6 +490,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "TrimrPix-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "TrimrPix - Modern image optimization tool";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
@@ -465,7 +499,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.7.3;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamjarl.trimrpix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -479,11 +513,11 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.7.3;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamjarl.trimrpix.TrimrPixTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -497,11 +531,11 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.7.3;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamjarl.trimrpix.TrimrPixTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -514,10 +548,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.7.3;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamjarl.trimrpix.TrimrPixUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -530,10 +564,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.7.3;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamjarl.trimrpix.TrimrPixUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -592,6 +626,14 @@
 				version = 1.2.1;
 			};
 		};
+		2F5AD0D02F65C81A000DEA3D /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.34.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -599,6 +641,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2F5AD0C02F65C81A000DEA3D /* XCRemoteSwiftPackageReference "iamjarl-design" */;
 			productName = IAMJARLDesignTokens;
+		};
+		2F5AD0D12F65C81A000DEA3D /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F5AD0D02F65C81A000DEA3D /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

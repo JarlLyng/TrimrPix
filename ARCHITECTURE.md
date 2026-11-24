@@ -60,6 +60,7 @@ TrimrPix/
 │   ├── WatchFolderService.swift    # File system monitoring
 │   ├── FeedbackMail.swift          # The Send Feedback… mailto draft
 │   ├── MetricsService.swift        # MetricKit diagnostics, logged locally
+│   ├── Telemetry.swift             # Anonymous crash reports and two counts to Sentry (SENTRY.md)
 │   ├── Logger.swift                # Logging service
 │   └── Protocols.swift             # Service protocol definitions
 └── Assets.xcassets/          # App icons and assets
@@ -189,6 +190,12 @@ Optimized file saved
 - Handles transparency (transparent pixels mapped to single palette entry)
 - Samples up to 100,000 pixels for performance on large images
 - Pure Swift implementation, no third-party dependencies
+
+#### Telemetry
+- Starts Sentry at launch when the build has a DSN, never under XCTest
+- Anonymous by recipe: one shared user `anonymous`, the session `did` pinned to it, no device or vendor-ID hash, no file names or paths, metric attributes from a fixed list
+- Two counts from `CompressionService` after every optimized image: `image.optimized` and `image.saved` (kilobytes), with the output `format` only
+- The rules, the DSN, symbols and the envelope check are in `SENTRY.md`
 
 #### WatchFolderService
 - Implements `WatchFolderServiceProtocol`
